@@ -1,0 +1,34 @@
+.HIDDEN {
+    display: none;
+}
+
+.character input {
+    border: 0;
+    /*border-bottom: 2px solid black;*/
+    outline: none;
+}
+
+.character input:focus {
+    border-bottom: 2px solid #34d;
+}
+
+label {
+    font-weight: bold;
+}
+
+.attribute-dot {
+    width: 10px;
+    height: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 0 2px;
+    display: inline-block;
+}
+
+.filled {
+    background-color: black;
+}
+
+.hoverFilled {
+    background-color: yellow;
+}
