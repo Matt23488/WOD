@@ -6,6 +6,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <script src="lib/knockout-3.5.0.min.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         <link rel="stylesheet" href="css/site.css">
     </head>
@@ -14,8 +15,9 @@
             <div>
                 <button class="btn btn-lg btn-outline-secondary" data-bind="click: backToList, visible: mode() === 'sheet'"><i class="fas fa-arrow-left"></i></button>
                 <button class="btn btn-lg btn-outline-primary" data-bind="visible: mode() === 'sheet'" data-toggle="modal" data-target="#diceModal"><i class="fas fa-dice"></i></button>
+                <button class="btn btn-lg btn-outline-primary" data-bind="visible: mode() === 'sheet'" data-toggle="modal" data-target="#notesModal"><i class="fas fa-clipboard"></i></button>
                 <button class="btn btn-lg btn-outline-success" data-bind="click: saveCharacters"><i class="far fa-save"></i></button>
-                <button class="btn btn-lg btn-outline-success" data-bind="click: downloadCharacters, visible: false"><i class="fas fa-download"></i></button>
+                <button class="btn btn-lg btn-outline-success" data-bind="click: downloadCharacters, visible: mode() === 'list'"><i class="fas fa-download"></i></button>
                 <button class="btn btn-lg btn-outline-danger" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
             </div>
             <div class="listContainer" data-bind="visible: mode() === 'list'">
@@ -236,7 +238,7 @@
                 <div class="row">
                     <div class="col">
                         <label>Other Stats:</label>
-                        <div class="col-xs-12">
+                        <div class="col-xs-12" data-bind="click: onComponentClick">
                             <label>Size:</label>
                             <input type="number" data-bind="textInput: size" />
                         </div>
@@ -248,7 +250,7 @@
                             <label>Defense:</label>
                             <span data-bind="text: defense"></span>
                         </div>
-                        <div class="col-xs-12">
+                        <div class="col-xs-12" data-bind="click: onComponentClick">
                             <label>Armor:</label>
                             <input type="number" data-bind="textInput: armor" />
                         </div>
@@ -256,11 +258,11 @@
                             <label>Initiative:</label>
                             <span data-bind="text: initiative"></span>
                         </div>
-                        <div class="col-xs-12">
+                        <div class="col-xs-12" data-bind="click: onComponentClick">
                             <label>Experience:</label>
                             <input type="number" data-bind="textInput: experience" />
                         </div>
-                        <div class="col-xs-12">
+                        <div class="col-xs-12" data-bind="click: onComponentClick">
                             <label>Morality:</label>
                             <input type="number" data-bind="textInput: morality" />
                         </div>
@@ -391,6 +393,31 @@
                     </div>
                 </div>
 
+                <div class="modal fade" id="notesModal">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Notes</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-borderless">
+                                        <thead><tr><th></th><th></th></tr></thead>
+                                        <tbody data-bind="foreach: notes">
+                                            <tr>
+                                                <td><textarea data-bind="textInput: value"></textarea></td>
+                                                <td><button class="btn btn-danger" data-bind="click: $parent.removeNote.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" data-bind="click: newNote"><i class="fas fa-plus"></i> Note</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="modal fade" id="diceModal">
@@ -404,7 +431,6 @@
                             <input type="number" data-bind="textInput: dicePool" />
                             <button class="btn btn-lg btn-primary" data-bind="click: rollDice"><i class="fas fa-check"></i> Roll</button>
                             <!-- ko foreach: rollRounds -->
-                            <hr data-bind="visible: $index() > 0" />
                             <div style="margin-bottom: 25px; font-size: 2em;" class="row">
                                 <!-- ko foreach: $data -->
                                 <div style="display: inline-block; margin-left: 10px;" data-bind="text: $data, style: { color: $data === 10 ? 'gold' : ($data > 7 ? 'green' : 'black') }"></div>

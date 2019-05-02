@@ -4,6 +4,7 @@ import Willpower from "./Willpower.js";
 import Merit from "./Merit.js";
 import Equipment from "./Equipment.js";
 import InventoryItem from "./InventoryItem.js";
+import Note from "./Note.js";
 
 export default class Character {
     constructor(json) {
@@ -73,6 +74,8 @@ export default class Character {
         this.weapons = ko.observableArray(json.weapons.map(w => new Equipment(w.name, w.description)));
         this.equipment = ko.observableArray(json.equipment.map(e => new Equipment(e.name, e.description)));
         this.inventory = ko.observableArray(json.inventory.map(i => new InventoryItem(i.name, i.description, i.quantity)));
+
+        this.notes = ko.observableArray(json.notes.map(n => new Note(n)));
     }
 
     static newCharacter(name) {
@@ -139,7 +142,9 @@ export default class Character {
 
             weapons: [],
             equipment: [],
-            inventory: []
+            inventory: [],
+
+            notes: []
         };
 
         return new Character(json);
@@ -175,6 +180,14 @@ export default class Character {
 
     removeInventoryItem(item) {
         this.inventory.remove(item);
+    }
+
+    newNote() {
+        this.notes.push(new Note(""));
+    }
+
+    removeNote(note) {
+        this.notes.remove(note);
     }
 
     toJson() {
@@ -246,7 +259,9 @@ export default class Character {
 
             weapons: this.weapons().map(w => { return { name: w.name(), description: w.description() }; }),
             equipment: this.equipment().map(e => { return { name: e.name(), description: e.description() }; }),
-            inventory: this.inventory().map(i => { return { name: i.name(), description: i.description(), quantity: i.quantity() }; })
+            inventory: this.inventory().map(i => { return { name: i.name(), description: i.description(), quantity: i.quantity() }; }),
+
+            notes: this.notes().map(n => n.value())
         };
     }
 }

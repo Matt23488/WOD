@@ -53,10 +53,26 @@ class Application {
 
     saveCharacters() {
         window.localStorage.setItem("characters", JSON.stringify(this.characters().map(c => c.toJson())));
+        swal("Characters saved successfully!", {
+            buttons: false,
+            timer: 1000,
+            icon: "success"
+        });
     }
 
     downloadCharacters() {
-        // TODO
+        const json = JSON.stringify(this.characters().map(c => c.toJson()));
+
+        const dl = document.createElement("a");
+        dl.setAttribute("href", `data:text/plain;charset=utf-8,${encodeURIComponent(json)}`);
+        dl.setAttribute("download", "characters.json");
+
+        dl.style.display = "none";
+        document.body.appendChild(dl);
+
+        dl.click();
+
+        document.body.removeChild(dl);
     }
 
     rollDice() {

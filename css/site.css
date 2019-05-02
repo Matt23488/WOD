@@ -2,13 +2,21 @@
     display: none;
 }
 
-input {
+input, textarea {
     border: 0;
     outline: none;
 }
 
+textarea {
+    width: 100%;
+}
+
 input:focus {
     border-bottom: 2px solid #34d;
+}
+
+textarea:focus {
+    border: 1px solid #34d;
 }
 
 label {
