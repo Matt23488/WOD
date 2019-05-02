@@ -158,6 +158,30 @@ export default class Character {
         e.currentTarget.getElementsByTagName("input")[0].focus();
     }
 
+    newMerit() {
+        this.merits.push(new Merit("", 0));
+    }
+
+    removeMerit(merit) {
+        this.merits.remove(merit);
+    }
+
+    newSpell() {
+        this.spells.push(new Merit("", 0));
+    }
+
+    removeSpell(spell) {
+        this.spells.remove(spell);
+    }
+
+    newFlaw() {
+        this.flaws.push(new Merit("", 0));
+    }
+
+    removeFlaw(flaw) {
+        this.flaws.remove(flaw);
+    }
+
     newWeapon() {
         this.weapons.push(new Equipment("", ""));
     }
@@ -290,6 +314,26 @@ ko.bindingHandlers.attribute = {
                 observable(index + 1);
             });
         });
+    },
+    update: function (element, valueAccessor) {
+        const value = valueAccessor()();
+        const dots = element.getElementsByTagName("span");
+        for (let i = 0; i < dots.length; i++) {
+            dots[i].classList.remove("filled");
+            if (i < value) {
+                dots[i].classList.add("filled");
+            }
+        }
+    }
+};
+
+ko.bindingHandlers.readOnlyAttribute = {
+    init: function (element, valueAccessor) {
+        for (let i = 0; i < 5; i++) {
+            const dot = document.createElement("span");
+            dot.classList.add("attribute-dot");
+            element.appendChild(dot);
+        }
     },
     update: function (element, valueAccessor) {
         const value = valueAccessor()();

@@ -2,6 +2,10 @@
     display: none;
 }
 
+.clickable:hover, .clickable *:hover {
+    cursor: pointer;
+}
+
 input, textarea {
     border: 0;
     outline: none;
@@ -50,4 +54,9 @@ label {
     padding: 5px;
     border: 1px solid black;
     box-shadow: 7px 7px 10px;
+    background-color: white;
+}
+
+.btn-outline {
+    background-color: white;
 }

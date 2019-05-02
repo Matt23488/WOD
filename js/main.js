@@ -60,12 +60,12 @@ class Application {
         });
     }
 
-    downloadCharacters() {
-        const json = JSON.stringify(this.characters().map(c => c.toJson()));
+    downloadCharacter() {
+        const json = JSON.stringify(this.character().toJson());
 
         const dl = document.createElement("a");
         dl.setAttribute("href", `data:text/plain;charset=utf-8,${encodeURIComponent(json)}`);
-        dl.setAttribute("download", "characters.json");
+        dl.setAttribute("download", `${this.character().name()}.json`);
 
         dl.style.display = "none";
         document.body.appendChild(dl);
@@ -73,6 +73,33 @@ class Application {
         dl.click();
 
         document.body.removeChild(dl);
+    }
+
+    uploadCharacter() {
+        const ul = document.createElement("input");
+        ul.type = "file";
+        ul.accept = ".json";
+        ul.style.display = "none";
+
+        ul.addEventListener("change", e => {
+            const file = ul.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = e => {
+                const json = e.target.result;
+                this.characters.push(Character.fromJson(JSON.parse(json)));
+                this.characterId(this.characters().length - 1);
+                this.mode("sheet");
+            };
+            reader.readAsText(file);
+        });
+
+        document.body.appendChild(ul);
+
+        ul.click();
+
+        document.body.removeChild(ul);
     }
 
     rollDice() {
