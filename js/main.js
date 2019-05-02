@@ -2,7 +2,7 @@ import Character from "./Character/Character.js";
 
 class Application {
     constructor() {
-        let savedCharacters = JSON.parse(window.localStorage.getItem("characters")).map(c => Character.fromJson(c));
+        let savedCharacters = (JSON.parse(window.localStorage.getItem("characters")) || []).map(c => Character.fromJson(c));
         if (!savedCharacters) savedCharacters = [];
 
         this.mode = ko.observable(savedCharacters.length > 0 ? "list" : "sheet");
