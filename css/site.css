@@ -16,12 +16,16 @@ label {
 }
 
 .attribute-dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border: 1px solid black;
-    border-radius: 5px;
-    margin: 0 2px;
+    border-radius: 6px;
+    margin: 0 5px 0 0;
     display: inline-block;
+}
+
+.attribute-dot:first-child {
+    margin-left: 3px;
 }
 
 .filled {
@@ -31,4 +35,11 @@ label {
 .hoverFilled {
     background-color: green;
     border-color: green;
+}
+
+.characterContainer {
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid black;
+    box-shadow: 7px 7px 10px;
 }
