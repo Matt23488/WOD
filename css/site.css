@@ -2,13 +2,12 @@
     display: none;
 }
 
-.character input {
+input {
     border: 0;
-    /*border-bottom: 2px solid black;*/
     outline: none;
 }
 
-.character input:focus {
+input:focus {
     border-bottom: 2px solid #34d;
 }
 
@@ -30,5 +29,6 @@ label {
 }
 
 .hoverFilled {
-    background-color: yellow;
+    background-color: green;
+    border-color: green;
 }
