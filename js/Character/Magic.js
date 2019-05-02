@@ -57,3 +57,10 @@ ko.bindingHandlers.magic = {
         }
     }
 };
+
+ko.bindingHandlers.remainingMagicTooltip = {
+    update: function (element, valueAccessor) {
+        $(element).tooltip("dispose");
+        $(element).tooltip({ title: `${valueAccessor().totalMagic() - valueAccessor().usedMagic()} points left` });
+    }
+};

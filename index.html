@@ -80,13 +80,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col" data-toggle="tooltip" data-bind="remainingMagicTooltip: magic">
                         <div class="col-xs-12"><label>Magic:</label></div>
                         <div class="col-xs-12"><div data-bind="capacity: magic.totalMagic"></div></div>
                         <div class="col-xs-12"><div data-bind="magic: magic"></div></div>
                         <div class="col-xs-12" data-bind="with: magic"><button class="btn btn-outline-primary btn-sm" data-bind="click: clearUsed">Heal All</button></div>
                     </div>
-                    <div class="col">
+                    <div class="col" data-toggle="tooltip" data-bind="remainingWillpowerTooltip: willpower">
                         <div class="col-xs-12"><label>Willpower:</label></div>
                         <div class="col-xs-12"><div data-bind="capacity: willpower.totalWillpower"></div></div>
                         <div class="col-xs-12"><div data-bind="willpower: willpower"></div></div>

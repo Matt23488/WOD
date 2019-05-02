@@ -57,3 +57,10 @@ ko.bindingHandlers.willpower = {
         }
     }
 };
+
+ko.bindingHandlers.remainingWillpowerTooltip = {
+    update: function (element, valueAccessor) {
+        $(element).tooltip("dispose");
+        $(element).tooltip({ title: `${valueAccessor().totalWillpower() - valueAccessor().usedWillpower()} points left` });
+    }
+};
