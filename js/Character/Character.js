@@ -418,3 +418,10 @@ ko.bindingHandlers.capacity = {
         }
     }
 };
+
+ko.bindingHandlers.tooltip = {
+    update: function (element, valueAccessor) {
+        $(element).tooltip("dispose");
+        $(element).tooltip({ title: valueAccessor()() });
+    }
+};

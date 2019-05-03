@@ -276,14 +276,16 @@
                         <label>Weapons:</label>
                         <span style="font-style: italic;" data-bind="visible: weapons().length === 0">None</span>
                         <div data-bind="foreach: weapons">
-                            <div class="col-xs-12" data-bind="text: name"></div>
+                            <span data-bind="visible: $index() > 0">, </span>
+                            <div style="display: inline-block;" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
                         </div>
                     </div>
                     <div class="col clickable" data-toggle="modal" data-target="#equipmentModal">
                         <label>Equipment:</label>
                         <span style="font-style: italic;" data-bind="visible: equipment().length === 0">None</span>
                         <div data-bind="foreach: equipment">
-                            <div class="col-xs-12" data-bind="text: name"></div>
+                            <span data-bind="visible: $index() > 0">, </span>
+                            <div style="display: inline-block;" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
                         </div>
                     </div>
                 </div>
@@ -295,7 +297,8 @@
                         <label>Inventory:</label>
                         <span style="font-style: italic;" data-bind="visible: inventory().length === 0">None</span>
                         <div class="col" data-bind="foreach: inventory">
-                            <div data-bind="text: displayText"></div>
+                            <span data-bind="visible: $index() > 0">, </span>
+                            <div style="display: inline-block;" data-toggle="tooltip" data-bind="text: displayText, tooltip: description"></div>
                         </div>
                     </div>
                 </div>
