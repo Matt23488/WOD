@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="css/site.css">
     </head>
     <body>
-        <div class="container">
+        <div class="container-fluid">
             <div>
                 <button class="btn btn-lg btn-outline btn-outline-secondary" data-bind="click: backToList, visible: mode() === 'sheet'"><i class="fas fa-arrow-left"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="visible: mode() === 'sheet'" data-toggle="modal" data-target="#diceModal"><i class="fas fa-dice"></i></button>
@@ -33,19 +33,19 @@
             <div class="characterContainer" data-bind="visible: mode() === 'sheet', using: character">
                 <div class="row">
                     <div class="col">
-                        <div class="col-xs-12 clickable" data-bind="click: onComponentClick"><label>Name:</label> <input type="text" data-bind="textInput: name" /></div>
-                        <div class="col-xs-12 clickable" data-bind="click: onComponentClick"><label>Player:</label> <input type="text" data-bind="textInput: player" /></div>
-                        <div class="col-xs-12 clickable" data-bind="click: onComponentClick"><label>Age:</label> <input type="number" data-bind="textInput: age" /></div>
+                        <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Name:</label> <input type="text" data-bind="textInput: name" /></div>
+                        <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Player:</label> <input type="text" data-bind="textInput: player" /></div>
+                        <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Age:</label> <input type="number" data-bind="textInput: age" /></div>
                     </div>
                     <div class="col">
-                        <div class="col-xs-12 clickable" data-bind="click: onComponentClick"><label>Vice:</label> <input type="text" data-bind="textInput: vice" /></div>
-                        <div class="col-xs-12 clickable" data-bind="click: onComponentClick"><label>Virtue:</label> <input type="text" data-bind="textInput: virtue" /></div>
-                        <div class="col-xs-12 clickable" data-bind="click: onComponentClick"><label>Origins:</label> <input type="text" data-bind="textInput: origins" /></div>
+                        <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Vice:</label> <input type="text" data-bind="textInput: vice" /></div>
+                        <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Virtue:</label> <input type="text" data-bind="textInput: virtue" /></div>
+                        <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Origins:</label> <input type="text" data-bind="textInput: origins" /></div>
                     </div>
                     <div class="col">
-                        <div class="col-xs-12 clickable" data-bind="click: onComponentClick"><label>Gender:</label> <input type="text" data-bind="textInput: gender" /></div>
-                        <div class="col-xs-12 clickable" data-bind="click: onComponentClick"><label>Concept:</label> <input type="text" data-bind="textInput: concept" /></div>
-                        <div class="col-xs-12 clickable" data-bind="click: onComponentClick"><label>Chronicle:</label> <input type="text" data-bind="textInput: chronicle" /></div>
+                        <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Gender:</label> <input type="text" data-bind="textInput: gender" /></div>
+                        <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Concept:</label> <input type="text" data-bind="textInput: concept" /></div>
+                        <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Chronicle:</label> <input type="text" data-bind="textInput: chronicle" /></div>
                     </div>
                 </div>
                 <hr />
@@ -94,7 +94,6 @@
                     </div>
                 </div>
                 <hr />
-                <h3 style="text-align: center;">Skills</h3>
                 <div class="row">
                     <div class="col">
                         <label>Mental</label> (-3 Unskilled)
@@ -206,7 +205,7 @@
                 <hr />
 
                 <div class="row">
-                    <div class="col clickable" data-toggle="modal" data-target="#meritsModal">
+                    <div class="col clickable pointer" data-toggle="modal" data-target="#meritsModal">
                         <label>Merits:</label>
                         <span style="font-style: italic;" data-bind="visible: merits().length === 0">None</span>
                         <div data-bind="foreach: merits">
@@ -216,7 +215,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col clickable" data-toggle="modal" data-target="#spellsModal">
+                    <div class="col clickable pointer" data-toggle="modal" data-target="#spellsModal">
                         <label>Spells:</label>
                         <span style="font-style: italic;" data-bind="visible: spells().length === 0">None</span>
                         <div data-bind="foreach: spells">
@@ -226,7 +225,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col clickable" data-toggle="modal" data-target="#flawsModal">
+                    <div class="col clickable pointer" data-toggle="modal" data-target="#flawsModal">
                         <label>Flaws:</label>
                         <span style="font-style: italic;" data-bind="visible: flaws().length === 0">None</span>
                         <div data-bind="foreach: flaws">
@@ -272,20 +271,18 @@
                             <input type="number" data-bind="textInput: morality" />
                         </div>
                     </div>
-                    <div class="col clickable" data-toggle="modal" data-target="#weaponsModal">
+                    <div class="col clickable pointer" data-toggle="modal" data-target="#weaponsModal">
                         <label>Weapons:</label>
                         <span style="font-style: italic;" data-bind="visible: weapons().length === 0">None</span>
-                        <div data-bind="foreach: weapons">
-                            <span data-bind="visible: $index() > 0">, </span>
-                            <div style="display: inline-block;" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
+                        <div class="font20" data-bind="foreach: weapons">
+                            <div class="listItem" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
                         </div>
                     </div>
-                    <div class="col clickable" data-toggle="modal" data-target="#equipmentModal">
+                    <div class="col clickable pointer" data-toggle="modal" data-target="#equipmentModal">
                         <label>Equipment:</label>
                         <span style="font-style: italic;" data-bind="visible: equipment().length === 0">None</span>
-                        <div data-bind="foreach: equipment">
-                            <span data-bind="visible: $index() > 0">, </span>
-                            <div style="display: inline-block;" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
+                        <div class="font20" data-bind="foreach: equipment">
+                            <div class="listItem" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
                         </div>
                     </div>
                 </div>
@@ -293,12 +290,11 @@
                 <hr />
 
                 <div class="row">
-                    <div class="col clickable" data-toggle="modal" data-target="#inventoryModal">
+                    <div class="col clickable pointer" data-toggle="modal" data-target="#inventoryModal">
                         <label>Inventory:</label>
                         <span style="font-style: italic;" data-bind="visible: inventory().length === 0">None</span>
-                        <div class="col" data-bind="foreach: inventory">
-                            <span data-bind="visible: $index() > 0">, </span>
-                            <div style="display: inline-block;" data-toggle="tooltip" data-bind="text: displayText, tooltip: description"></div>
+                        <div class="font20" class="col" data-bind="foreach: inventory">
+                            <div class="listItem" data-toggle="tooltip" data-bind="text: displayText, tooltip: description"></div>
                         </div>
                     </div>
                 </div>

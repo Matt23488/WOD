@@ -2,10 +2,6 @@
     display: none;
 }
 
-.clickable:hover, .clickable *:hover {
-    cursor: pointer;
-}
-
 input, textarea {
     border: 0;
     border-bottom: 2px solid black;
@@ -53,11 +49,51 @@ label {
 .characterContainer {
     margin-top: 10px;
     padding: 5px;
-    border: 1px solid black;
-    box-shadow: 7px 7px 10px;
-    background-color: white;
 }
 
 .btn-outline {
     background-color: white;
+}
+
+.widthMax {
+    width: 100%;
+}
+
+@keyframes liftBox {
+    from {
+        box-shadow: 0 0 0;
+        border: 0;
+        margin: 0;
+    }
+    to {
+        box-shadow: 10px 10px 20px;
+        border: 1px solid black;
+        margin: -5px 0 0 -5px;
+    }
+}
+
+.pointer, .pointer * {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    animation: liftBox 0.5s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}
+
+.font20 {
+    font-size: 20pt;
+}
+
+.listItem {
+    display: inline-block;
+}
+
+.listItem::before {
+    content: "•";
+}
+
+.listItem:not(:first-child) {
+    margin-left: 10px;
 }
