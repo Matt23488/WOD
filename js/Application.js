@@ -20,8 +20,9 @@ export default class Application {
         this.totalDiceSuccesses = ko.computed(() => this.rollRounds().reduce((total, r) => total + r.reduce((total, d) => total + (d > 7 ? 1 : 0), 0), 0));
     }
 
-    backToList() {
-        this.mode("list");
+    goBack() {
+        if (this.mode() === "sheet") this.mode("list");
+        else this.mode("sheet");
     }
 
     newCharacter() {
@@ -117,6 +118,10 @@ export default class Application {
             this.rollRounds.push(currentRound);
             numRolls = nextRoundRolls;
         }
+    }
+
+    switchMode(mode) {
+        return () => this.mode(mode);
     }
 }
 

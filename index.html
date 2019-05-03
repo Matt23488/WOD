@@ -18,14 +18,15 @@
     <body>
         <div class="container">
             <div>
-                <button class="btn btn-lg btn-outline btn-outline-secondary" data-bind="click: backToList, visible: mode() === 'sheet'"><i class="fas fa-arrow-left"></i></button>
-                <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="visible: mode() === 'sheet'" data-toggle="modal" data-target="#diceModal"><i class="fas fa-dice"></i></button>
-                <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="visible: mode() === 'sheet'" data-toggle="modal" data-target="#notesModal"><i class="fas fa-clipboard"></i></button>
+                <button class="btn btn-lg btn-outline btn-outline-secondary" data-bind="click: goBack, visible: mode() !== 'list'"><i class="fas fa-arrow-left"></i></button>
+                <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('dice'), visible: mode() === 'sheet'"><i class="fas fa-dice"></i></button>
+                <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('notes'), visible: mode() === 'sheet'"><i class="fas fa-clipboard"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: saveCharacters"><i class="fas fa-save"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: downloadCharacter, visible: mode() === 'sheet'"><i class="fas fa-download"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: uploadCharacter, visible: mode() === 'list'"><i class="fas fa-upload"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-danger" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
             </div>
+
             <div class="listContainer" data-bind="visible: mode() === 'list'">
                 <h2>Select a Character</h2>
                 <div class="list-group">
@@ -35,6 +36,7 @@
                     <!-- /ko -->
                 </div>
             </div>
+
             <div class="characterContainer" data-bind="visible: mode() === 'sheet', using: character">
                 <h2>Character Information</h2>
                 <div class="row">
@@ -214,7 +216,7 @@
                 </div>
                 <br />
                 <div class="row">
-                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#meritsModal">
+                    <div class="col-lg-4 clickable pointer" data-bind="click: $root.switchMode('merits').bind($root)">
                         <h2>Merits</h2>
                         <span style="font-style: italic;" data-bind="visible: merits().length === 0">None</span>
                         <div data-bind="foreach: merits">
@@ -225,7 +227,7 @@
                         </div>
                         <br />
                     </div>
-                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#spellsModal">
+                    <div class="col-lg-4 clickable pointer" data-bind="click: $root.switchMode('spells').bind($root)">
                         <h2>Spells</h2>
                         <span style="font-style: italic;" data-bind="visible: spells().length === 0">None</span>
                         <div data-bind="foreach: spells">
@@ -236,7 +238,7 @@
                         </div>
                         <br />
                     </div>
-                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#flawsModal">
+                    <div class="col-lg-4 clickable pointer" data-bind="click: $root.switchMode('flaws').bind($root)">
                         <h2>Flaws</h2>
                         <span style="font-style: italic;" data-bind="visible: flaws().length === 0">None</span>
                         <div data-bind="foreach: flaws">
@@ -281,7 +283,7 @@
                         </div>
                         <br />
                     </div>
-                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#weaponsModal">
+                    <div class="col-lg-4 clickable pointer" data-bind="click: $root.switchMode('weapons').bind($root)">
                         <h2>Weapons</h2>
                         <span style="font-style: italic;" data-bind="visible: weapons().length === 0">None</span>
                         <div class="font20" data-bind="foreach: weapons">
@@ -289,7 +291,7 @@
                         </div>
                         <br />
                     </div>
-                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#equipmentModal">
+                    <div class="col-lg-4 clickable pointer" data-bind="click: $root.switchMode('equipment').bind($root)">
                         <h2>Equipment</h2>
                         <span style="font-style: italic;" data-bind="visible: equipment().length === 0">None</span>
                         <div class="font20" data-bind="foreach: equipment">
@@ -299,7 +301,7 @@
                 </div>
                 <br />
                 <div class="row">
-                    <div class="col clickable pointer" data-toggle="modal" data-target="#inventoryModal">
+                    <div class="col clickable pointer" data-bind="click: $root.switchMode('inventory').bind($root)">
                         <h2>Inventory</h2>
                         <span style="font-style: italic;" data-bind="visible: inventory().length === 0">None</span>
                         <div class="font20" class="col" data-bind="foreach: inventory">
@@ -307,246 +309,157 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="modal fade" id="meritsModal">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Merits</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Value</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-bind="foreach: merits">
-                                        <tr>
-                                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
-                                            <td><div style="display: inline;" data-bind="attribute: value"></div></td>
-                                            <td><button class="btn btn-danger" data-bind="click: $parent.removeMerit.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" data-bind="click: newMerit"><i class="fas fa-plus"></i> Merit</button>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            
+            <div class="diceContainer" data-bind="visible: mode() === 'dice'">
+                <h1>Roll Dice</h1>
+                <input type="number" data-bind="textInput: dicePool" />
+                <button class="btn btn-lg btn-primary" data-bind="click: rollDice"><i class="fas fa-check"></i> Roll</button>
+                <div data-bind="dice: rollRounds"></div>
+                <div style="font-size: 2.5em;">
+                    <label>Total:</label>
+                    <span data-bind="text: totalDiceSuccesses"></span>
                 </div>
-
-                <div class="modal fade" id="spellsModal">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Spells</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Value</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-bind="foreach: spells">
-                                        <tr>
-                                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
-                                            <td><div style="display: inline;" data-bind="attribute: value"></div></td>
-                                            <td><button class="btn btn-danger" data-bind="click: $parent.removeSpell.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" data-bind="click: newSpell"><i class="fas fa-plus"></i> Spell</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="flawsModal">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Flaws</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Value</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-bind="foreach: flaws">
-                                        <tr>
-                                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
-                                            <td><div style="display: inline;" data-bind="attribute: value"></div></td>
-                                            <td><button class="btn btn-danger" data-bind="click: $parent.removeFlaw.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" data-bind="click: newFlaw"><i class="fas fa-plus"></i> Flaw</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="weaponsModal">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Weapons</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-bind="foreach: weapons">
-                                        <tr>
-                                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
-                                            <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                                            <td><button class="btn btn-danger" data-bind="click: $parent.removeWeapon.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" data-bind="click: newWeapon"><i class="fas fa-plus"></i> Weapon</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="equipmentModal">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Equipment</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-bind="foreach: equipment">
-                                        <tr>
-                                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
-                                            <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                                            <td><button class="btn btn-danger" data-bind="click: $parent.removeEquipment.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" data-bind="click: newEquipment"><i class="fas fa-plus"></i> Equipment</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="inventoryModal">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Inventory</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                            <th>Quantity</th>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody data-bind="foreach: inventory">
-                                        <tr>
-                                            <td><input type="number" style="width: 100%;" data-bind="textInput: quantity" /></td>
-                                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
-                                            <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                                            <td><button class="btn btn-danger" data-bind="click: $parent.removeInventoryItem.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" data-bind="click: newInventoryItem"><i class="fas fa-plus"></i> Inventory Item</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="notesModal">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Notes</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <table class="table table-borderless">
-                                        <thead><tr><th></th><th></th></tr></thead>
-                                        <tbody data-bind="foreach: notes">
-                                            <tr>
-                                                <td><textarea data-bind="textInput: value"></textarea></td>
-                                                <td><button class="btn btn-danger" data-bind="click: $parent.removeNote.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-success" data-bind="click: newNote"><i class="fas fa-plus"></i> Note</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
-            <div class="modal fade" id="diceModal">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Roll Dice</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="number" data-bind="textInput: dicePool" />
-                            <button class="btn btn-lg btn-primary" data-bind="click: rollDice"><i class="fas fa-check"></i> Roll</button>
-                            <div data-bind="dice: rollRounds"></div>
-                            <div style="font-size: 2.5em;">
-                                <label>Total:</label>
-                                <span data-bind="text: totalDiceSuccesses"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="notesContainer" data-bind="visible: mode() === 'notes', with: character">
+                <h1>Notes <button type="button" class="btn btn-sm btn-success" data-bind="click: newNote"><i class="fas fa-plus"></i></button></h1>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: notes">
+                        <tr>
+                            <td><textarea data-bind="textInput: value"></textarea></td>
+                            <td><button class="btn btn-danger" data-bind="click: $parent.removeNote.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="meritsContainer" data-bind="visible: mode() === 'merits', with: character">
+                <h1>Merits <button type="button" class="btn btn-sm btn-success" data-bind="click: newMerit"><i class="fas fa-plus"></i></button></h1>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: merits">
+                        <tr>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><div style="display: inline;" data-bind="attribute: value"></div></td>
+                            <td><button class="btn btn-danger" data-bind="click: $parent.removeMerit.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spellsContainer" data-bind="visible: mode() === 'spells', with: character">
+                <h1>Spells <button type="button" class="btn btn-sm btn-success" data-bind="click: newSpell"><i class="fas fa-plus"></i></button></h1>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: spells">
+                        <tr>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><div style="display: inline;" data-bind="attribute: value"></div></td>
+                            <td><button class="btn btn-danger" data-bind="click: $parent.removeSpell.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flawsContainer" data-bind="visible: mode() === 'flaws', with: character">
+                <h1>Flaws <button type="button" class="btn btn-sm btn-success" data-bind="click: newFlaw"><i class="fas fa-plus"></i></button></h1>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: flaws">
+                        <tr>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><div style="display: inline;" data-bind="attribute: value"></div></td>
+                            <td><button class="btn btn-danger" data-bind="click: $parent.removeFlaw.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="weaponsContainer" data-bind="visible: mode() === 'weapons', with: character">
+                <h1>Weapons <button type="button" class="btn btn-sm btn-success" data-bind="click: newWeapon"><i class="fas fa-plus"></i></button></h1>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: weapons">
+                        <tr>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
+                            <td><button class="btn btn-danger" data-bind="click: $parent.removeWeapon.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="equipmentContainer" data-bind="visible: mode() === 'equipment', with: character">
+                <h1>Equipment <button type="button" class="btn btn-sm btn-success" data-bind="click: newEquipment"><i class="fas fa-plus"></i></button></h1>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: equipment">
+                        <tr>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
+                            <td><button class="btn btn-danger" data-bind="click: $parent.removeEquipment.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="inventoryContainer" data-bind="visible: mode() === 'inventory', with: character">
+                <h1>Inventory <button type="button" class="btn btn-sm btn-success" data-bind="click: newInventoryItem"><i class="fas fa-plus"></i></button></h1>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th>Quantity</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: inventory">
+                        <tr>
+                            <td><input type="number" style="width: 100%;" data-bind="textInput: quantity" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
+                            <td><button class="btn btn-danger" data-bind="click: $parent.removeInventoryItem.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
