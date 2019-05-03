@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!-- Boostrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <!-- KnockoutJS -->
         <script src="lib/knockout-3.5.0.min.js"></script>
+        <!-- SweetAlert -->
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <!-- Custom -->
         <link rel="stylesheet" href="css/site.css">
     </head>
     <body>
@@ -16,7 +21,7 @@
                 <button class="btn btn-lg btn-outline btn-outline-secondary" data-bind="click: backToList, visible: mode() === 'sheet'"><i class="fas fa-arrow-left"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="visible: mode() === 'sheet'" data-toggle="modal" data-target="#diceModal"><i class="fas fa-dice"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="visible: mode() === 'sheet'" data-toggle="modal" data-target="#notesModal"><i class="fas fa-clipboard"></i></button>
-                <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: saveCharacters"><i class="far fa-save"></i></button>
+                <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: saveCharacters"><i class="fas fa-save"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: downloadCharacter, visible: mode() === 'sheet'"><i class="fas fa-download"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: uploadCharacter, visible: mode() === 'list'"><i class="fas fa-upload"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-danger" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
@@ -534,16 +539,10 @@
                         <div class="modal-body">
                             <input type="number" data-bind="textInput: dicePool" />
                             <button class="btn btn-lg btn-primary" data-bind="click: rollDice"><i class="fas fa-check"></i> Roll</button>
-                            <!-- ko foreach: rollRounds -->
-                            <div style="margin-bottom: 25px; font-size: 2em;" class="row">
-                                <!-- ko foreach: $data -->
-                                <div style="display: inline-block; margin-left: 10px;" data-bind="text: $data, style: { color: $data === 10 ? 'gold' : ($data > 7 ? 'green' : 'black') }"></div>
-                                <!-- /ko -->
-                            </div>
-                            <!-- /ko -->
+                            <div data-bind="dice: rollRounds"></div>
                             <div style="font-size: 2.5em;">
                                 <label>Total:</label>
-                                <span data-bind="text: rollRounds().reduce((total, r) => total + r.reduce((total, d) => total + (d > 7 ? 1 : 0), 0), 0)"></span>
+                                <span data-bind="text: totalDiceSuccesses"></span>
                             </div>
                         </div>
                     </div>

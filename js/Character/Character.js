@@ -316,9 +316,6 @@ function randomName() {
 
 function randomInteger(minInclusive = 0, maxExclusive = 10) {
     if (maxExclusive < minInclusive) {
-        // const temp = minInclusive;
-        // minInclusive = maxExclusive;
-        // maxExclusive = temp;
         [minInclusive, maxExclusive] = [maxExclusive, minInclusive];
     }
 
@@ -363,7 +360,7 @@ ko.bindingHandlers.attribute = {
 };
 
 ko.bindingHandlers.readOnlyAttribute = {
-    init: function (element, valueAccessor) {
+    init: function (element) {
         for (let i = 0; i < 5; i++) {
             const dot = document.createElement("span");
             dot.classList.add("attribute-dot");
