@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="css/site.css">
     </head>
     <body>
-        <div class="container-fluid">
+        <div class="container">
             <div>
                 <button class="btn btn-lg btn-outline btn-outline-secondary" data-bind="click: backToList, visible: mode() === 'sheet'"><i class="fas fa-arrow-left"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="visible: mode() === 'sheet'" data-toggle="modal" data-target="#diceModal"><i class="fas fa-dice"></i></button>
@@ -31,45 +31,47 @@
                 </div>
             </div>
             <div class="characterContainer" data-bind="visible: mode() === 'sheet', using: character">
+                <h2>Character Information</h2>
                 <div class="row">
-                    <div class="col">
+                    <div class="col-lg-4">
                         <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Name:</label> <input type="text" data-bind="textInput: name" /></div>
                         <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Player:</label> <input type="text" data-bind="textInput: player" /></div>
                         <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Age:</label> <input type="number" data-bind="textInput: age" /></div>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-4">
                         <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Vice:</label> <input type="text" data-bind="textInput: vice" /></div>
                         <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Virtue:</label> <input type="text" data-bind="textInput: virtue" /></div>
                         <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Origins:</label> <input type="text" data-bind="textInput: origins" /></div>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-4">
                         <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Gender:</label> <input type="text" data-bind="textInput: gender" /></div>
                         <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Concept:</label> <input type="text" data-bind="textInput: concept" /></div>
                         <div class="col-xs-12 pointer" data-bind="click: onComponentClick"><label>Chronicle:</label> <input type="text" data-bind="textInput: chronicle" /></div>
                     </div>
                 </div>
-                <hr />
+                <br />
+                <h2>Base Stats</h2>
                 <div class="row">
-                    <div class="col">
+                    <div class="col-lg-4">
                         <div class="col-xs-12"><label>Intelligence:</label> <div style="display: inline;" data-bind="attribute: intelligence"></div></div>
                         <div class="col-xs-12"><label>Wits:</label> <div style="display: inline;" data-bind="attribute: wits"></div></div>
                         <div class="col-xs-12"><label>Resolve:</label> <div style="display: inline;" data-bind="attribute: resolve"></div></div>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-4">
                         <div class="col-xs-12"><label>Strength:</label> <div style="display: inline;" data-bind="attribute: strength"></div></div>
                         <div class="col-xs-12"><label>Dexterity:</label> <div style="display: inline;" data-bind="attribute: dexterity"></div></div>
                         <div class="col-xs-12"><label>Stamina:</label> <div style="display: inline;" data-bind="attribute: stamina"></div></div>
                     </div>
-                    <div class="col">
+                    <div class="col-lg-4">
                         <div class="col-xs-12"><label>Presence:</label> <div style="display: inline;" data-bind="attribute: presence"></div></div>
                         <div class="col-xs-12"><label>Manipulation:</label> <div style="display: inline;" data-bind="attribute: manipulation"></div></div>
                         <div class="col-xs-12"><label>Composure:</label> <div style="display: inline;" data-bind="attribute: composure"></div></div>
                     </div>
                 </div>
-                <hr />
+                <br />
                 <div class="row">
-                    <div class="col">
-                        <div class="col-xs-12"><label>Health:</label></div>
+                    <div class="col-lg-4">
+                        <div class="col-xs-12"><h2>Health</h2></div>
                         <div class="col-xs-12"><div data-bind="capacity: damage.totalHealth"></div></div>
                         <div class="col-xs-12">
                             <div class="col-xs-12" data-bind="damage: damage"></div>
@@ -79,24 +81,26 @@
                                 <button class="btn btn-outline-primary btn-sm" data-bind="click: addAggravated">Aggravated</button>
                             </div>
                         </div>
+                        <br />
                     </div>
-                    <div class="col" data-toggle="tooltip" data-bind="remainingMagicTooltip: magic">
-                        <div class="col-xs-12"><label>Magic:</label></div>
+                    <div class="col-lg-4" data-toggle="tooltip" data-bind="remainingMagicTooltip: magic">
+                        <div class="col-xs-12"><h2>Magic</h2></div>
                         <div class="col-xs-12"><div data-bind="capacity: magic.totalMagic"></div></div>
                         <div class="col-xs-12"><div data-bind="magic: magic"></div></div>
                         <div class="col-xs-12" data-bind="with: magic"><button class="btn btn-outline-primary btn-sm" data-bind="click: clearUsed">Heal All</button></div>
+                        <br />
                     </div>
-                    <div class="col" data-toggle="tooltip" data-bind="remainingWillpowerTooltip: willpower">
-                        <div class="col-xs-12"><label>Willpower:</label></div>
+                    <div class="col-lg-4" data-toggle="tooltip" data-bind="remainingWillpowerTooltip: willpower">
+                        <div class="col-xs-12"><h2>Willpower</h2></div>
                         <div class="col-xs-12"><div data-bind="capacity: willpower.totalWillpower"></div></div>
                         <div class="col-xs-12"><div data-bind="willpower: willpower"></div></div>
                         <div class="col-xs-12" data-bind="with: willpower"><button class="btn btn-outline-primary btn-sm" data-bind="click: clearUsed">Heal All</button></div>
                     </div>
                 </div>
-                <hr />
+                <br />
                 <div class="row">
-                    <div class="col">
-                        <label>Mental</label> (-3 Unskilled)
+                    <div class="col-lg-4">
+                        <h2>Mental</h2> (-3 Unskilled)
                         <div class="col-xs-12">
                             <label>Academics:</label>
                             <div style="display: inline;" data-bind="attribute: academics"></div>
@@ -129,9 +133,10 @@
                             <label>Science:</label>
                             <div style="display: inline;" data-bind="attribute: science"></div>
                         </div>
+                        <br />
                     </div>
-                    <div class="col">
-                        <label>Physical</label> (-1 Unskilled)
+                    <div class="col-lg-4">
+                        <h2>Physical</h2> (-1 Unskilled)
                         <div class="col-xs-12">
                             <label>Athletics:</label>
                             <div style="display: inline;" data-bind="attribute: athletics"></div>
@@ -164,9 +169,10 @@
                             <label>Weaponry:</label>
                             <div style="display: inline;" data-bind="attribute: weaponry"></div>
                         </div>
+                        <br />
                     </div>
-                    <div class="col">
-                        <label>Social</label> (-1 Unskilled)
+                    <div class="col-lg-4">
+                        <h2>Social</h2> (-1 Unskilled)
                         <div class="col-xs-12">
                             <label>Animal Ken:</label>
                             <div style="display: inline;" data-bind="attribute: animalKen"></div>
@@ -201,12 +207,10 @@
                         </div>
                     </div>
                 </div>
-
-                <hr />
-
+                <br />
                 <div class="row">
-                    <div class="col clickable pointer" data-toggle="modal" data-target="#meritsModal">
-                        <label>Merits:</label>
+                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#meritsModal">
+                        <h2>Merits</h2>
                         <span style="font-style: italic;" data-bind="visible: merits().length === 0">None</span>
                         <div data-bind="foreach: merits">
                             <div class="col-xs-12">
@@ -214,9 +218,10 @@
                                 <div style="display: inline;" data-bind="readOnlyAttribute: value"></div>
                             </div>
                         </div>
+                        <br />
                     </div>
-                    <div class="col clickable pointer" data-toggle="modal" data-target="#spellsModal">
-                        <label>Spells:</label>
+                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#spellsModal">
+                        <h2>Spells</h2>
                         <span style="font-style: italic;" data-bind="visible: spells().length === 0">None</span>
                         <div data-bind="foreach: spells">
                             <div class="col-xs-12">
@@ -224,9 +229,10 @@
                                 <div style="display: inline;" data-bind="readOnlyAttribute: value"></div>
                             </div>
                         </div>
+                        <br />
                     </div>
-                    <div class="col clickable pointer" data-toggle="modal" data-target="#flawsModal">
-                        <label>Flaws:</label>
+                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#flawsModal">
+                        <h2>Flaws</h2>
                         <span style="font-style: italic;" data-bind="visible: flaws().length === 0">None</span>
                         <div data-bind="foreach: flaws">
                             <div class="col-xs-12">
@@ -236,12 +242,10 @@
                         </div>
                     </div>
                 </div>
-
-                <hr />
-
+                <br />
                 <div class="row">
-                    <div class="col">
-                        <label>Other Stats:</label>
+                    <div class="col-lg-4">
+                        <h2>Other Stats</h2>
                         <div class="col-xs-12" data-bind="click: onComponentClick">
                             <label>Size:</label>
                             <input type="number" data-bind="textInput: size" />
@@ -270,28 +274,28 @@
                             <label>Morality:</label>
                             <input type="number" data-bind="textInput: morality" />
                         </div>
+                        <br />
                     </div>
-                    <div class="col clickable pointer" data-toggle="modal" data-target="#weaponsModal">
-                        <label>Weapons:</label>
+                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#weaponsModal">
+                        <h2>Weapons</h2>
                         <span style="font-style: italic;" data-bind="visible: weapons().length === 0">None</span>
                         <div class="font20" data-bind="foreach: weapons">
                             <div class="listItem" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
                         </div>
+                        <br />
                     </div>
-                    <div class="col clickable pointer" data-toggle="modal" data-target="#equipmentModal">
-                        <label>Equipment:</label>
+                    <div class="col-lg-4 clickable pointer" data-toggle="modal" data-target="#equipmentModal">
+                        <h2>Equipment</h2>
                         <span style="font-style: italic;" data-bind="visible: equipment().length === 0">None</span>
                         <div class="font20" data-bind="foreach: equipment">
                             <div class="listItem" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
                         </div>
                     </div>
                 </div>
-
-                <hr />
-
+                <br />
                 <div class="row">
                     <div class="col clickable pointer" data-toggle="modal" data-target="#inventoryModal">
-                        <label>Inventory:</label>
+                        <h2>Inventory</h2>
                         <span style="font-style: italic;" data-bind="visible: inventory().length === 0">None</span>
                         <div class="font20" class="col" data-bind="foreach: inventory">
                             <div class="listItem" data-toggle="tooltip" data-bind="text: displayText, tooltip: description"></div>
