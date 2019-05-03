@@ -8,7 +8,7 @@ class Application {
         this.mode = ko.observable(savedCharacters.length > 0 ? "list" : "sheet");
 
         if (savedCharacters.length === 0) {
-            savedCharacters.push(Character.newCharacter(""));
+            savedCharacters.push(Character.newCharacter());
         }
 
         this.characterId = ko.observable(0);
@@ -24,7 +24,7 @@ class Application {
     }
 
     newCharacter() {
-        this.characters.push(Character.newCharacter("new buttwhole"));
+        this.characters.push(Character.newCharacter());
         this.characterId(this.characters().length - 1);
         this.mode("sheet");
     }

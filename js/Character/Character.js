@@ -78,9 +78,9 @@ export default class Character {
         this.notes = ko.observableArray(json.notes.map(n => new Note(n)));
     }
 
-    static newCharacter(name) {
+    static newCharacter() {
         const json = {
-            name: name,
+            name: randomName(),
             player: "",
             age: 0,
             vice: "",
@@ -288,6 +288,41 @@ export default class Character {
             notes: this.notes().map(n => n.value())
         };
     }
+}
+
+const alphabet = "abcdefghijklmnopqrstuvwxyz";
+function randomName() {
+    const firstNameLength = randomInteger(5, 12);
+    const lastNameLength = randomInteger(5, 12);
+    let firstName = "";
+    let lastName = "";
+
+    for (let i = 0; i < firstNameLength; i++) {
+        let newLetter = alphabet.charAt(randomInteger(0, alphabet.length));
+        if (i === 0) newLetter = newLetter.toUpperCase();
+
+        firstName += newLetter;
+    }
+
+    for (let i = 0; i < lastNameLength; i++) {
+        let newLetter = alphabet.charAt(randomInteger(0, alphabet.length));
+        if (i === 0) newLetter = newLetter.toUpperCase();
+
+        lastName += newLetter;
+    }
+
+    return `${firstName} ${lastName}`;
+}
+
+function randomInteger(minInclusive = 0, maxExclusive = 10) {
+    if (maxExclusive < minInclusive) {
+        // const temp = minInclusive;
+        // minInclusive = maxExclusive;
+        // maxExclusive = temp;
+        [minInclusive, maxExclusive] = [maxExclusive, minInclusive];
+    }
+
+    return Math.floor(Math.random() * (maxExclusive - minInclusive)) + minInclusive;
 }
 
 ko.bindingHandlers.attribute = {
