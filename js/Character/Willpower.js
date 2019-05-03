@@ -1,14 +1,14 @@
 export default class Willpower {
-    constructor(totalWillpower, used) {
-        this.usedWillpower = ko.observable(used || 0);
-        this.totalWillpower = ko.observable(totalWillpower);
-        this.totalWillpower.subscribe(val => {
+    constructor(total, used) {
+        this.used = ko.observable(used || 0);
+        this.total = ko.observable(total);
+        this.total.subscribe(val => {
             if (this.usedWillpower() > val) this.usedWillpower(val);
         });
     }
 
     clearUsed() {
-        this.usedWillpower(0);
+        this.used(0);
     }
 }
 
@@ -17,11 +17,11 @@ ko.bindingHandlers.willpower = {
         function setup() {
             [...element.getElementsByTagName("span")].forEach(e => e.remove());
             const dots = [];
-            for (let i = 0; i < valueAccessor().totalWillpower(); i++) {
+            for (let i = 0; i < valueAccessor().total(); i++) {
                 const dot = document.createElement("span");
                 dot.classList.add("attribute-dot");
-                if (i < valueAccessor().usedWillpower()) {
-                    dot.classList.add("filled");
+                if (i < valueAccessor().used()) {
+                    dot.classList.add("filled-red");
                 }
                 element.appendChild(dot);
 
@@ -37,30 +37,30 @@ ko.bindingHandlers.willpower = {
             }
             dots.forEach((dot, index) => {
                 dot.addEventListener("click", () => {
-                    valueAccessor().usedWillpower(index + 1);
+                    valueAccessor().used(index + 1);
                 });
             });
         }
 
         setup();
-        valueAccessor().totalWillpower.subscribe(setup);
+        valueAccessor().total.subscribe(setup);
     },
     update: function (element, valueAccessor) {
-        const usedWillpower = valueAccessor().usedWillpower();
+        const used = valueAccessor().used();
         const dots = element.getElementsByTagName("span");
 
         for (let i = 0; i < dots.length; i++) {
-            dots[i].classList.remove("filled");
-            if (i < usedWillpower) {
-                dots[i].classList.add("filled");
+            dots[i].classList.remove("filled-red");
+            if (i < used) {
+                dots[i].classList.add("filled-red");
             }
         }
     }
 };
 
-ko.bindingHandlers.remainingWillpowerTooltip = {
+ko.bindingHandlers.remainingTooltip = {
     update: function (element, valueAccessor) {
         $(element).tooltip("dispose");
-        $(element).tooltip({ title: `${valueAccessor().totalWillpower() - valueAccessor().usedWillpower()} points left` });
+        $(element).tooltip({ title: `${valueAccessor().total() - valueAccessor().used()} points left` });
     }
 };

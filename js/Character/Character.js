@@ -1,5 +1,4 @@
 import Damage from "./Damage.js";
-import Magic from "./Magic.js";
 import Willpower from "./Willpower.js";
 import Merit from "./Merit.js";
 import Equipment from "./Equipment.js";
@@ -29,7 +28,7 @@ export default class Character {
         this.composure = ko.observable(json.composure);
 
         this.damage = new Damage(json.health, json.bashing, json.lethal, json.aggravated);
-        this.magic = new Magic(json.magic, json.usedMagic);
+        this.magic = new Willpower(json.magic, json.usedMagic);
         this.willpower = new Willpower(json.willpower, json.usedWillpower);
 
         this.academics = ko.observable(json.academics);
@@ -240,10 +239,10 @@ export default class Character {
             bashing: this.damage.bashing(),
             lethal: this.damage.lethal(),
             aggravated: this.damage.aggravated(),
-            magic: this.magic.totalMagic(),
-            usedMagic: this.magic.usedMagic(),
-            willpower: this.willpower.totalWillpower(),
-            usedWillpower: this.willpower.usedWillpower(),
+            magic: this.magic.total(),
+            usedMagic: this.magic.used(),
+            willpower: this.willpower.total(),
+            usedWillpower: this.willpower.used(),
 
             academics: this.academics(),
             robotics: this.robotics(),
@@ -342,18 +341,21 @@ ko.bindingHandlers.attribute = {
         }
         dots.forEach((dot, index) => {
             dot.addEventListener("click", () => {
-                const observable = valueAccessor();
+                const params = valueAccessor();
+                const observable = params.value();
                 observable(index + 1);
             });
         });
     },
     update: function (element, valueAccessor) {
-        const value = valueAccessor()();
+        const value = valueAccessor().value();
+        const color = valueAccessor().color;
         const dots = element.getElementsByTagName("span");
         for (let i = 0; i < dots.length; i++) {
-            dots[i].classList.remove("filled");
+            dots[i].style.backgroundColor = null;
             if (i < value) {
                 dots[i].classList.add("filled");
+                dots[i].style.backgroundColor = color;
             }
         }
     }
