@@ -28,7 +28,7 @@ $(function () {
         }
         else if (self.bashing() > 0) {
             self.bashing(self.bashing() - 1);
-            self.lethal(self.length() + 1);
+            self.lethal(self.lethal() + 1);
         }
         else if (self.lethal() > 0) {
             self.lethal(self.lethal() - 1);
@@ -104,34 +104,38 @@ $(function () {
             else {
                 imgs[i].src = "images/none.png";
             }
+
+            if (i < damageObj.totalHealth()) {
+                imgs[i].classList.remove("HIDDEN");
+            }
+            else {
+                imgs[i].classList.add("HIDDEN");
+            }
         }
     }
     
     ko.bindingHandlers.damage = {
         init: function (element, valueAccessor) {
-            var previousTotalSubscription;
+            var totalHealthSub;
+            var charSub;
             function setup() {
-                var imgs = element.getElementsByTagName("img");
-                for (var i = 0; i < imgs.length; i++) {
-                    imgs[i].remove();
-                }
                 var damageObj = valueAccessor().damage;
-                for (var i = 0; i < damageObj.totalHealth(); i++) {
+                for (var i = 0; i < 12; i++) {
                     var cb = document.createElement("img");
                     cb.style.border = "1px solid var(--body-color)";
                     cb.style.margin = "0 2px";
                     cb.src = "images/none.png";
-    
                     element.appendChild(cb);
                 }
-    
+
                 updateDamageDisplay(element, valueAccessor);
-                if (previousTotalSubscription) previousTotalSubscription.dispose();
-                previousTotalSubscription = valueAccessor().damage.totalHealth.subscribe(setup);
+                if (totalHealthSub) totalHealthSub.dispose();
+                if (charSub) charSub.dispose();
+                totalHealthSub = damageObj.totalHealth.subscribe(updateDamageDisplay.bind(this, element, valueAccessor));
+                charSub = valueAccessor().app.character.subscribe(updateDamageDisplay.bind(this, element, valueAccessor));
             }
-    
+
             setup();
-            valueAccessor().app.character.subscribe(setup);
         },
         update: updateDamageDisplay
     };

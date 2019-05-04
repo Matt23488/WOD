@@ -14,37 +14,40 @@ $(function () {
     
     function updateUsedDisplay(element, valueAccessor) {
         var used = valueAccessor().willpower.used();
+        var total = valueAccessor().willpower.total();
         var dots = element.getElementsByTagName("span");
         for (var i = 0; i < dots.length; i++) {
-            dots[i].classList.remove("filled-red");
             if (i < used) dots[i].classList.add("filled-red");
+            else dots[i].classList.remove("filled-red");
+
+            if (i < total) dots[i].classList.remove("HIDDEN");
+            else dots[i].classList.add("HIDDEN");
         }
     }
     
-    // TODO: Fix the closure. Since I'm not using let/const for ES5 compatibility,
-    //       the closures aren't working.
     ko.bindingHandlers.willpower = {
         init: function (element, valueAccessor) {
-            var previousTotalSubscription;
+            var totalSub;
             function setup() {
-                var spans = element.getElementsByTagName("span");
-                for (var i = 0; i < spans.length; i++) {
-                    spans[i].remove();
-                }
                 var dots = [];
-                for (var i = 0; i < valueAccessor().willpower.total(); i++) {
+                for (var i = 0; i < 12; i++) {
                     var dot = document.createElement("span");
                     dot.classList.add("attribute-dot");
+                    dot.dataset.index = i;
                     element.appendChild(dot);
     
                     dots.push(dot);
-                    var captureDots = dots.map(function (dot) { return dot; });
     
                     dot.addEventListener("pointerenter", function () {
-                        captureDots.forEach(function (dot) { dot.classList.add("hoverFilled"); });
+                        var dotIndex = parseInt(this.dataset.index);
+                        dots.forEach(function (dot, index) {
+                            if (index <= dotIndex) dot.classList.add("hoverFilled");
+                        });
                     });
                     dot.addEventListener("pointerleave", function () {
-                        captureDots.forEach(function (dot) { dot.classList.remove("hoverFilled"); });
+                        dots.forEach(function (dot) {
+                            dot.classList.remove("hoverFilled");
+                        });
                     });
                 }
                 dots.forEach(function (dot, index) {
@@ -54,12 +57,12 @@ $(function () {
                 });
     
                 updateUsedDisplay(element, valueAccessor);
-                if (previousTotalSubscription) previousTotalSubscription.dispose();
-                previousTotalSubscription = valueAccessor().willpower.total.subscribe(setup);
+                if (totalSub) totalSub.dispose();
+                totalSub = valueAccessor().willpower.total.subscribe(updateUsedDisplay.bind(this, element, valueAccessor));
             }
     
             setup();
-            valueAccessor().app.character.subscribe(setup);
+            valueAccessor().app.character.subscribe(updateUsedDisplay.bind(this, element, valueAccessor));
         },
         update: updateUsedDisplay
     };

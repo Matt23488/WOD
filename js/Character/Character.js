@@ -323,16 +323,21 @@ $(function () {
             for (var i = 0; i < 5; i++) {
                 var dot = document.createElement("span");
                 dot.classList.add("attribute-dot");
+                dot.dataset.index = i;
                 element.appendChild(dot);
     
                 dots.push(dot);
-                var captureDots = dots.map(function (dot) { return dot; });
     
                 dot.addEventListener("pointerenter", function () {
-                    captureDots.forEach(function (dot) { dot.classList.add("hoverFilled"); });
+                    var dotIndex = parseInt(this.dataset.index);
+                    dots.forEach(function (dot, index) {
+                        if (index <= dotIndex) dot.classList.add("hoverFilled");
+                    });
                 });
                 dot.addEventListener("pointerleave", function () {
-                    captureDots.forEach(function (dot) { dot.classList.remove("hoverFilled"); });
+                    dots.forEach(function (dot) {
+                        dot.classList.remove("hoverFilled");
+                    });
                 });
             }
             dots.forEach(function (dot, index) {
@@ -378,24 +383,27 @@ $(function () {
         }
     };
     
-    // TODO: Fix the closure. Since I'm not using let/const for ES5 compatibility,
-    //       the closures aren't working.
     ko.bindingHandlers.capacity = {
         init: function (element, valueAccessor) {
             var dots = [];
             for (let i = 0; i < 12; i++) {
                 var dot = document.createElement("span");
                 dot.classList.add("attribute-dot");
+                dot.dataset.index = i;
                 element.appendChild(dot);
     
                 dots.push(dot);
-                var captureDots = dots.map(function (dot) { return dot; });
     
                 dot.addEventListener("pointerenter", function () {
-                    captureDots.forEach(function (dot) { dot.classList.add("hoverFilled"); });
+                    var dotIndex = parseInt(this.dataset.index);
+                    dots.forEach(function (dot, index) {
+                        if (index <= dotIndex) dot.classList.add("hoverFilled");
+                    });
                 });
                 dot.addEventListener("pointerleave", function () {
-                    captureDots.forEach(function (dot) { dot.classList.remove("hoverFilled"); });
+                    dots.forEach(function (dot) {
+                        dot.classList.remove("hoverFilled");
+                    });
                 });
             }
             dots.forEach(function (dot, index) {

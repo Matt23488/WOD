@@ -9,7 +9,7 @@ body {
 }
 
 .HIDDEN {
-    display: none;
+    display: none !important;
 }
 
 input, textarea, span.form-control {
