@@ -353,9 +353,11 @@ ko.bindingHandlers.attribute = {
         const dots = element.getElementsByTagName("span");
         for (let i = 0; i < dots.length; i++) {
             dots[i].style.backgroundColor = null;
+            dots[i].style.borderColor = null;
             if (i < value) {
                 dots[i].classList.add("filled");
                 dots[i].style.backgroundColor = color;
+                dots[i].style.borderColor = color;
             }
         }
     }

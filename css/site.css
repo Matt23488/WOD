@@ -39,11 +39,12 @@ label {
 
 .filled-red {
     background-color: red;
+    border-color: red;
 }
 
 .hoverFilled {
-    background-color: gold;
-    border-color: gold;
+    background-color: gold !important;
+    border-color: gold !important;
 }
 
 .characterContainer {
