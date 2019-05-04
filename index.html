@@ -111,7 +111,7 @@
                 <br />
                 <div class="row">
                     <div class="col-lg">
-                        <h2>Health</h2>
+                        <h2>Health <button class="btn btn-sm btn-outline-light" data-bind="click: damage.clearAll.bind(damage)">Heal All</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: damage.totalHealth"></div></div>
                         <br />
@@ -128,29 +128,21 @@
                         <br />
                     </div>
                     <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: magic">
-                        <h2>Magic</h2>
+                        <h2>Magic <button class="btn btn-outline-light btn-sm" data-bind="click: magic.clearUsed.bind(magic)">Heal All</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: magic.total"></div></div>
                         <br />
                         <div class="col-12"><label>Used:</label></div>
                         <div class="col-12"><div data-bind="willpower: { willpower: magic, app: $root }"></div></div>
                         <br />
-                        <div class="col-12" data-bind="with: magic">
-                            <button class="btn btn-outline-light btn-sm" data-bind="click: clearUsed">Heal All</button>
-                        </div>
-                        <br />
                     </div>
                     <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: willpower">
-                        <h2>Willpower</h2>
+                        <h2>Willpower <button class="btn btn-outline-light btn-sm" data-bind="click: willpower.clearUsed.bind(willpower)">Heal All</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: willpower.total"></div></div>
                         <br />
                         <div class="col-12"><label>Used:</label></div>
                         <div class="col-12"><div data-bind="willpower: { willpower: willpower, app: $root }"></div></div>
-                        <br />
-                        <div class="col-12" data-bind="with: willpower">
-                            <button class="btn btn-outline-light btn-sm" data-bind="click: clearUsed">Heal All</button>
-                        </div>
                     </div>
                 </div>
                 <br />

@@ -78,6 +78,12 @@ $(function () {
         }
     };
 
+    Damage.prototype.clearAll = function () {
+        this.bashing(0);
+        this.lethal(0);
+        this.aggravated(0);
+    };
+
     Damage.prototype.anyEmpty = function () {
         return this.bashing() + this.lethal() + this.aggravated() < this.totalHealth();
     };
