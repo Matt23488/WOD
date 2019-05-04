@@ -1,23 +1,33 @@
-export default class Dice {
-    constructor () {
-        this.dicePool = ko.observable(1);
-        this.rollRounds = ko.observableArray([]);
-        this.totalDiceSuccesses = ko.computed(() => this.rollRounds().reduce((total, r) => total + r.reduce((total, d) => total + (d > 7 ? 1 : 0), 0), 0));
+$(function () {
+    function Dice() {
+        var self = this;
+        self.dicePool = ko.observable(1);
+        self.rollRounds = ko.observableArray([]);
+        self.totalDiceSuccesses = ko.computed(function () {
+            return self.rollRounds().reduce(function (total, r) {
+                return total + r.reduce(function (total, d) {
+                    return total + (d > 7 ? 1 : 0);
+                }, 0);
+            }, 0);
+        });
     }
-
-    rollDice() {
-        this.rollRounds.removeAll();
-        let numRolls = this.dicePool();
+    
+    Dice.prototype.rollDice = function () {
+        var self = this;
+        self.rollRounds.removeAll();
+        var numRolls = self.dicePool();
         while (numRolls > 0) {
-            let rerolls = 0;
-            const currentRound = [];
-            for (let i = 0; i < numRolls; i++) {
-                const roll = Math.floor(Math.random() * 10) + 1;
+            var rerolls = 0;
+            var currentRound = [];
+            for (var i = 0; i < numRolls; i++) {
+                var roll = Math.floor(Math.random() * 10) + 1;
                 if (roll === 10) rerolls++;
                 currentRound.push(roll)
             }
-            this.rollRounds.push(currentRound);
+            self.rollRounds.push(currentRound);
             numRolls = rerolls;
         }
-    }
-}
+    };
+
+    window.Dice = Dice;
+});

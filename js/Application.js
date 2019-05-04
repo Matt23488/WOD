@@ -1,59 +1,68 @@
-import Character from "./Character/Character.js";
-import Dice from "./Dice.js";
-
-export default class Application {
-    constructor() {
-        let savedCharacters = (JSON.parse(window.localStorage.getItem("characters")) || []).map(c => Character.fromJson(c));
-        if (!savedCharacters) savedCharacters = [];
+$(function () {
+    function Application() {
+        var self = this;
+        var savedCharacters = (JSON.parse(window.localStorage.getItem("characters")) || []).map(Character.fromJson);
         savedCharacters.unshift(Character.newCharacter());
         savedCharacters[0].ghost = true;
 
-        this.mode = ko.observable("list");
-        this.characterId = ko.observable(0);
-        this.characters = ko.observableArray(savedCharacters);
-        this.realCharacters = ko.computed(() => this.characters().filter(c => !c.ghost));
-        this.character = ko.computed(() => this.characters()[this.characterId()], this);
-        this.dice = new Dice();
+        self.mode = ko.observable("list");
+        self.characterId = ko.observable(0);
+        self.characters = ko.observableArray(savedCharacters);
+        self.realCharacters = ko.computed(function () {
+            return self.characters().filter(function (c) {
+                return !c.ghost;
+            });
+        });
+        self.character = ko.computed(function () { return self.characters()[self.characterId()]; });
+        self.dice = new Dice();
     }
 
-    goBack() {
-        if (this.mode() === "sheet") this.mode("list");
-        else this.mode("sheet");
-    }
+    Application.prototype.goBack = function () {
+        var self = this;
+        if (self.mode() === "sheet") self.mode("list");
+        else self.mode("sheet");
+    };
 
-    newCharacter() {
-        this.characters.push(Character.newCharacter());
-        this.characterId(this.characters().length - 1);
-        this.mode("sheet");
-    }
+    Application.prototype.newCharacter = function () {
+        var self = this;
+        self.characters.push(Character.newCharacter());
+        self.characterId(self.characters().length - 1);
+        self.mode("sheet");
+    };
 
-    selectCharacter(character) {
-        this.characterId(this.characters.indexOf(character));
-        this.mode("sheet");
-    }
+    Application.prototype.selectCharacter = function (character) {
+        var self = this;
+        self.characterId(self.characters.indexOf(character));
+        self.mode("sheet");
+    };
 
-    deleteCharacter() {
-        const id = this.characterId();
-        this.characterId(id - 1);
-        this.characters.remove(this.characters()[id]);
-        this.mode("list");
-    }
+    Application.prototype.deleteCharacter = function () {
+        var self = this;
+        var id = self.characterId();
+        self.characterId(id - 1);
+        self.characters.remove(self.characters()[id]);
+        self.mode("list");
+    };
 
-    saveCharacters() {
-        window.localStorage.setItem("characters", JSON.stringify(this.realCharacters().map(c => c.toJson())));
+    Application.prototype.saveCharacters = function () {
+        var self = this;
+        window.localStorage.setItem("characters", JSON.stringify(self.realCharacters().map(function (c) {
+            return c.toJson();
+        })));
         swal("Characters saved successfully!", {
-            buttons: false,
+            button: false,
             timer: 1000,
             icon: "success"
         });
-    }
+    };
 
-    downloadCharacter() {
-        const json = JSON.stringify(this.character().toJson());
+    Application.prototype.downloadCharacter = function () {
+        var self = this;
+        var json = JSON.stringify(self.character().toJson());
 
-        const dl = document.createElement("a");
+        var dl = document.createElement("a");
         dl.setAttribute("href", `data:text/plain;charset=utf-8,${encodeURIComponent(json)}`);
-        dl.setAttribute("download", `${this.character().name()}.json`);
+        dl.setAttribute("download", `${self.character().name()}.json`);
 
         dl.style.display = "none";
         document.body.appendChild(dl);
@@ -61,24 +70,25 @@ export default class Application {
         dl.click();
 
         document.body.removeChild(dl);
-    }
+    };
 
-    uploadCharacter() {
-        const ul = document.createElement("input");
+    Application.prototype.uploadCharacter = function () {
+        var self = this;
+        var ul = document.createElement("input");
         ul.type = "file";
         ul.accept = ".json";
         ul.style.display = "none";
 
-        ul.addEventListener("change", e => {
-            const file = ul.files[0];
+        ul.addEventListener("change", function (e) {
+            var file = ul.files[0];
             if (!file) return;
 
-            const reader = new FileReader();
-            reader.onload = e => {
-                const json = e.target.result;
-                this.characters.push(Character.fromJson(JSON.parse(json)));
-                this.characterId(this.characters().length - 1);
-                this.mode("sheet");
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var json = e.target.result;
+                self.characters.push(Character.fromJson(JSON.parse(json)));
+                self.characterId(self.characters().length - 1);
+                self.mode("sheet");
             };
             reader.readAsText(file);
         });
@@ -88,28 +98,35 @@ export default class Application {
         ul.click();
 
         document.body.removeChild(ul);
-    }
+    };
+    
+    Application.prototype.switchMode = function (mode) {
+        var self = this;
+        return function () {
+            self.mode(mode);
+        };
+    };
 
-    switchMode(mode) {
-        return () => this.mode(mode);
-    }
-}
-
-ko.bindingHandlers.dice = {
-    update: function (element, valueAccessor) {
-        element.innerHTML = "";
-        const rollRounds = valueAccessor()();
-        for (let rolls of rollRounds) {
-            const div = document.createElement("div");
-            div.style.marginBottom = "25px";
-            for (let roll of rolls) {
-                const img = document.createElement("img");
-                img.src = `images/dice-${roll}.png`;
-                img.style.width = "72px";
-                img.style.height = "72px";
-                div.appendChild(img);
+    ko.bindingHandlers.dice = {
+        update: function (element, valueAccessor) {
+            element.innerHTML = "";
+            var rollRounds = valueAccessor()();
+            for (var i = 0; i < rollRounds.length; i++) {
+                var rolls = rollRounds[i];
+                var div = document.createElement("div");
+                div.style.marginBottom = "25px";
+                for (var j = 0; j < rolls.length; j++) {
+                    var roll = rolls[j];
+                    var img = document.createElement("img");
+                    img.src = "images/dice-" + roll + ".png";
+                    img.style.width = "72px";
+                    img.style.height = "72px";
+                    div.appendChild(img);
+                }
+                element.appendChild(div);
             }
-            element.appendChild(div);
         }
-    }
-};
+    };
+
+    window.Application = Application;
+});
