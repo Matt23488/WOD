@@ -5,15 +5,13 @@ export default class Application {
     constructor() {
         let savedCharacters = (JSON.parse(window.localStorage.getItem("characters")) || []).map(c => Character.fromJson(c));
         if (!savedCharacters) savedCharacters = [];
+        savedCharacters.unshift(Character.newCharacter());
+        savedCharacters[0].ghost = true;
 
-        this.mode = ko.observable(savedCharacters.length > 0 ? "list" : "sheet");
-
-        if (savedCharacters.length === 0) {
-            savedCharacters.push(Character.newCharacter());
-        }
-
+        this.mode = ko.observable("list");
         this.characterId = ko.observable(0);
         this.characters = ko.observableArray(savedCharacters);
+        this.realCharacters = ko.computed(() => this.characters().filter(c => !c.ghost));
         this.character = ko.computed(() => this.characters()[this.characterId()], this);
         this.dice = new Dice();
     }
@@ -36,23 +34,13 @@ export default class Application {
 
     deleteCharacter() {
         const id = this.characterId();
-
-        if (this.characters().length === 1) {
-            this.characters.push(Character.newCharacter(""));
-            this.characterId(0);
-        }
-        else {
-            if (id > 0) {
-                this.characterId(id - 1);
-            }
-            this.mode("list");
-        }
-
+        this.characterId(id - 1);
         this.characters.remove(this.characters()[id]);
+        this.mode("list");
     }
 
     saveCharacters() {
-        window.localStorage.setItem("characters", JSON.stringify(this.characters().map(c => c.toJson())));
+        window.localStorage.setItem("characters", JSON.stringify(this.realCharacters().map(c => c.toJson())));
         swal("Characters saved successfully!", {
             buttons: false,
             timer: 1000,

@@ -1,11 +1,27 @@
+:root {
+    --body-color: rgb(255, 255, 255);
+}
+
+body {
+    /* background-image: linear-gradient(to bottom right, rgb(63, 0, 146), rgb(200, 0, 255)); */
+    background-color: rgb(63, 0, 146);
+    color: var(--body-color);
+}
+
 .HIDDEN {
     display: none;
 }
 
 input, textarea, span.form-control {
     border: 0 !important;
-    border-bottom: 2px solid black !important;
+    border-bottom: 2px solid var(--body-color) !important;
     border-radius: 0 !important;
+    background-color: transparent !important;
+    color: var(--body-color) !important;
+}
+
+table {
+    color: var(--body-color) !important;
 }
 
 textarea {
@@ -23,7 +39,7 @@ label {
 .attribute-dot {
     width: 12px;
     height: 12px;
-    border: 1px solid black;
+    border: 1px solid var(--body-color);
     border-radius: 6px;
     margin: 0 5px 0 0;
     display: inline-block;
@@ -34,7 +50,7 @@ label {
 }
 
 .filled {
-    background-color: black;
+    background-color: var(--body-color);
 }
 
 .filled-red {
@@ -52,10 +68,6 @@ label {
     padding: 5px;
 }
 
-.btn-outline {
-    background-color: white;
-}
-
 .widthMax {
     width: 100%;
 }
@@ -65,9 +77,20 @@ label {
 }
 
 .clickable:hover {
-    border: 1px solid black;
+    border: 1px solid var(--body-color);
 }
 
 .font20 {
     font-size: 20pt;
+}
+
+.characterList {
+    list-style-type: none;
+    font-size: 3em;
+}
+
+.characterList > li {
+    color: var(--body-color);
+    padding: 10px;
+    border-radius: 5px;
 }

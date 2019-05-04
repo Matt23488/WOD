@@ -80,7 +80,7 @@ export default class Damage {
 }
 
 function updateDamageDisplay(element, valueAccessor) {
-    const damageObj = valueAccessor();
+    const damageObj = valueAccessor().damage;
     const imgs = element.getElementsByTagName("img");
     for (let i = 0; i < imgs.length; i++) {
         if (i < damageObj.aggravated()) {
@@ -100,12 +100,13 @@ function updateDamageDisplay(element, valueAccessor) {
 
 ko.bindingHandlers.damage = {
     init: function (element, valueAccessor) {
+        let previousTotalSubscription;
         function setup() {
             [...element.getElementsByTagName("img")].forEach(e => e.remove());
-            const damageObj = valueAccessor();
+            const damageObj = valueAccessor().damage;
             for (let i = 0; i < damageObj.totalHealth(); i++) {
                 const cb = document.createElement("img");
-                cb.style.border = "1px solid black";
+                cb.style.border = "1px solid var(--body-color)";
                 cb.style.margin = "0 2px";
                 cb.src = "images/none.png";
 
@@ -113,10 +114,12 @@ ko.bindingHandlers.damage = {
             }
 
             updateDamageDisplay(element, valueAccessor);
+            if (previousTotalSubscription) previousTotalSubscription.dispose();
+            previousTotalSubscription = valueAccessor().damage.totalHealth.subscribe(setup);
         }
 
         setup();
-        valueAccessor().totalHealth.subscribe(setup);
+        valueAccessor().app.character.subscribe(setup);
     },
     update: updateDamageDisplay
 };

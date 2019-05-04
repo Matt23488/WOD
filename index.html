@@ -27,7 +27,7 @@
     <body>
         <div class="container-fluid">
             <div>
-                <button class="btn btn-lg btn-outline btn-outline-secondary" data-bind="click: goBack, visible: mode() !== 'list'"><i class="fas fa-arrow-left"></i></button>
+                <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: goBack, visible: mode() !== 'list'"><i class="fas fa-arrow-left"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('dice'), visible: mode() === 'sheet'"><i class="fas fa-dice"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('notes'), visible: mode() === 'sheet'"><i class="fas fa-clipboard"></i></button>
                 <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: saveCharacters"><i class="fas fa-save"></i></button>
@@ -37,13 +37,10 @@
             </div>
 
             <div class="listContainer" data-bind="visible: mode() === 'list'">
-                <h2>Select a Character</h2>
-                <div class="list-group">
-                    <a href="#" class="list-group-item list-group-item-action" data-bind="click: newCharacter"><i class="fas fa-plus"></i> Character</a>
-                    <!-- ko foreach: characters -->
-                    <a href="#" class="list-group-item list-group-item-action" data-bind="text: name, click: $root.selectCharacter.bind($root)"></a>
-                    <!-- /ko -->
-                </div>
+                <h1>Characters <button class="btn btn-sm btn-outline-success" data-bind="click: newCharacter"><i class="fas fa-plus"></i></button></h1>
+                <ul class="characterList" data-bind="foreach: realCharacters">
+                    <li class="clickable pointer" data-bind="text: name, click: $root.selectCharacter.bind($root)"></li>
+                </ul>
             </div>
 
             <div class="characterContainer" data-bind="visible: mode() === 'sheet', using: character">
@@ -71,43 +68,43 @@
                     <div class="col-lg">
                         <div class="row">
                             <div class="col"><label>Intelligence:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: intelligence, color: 'black' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: intelligence, color: 'var(--body-color)' }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Wits:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: wits, color: 'black' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: wits, color: 'var(--body-color)' }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Resolve:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: resolve, color: 'black' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: resolve, color: 'var(--body-color)' }"></div></div>
                         </div>
                     </div>
                     <div class="col-lg">
                         <div class="row">
                             <div class="col"><label>Strength:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: strength, color: 'black' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: strength, color: 'var(--body-color)' }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Dexterity:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: dexterity, color: 'black' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: dexterity, color: 'var(--body-color)' }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Stamina:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: stamina, color: 'black' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: stamina, color: 'var(--body-color)' }"></div></div>
                         </div>
                     </div>
                     <div class="col-lg">
                         <div class="row">
                             <div class="col"><label>Presence:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: presence, color: 'black' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: presence, color: 'var(--body-color)' }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Manipulation:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: manipulation, color: 'black' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: manipulation, color: 'var(--body-color)' }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Composure:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: composure, color: 'black' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: composure, color: 'var(--body-color)' }"></div></div>
                         </div>
                     </div>
                 </div>
@@ -121,14 +118,14 @@
                         </div>
                         <div class="row">
                             <div class="col-xl"><label>Damage:</label></div>
-                            <div class="col-xl"><div data-bind="damage: damage"></div></div>
+                            <div class="col-xl"><div data-bind="damage: { damage: damage, app: $root }"></div></div>
                         </div>
                         <div class="row" data-bind="with: damage">
                             <div class="col-xl"></div>
                             <div class="col-xl btn-group">
-                                <button class="btn btn-outline-primary btn-sm" data-bind="click: addBashing">Bashing</button>
-                                <button class="btn btn-outline-primary btn-sm" data-bind="click: addLethal">Lethal</button>
-                                <button class="btn btn-outline-primary btn-sm" data-bind="click: addAggravated">Aggravated</button>
+                                <button class="btn btn-outline-light btn-sm" data-bind="click: addBashing">Bashing</button>
+                                <button class="btn btn-outline-light btn-sm" data-bind="click: addLethal">Lethal</button>
+                                <button class="btn btn-outline-light btn-sm" data-bind="click: addAggravated">Aggravated</button>
                             </div>
                         </div>
                         <br />
@@ -141,12 +138,12 @@
                         </div>
                         <div class="row">
                             <div class="col-xl"><label>Used:</label></div>
-                            <div class="col-xl"><div data-bind="willpower: magic"></div></div>
+                            <div class="col-xl"><div data-bind="willpower: { willpower: magic, app: $root }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col-xl"></div>
                             <div class="col-xl" data-bind="with: magic">
-                                <button class="btn btn-outline-primary btn-sm" data-bind="click: clearUsed">Heal All</button>
+                                <button class="btn btn-outline-light btn-sm" data-bind="click: clearUsed">Heal All</button>
                             </div>
                         </div>
                         <br />
@@ -159,12 +156,12 @@
                         </div>
                         <div class="row">
                             <div class="col-xl"><label>Used:</label></div>
-                            <div class="col-xl"><div data-bind="willpower: willpower"></div></div>
+                            <div class="col-xl"><div data-bind="willpower: { willpower: willpower, app: $root }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col-xl"></div>
                             <div class="col-xl" data-bind="with: willpower">
-                                <button class="btn btn-outline-primary btn-sm" data-bind="click: clearUsed">Heal All</button>
+                                <button class="btn btn-outline-light btn-sm" data-bind="click: clearUsed">Heal All</button>
                             </div>
                         </div>
                     </div>
@@ -379,7 +376,7 @@
             <div class="diceContainer" data-bind="visible: mode() === 'dice', with: dice">
                 <h1>Roll Dice</h1>
                 <input type="number" data-bind="textInput: dicePool" />
-                <button class="btn btn-lg btn-primary" data-bind="click: rollDice"><i class="fas fa-check"></i> Roll</button>
+                <button class="btn btn-lg btn-outline-light" data-bind="click: rollDice"><i class="fas fa-check"></i> Roll</button>
                 <span style="font-size: 2.5em; margin-left: 10px;">
                     <label>Total Successes:</label>
                     <span data-bind="text: totalDiceSuccesses"></span>
@@ -388,7 +385,7 @@
             </div>
 
             <div class="notesContainer" data-bind="visible: mode() === 'notes', with: character">
-                <h1>Notes <button type="button" class="btn btn-sm btn-success" data-bind="click: newNote"><i class="fas fa-plus"></i></button></h1>
+                <h1>Notes <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newNote"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -399,14 +396,14 @@
                     <tbody data-bind="foreach: notes">
                         <tr>
                             <td><textarea class="form-control" data-bind="textInput: value"></textarea></td>
-                            <td><button class="btn btn-danger" data-bind="click: $parent.removeNote.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeNote.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="meritsContainer" data-bind="visible: mode() === 'merits', with: character">
-                <h1>Merits <button type="button" class="btn btn-sm btn-success" data-bind="click: newMerit"><i class="fas fa-plus"></i></button></h1>
+                <h1>Merits <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newMerit"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -418,15 +415,15 @@
                     <tbody data-bind="foreach: merits">
                         <tr>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
-                            <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'black' }"></div></td>
-                            <td><button class="btn btn-danger" data-bind="click: $parent.removeMerit.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                            <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeMerit.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="spellsContainer" data-bind="visible: mode() === 'spells', with: character">
-                <h1>Spells <button type="button" class="btn btn-sm btn-success" data-bind="click: newSpell"><i class="fas fa-plus"></i></button></h1>
+                <h1>Spells <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newSpell"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -438,15 +435,15 @@
                     <tbody data-bind="foreach: spells">
                         <tr>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
-                            <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'black' }"></div></td>
-                            <td><button class="btn btn-danger" data-bind="click: $parent.removeSpell.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                            <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeSpell.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="flawsContainer" data-bind="visible: mode() === 'flaws', with: character">
-                <h1>Flaws <button type="button" class="btn btn-sm btn-success" data-bind="click: newFlaw"><i class="fas fa-plus"></i></button></h1>
+                <h1>Flaws <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newFlaw"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -458,15 +455,15 @@
                     <tbody data-bind="foreach: flaws">
                         <tr>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
-                            <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'black' }"></div></td>
-                            <td><button class="btn btn-danger" data-bind="click: $parent.removeFlaw.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                            <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeFlaw.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="weaponsContainer" data-bind="visible: mode() === 'weapons', with: character">
-                <h1>Weapons <button type="button" class="btn btn-sm btn-success" data-bind="click: newWeapon"><i class="fas fa-plus"></i></button></h1>
+                <h1>Weapons <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newWeapon"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -479,14 +476,14 @@
                         <tr>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                            <td><button class="btn btn-danger" data-bind="click: $parent.removeWeapon.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeWeapon.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="equipmentContainer" data-bind="visible: mode() === 'equipment', with: character">
-                <h1>Equipment <button type="button" class="btn btn-sm btn-success" data-bind="click: newEquipment"><i class="fas fa-plus"></i></button></h1>
+                <h1>Equipment <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newEquipment"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -499,14 +496,14 @@
                         <tr>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                            <td><button class="btn btn-danger" data-bind="click: $parent.removeEquipment.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeEquipment.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="inventoryContainer" data-bind="visible: mode() === 'inventory', with: character">
-                <h1>Inventory <button type="button" class="btn btn-sm btn-success" data-bind="click: newInventoryItem"><i class="fas fa-plus"></i></button></h1>
+                <h1>Inventory <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newInventoryItem"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -521,7 +518,7 @@
                             <td><input type="number" style="width: 100%;" data-bind="textInput: quantity" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                            <td><button class="btn btn-danger" data-bind="click: $parent.removeInventoryItem.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeInventoryItem.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
