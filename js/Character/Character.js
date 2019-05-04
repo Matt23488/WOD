@@ -342,7 +342,7 @@ ko.bindingHandlers.attribute = {
         dots.forEach((dot, index) => {
             dot.addEventListener("click", () => {
                 const params = valueAccessor();
-                const observable = params.value();
+                const observable = params.value;
                 observable(index + 1);
             });
         });
@@ -355,7 +355,6 @@ ko.bindingHandlers.attribute = {
             dots[i].style.backgroundColor = null;
             dots[i].style.borderColor = null;
             if (i < value) {
-                dots[i].classList.add("filled");
                 dots[i].style.backgroundColor = color;
                 dots[i].style.borderColor = color;
             }
