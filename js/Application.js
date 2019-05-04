@@ -1,4 +1,5 @@
 import Character from "./Character/Character.js";
+import Dice from "./Dice.js";
 
 export default class Application {
     constructor() {
@@ -14,10 +15,7 @@ export default class Application {
         this.characterId = ko.observable(0);
         this.characters = ko.observableArray(savedCharacters);
         this.character = ko.computed(() => this.characters()[this.characterId()], this);
-
-        this.dicePool = ko.observable(1);
-        this.rollRounds = ko.observableArray([]);
-        this.totalDiceSuccesses = ko.computed(() => this.rollRounds().reduce((total, r) => total + r.reduce((total, d) => total + (d > 7 ? 1 : 0), 0), 0));
+        this.dice = new Dice();
     }
 
     goBack() {
@@ -102,22 +100,6 @@ export default class Application {
         ul.click();
 
         document.body.removeChild(ul);
-    }
-
-    rollDice() {
-        this.rollRounds.removeAll();
-        let numRolls = this.dicePool();
-        while (numRolls > 0) {
-            let nextRoundRolls = 0;
-            const currentRound = [];
-            for (let i = 0; i < numRolls; i++) {
-                const roll = Math.floor(Math.random() * 10) + 1;
-                if (roll === 10) nextRoundRolls++;
-                currentRound.push(roll)
-            }
-            this.rollRounds.push(currentRound);
-            numRolls = nextRoundRolls;
-        }
     }
 
     switchMode(mode) {

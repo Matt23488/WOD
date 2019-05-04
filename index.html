@@ -376,15 +376,15 @@
                 </div>
             </div>
 
-            <div class="diceContainer" data-bind="visible: mode() === 'dice'">
+            <div class="diceContainer" data-bind="visible: mode() === 'dice', with: dice">
                 <h1>Roll Dice</h1>
                 <input type="number" data-bind="textInput: dicePool" />
                 <button class="btn btn-lg btn-primary" data-bind="click: rollDice"><i class="fas fa-check"></i> Roll</button>
-                <div data-bind="dice: rollRounds"></div>
-                <div style="font-size: 2.5em;">
-                    <label>Total:</label>
+                <span style="font-size: 2.5em; margin-left: 10px;">
+                    <label>Total Successes:</label>
                     <span data-bind="text: totalDiceSuccesses"></span>
-                </div>
+                </span>
+                <div data-bind="dice: rollRounds"></div>
             </div>
 
             <div class="notesContainer" data-bind="visible: mode() === 'notes', with: character">
