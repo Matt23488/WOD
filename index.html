@@ -57,7 +57,7 @@
             </div>
 
             <div class="listContainer" data-bind="visible: mode() === 'list'">
-                <h1>Characters <button class="btn btn-outline-success" data-bind="click: newCharacter"><i class="fas fa-plus"></i></button></h1>
+                <h1>Characters <button class="btn btn-lg btn-outline-success" data-bind="click: newCharacter"><i class="fas fa-plus"></i></button></h1>
                 <ul class="characterList" data-bind="foreach: realCharacters">
                     <li class="clickable pointer" data-bind="text: name, click: $root.selectCharacter.bind($root)"></li>
                 </ul>
@@ -131,7 +131,7 @@
                 <br />
                 <div class="row">
                     <div class="col-lg">
-                        <h2>Health <button class="btn btn-outline-light" data-bind="click: damage.clearAll.bind(damage)">Heal All</button></h2>
+                        <h2>Health <button class="btn btn-lg btn-outline-light" data-bind="click: damage.clearAll.bind(damage)">Heal All</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: damage.totalHealth"></div></div>
                         <br />
@@ -140,15 +140,15 @@
                         <br />
                         <div class="col-12" data-bind="with: damage">
                             <div class="btn-group">
-                                <button class="btn btn-outline-light" data-bind="click: addBashing">Bashing</button>
-                                <button class="btn btn-outline-light" data-bind="click: addLethal">Lethal</button>
-                                <button class="btn btn-outline-light" data-bind="click: addAggravated">Aggravated</button>
+                                <button class="btn btn-lg btn-outline-light" data-bind="click: addBashing">Bashing</button>
+                                <button class="btn btn-lg btn-outline-light" data-bind="click: addLethal">Lethal</button>
+                                <button class="btn btn-lg btn-outline-light" data-bind="click: addAggravated">Aggravated</button>
                             </div>
                         </div>
                         <br />
                     </div>
                     <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: magic">
-                        <h2>Magic <button class="btn btn-outline-light" data-bind="click: magic.clearUsed.bind(magic)">Heal All</button></h2>
+                        <h2>Magic <button class="btn btn-lg btn-outline-light" data-bind="click: magic.clearUsed.bind(magic)">Heal All</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: magic.total"></div></div>
                         <br />
@@ -157,7 +157,7 @@
                         <br />
                     </div>
                     <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: willpower">
-                        <h2>Willpower <button class="btn btn-outline-light" data-bind="click: willpower.clearUsed.bind(willpower)">Heal All</button></h2>
+                        <h2>Willpower <button class="btn btn-lg btn-outline-light" data-bind="click: willpower.clearUsed.bind(willpower)">Heal All</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: willpower.total"></div></div>
                         <br />
@@ -168,7 +168,7 @@
                 <br />
                 <div class="row">
                     <div class="col-lg">
-                        <h2>Mental</h2> (-3 Unskilled)
+                        <h2>Mental <small>(-3 Unskilled)</small></h2>
                         <div class="row">
                             <div class="col"><label>Academics:</label></div>
                             <div class="col"><div data-bind="attribute: { value: academics, color: 'var(--body-color)' }"></div></div>
@@ -204,7 +204,7 @@
                         <br />
                     </div>
                     <div class="col-lg">
-                        <h2>Physical</h2> (-1 Unskilled)
+                        <h2>Physical <small>(-1 Unskilled)</small></h2>
                         <div class="row">
                             <div class="col"><label>Athletics:</label></div>
                             <div class="col"><div data-bind="attribute: { value: athletics, color: 'var(--body-color)' }"></div></div>
@@ -240,7 +240,7 @@
                         <br />
                     </div>
                     <div class="col-lg">
-                        <h2>Social</h2> (-1 Unskilled)
+                        <h2>Social <small>(-1 Unskilled)</small></h2>
                         <div class="row">
                             <div class="col"><label>Animal Ken:</label></div>
                             <div class="col"><div data-bind="attribute: { value: animalKen, color: 'var(--body-color)' }"></div></div>
@@ -381,9 +381,9 @@
             <div class="diceContainer" data-bind="visible: mode() === 'dice', with: dice">
                 <h1>Roll Dice</h1>
                 <div class="btn-group">
-                    <button class="btn btn-outline-light" data-bind="click: incrementDicePool(-1)"><i class="fas fa-minus"></i></button>
-                    <button class="btn btn-outline-light" style="padding-left: 20px; padding-right: 20px;" data-bind="click: rollDice, text: dicePool"></button>
-                    <button class="btn btn-outline-light" data-bind="click: incrementDicePool(1)"><i class="fas fa-plus"></i></button>
+                    <button class="btn btn-lg btn-outline-light" data-bind="click: incrementDicePool(-1)"><i class="fas fa-minus"></i></button>
+                    <button class="btn btn-lg btn-outline-light" style="padding-left: 20px; padding-right: 20px;" data-bind="click: rollDice, text: dicePool"></button>
+                    <button class="btn btn-lg btn-outline-light" data-bind="click: incrementDicePool(1)"><i class="fas fa-plus"></i></button>
                 </div>
                 <br />
                 <br />
