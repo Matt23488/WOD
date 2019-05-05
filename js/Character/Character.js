@@ -1,84 +1,78 @@
-import Damage from "./Damage.js";
-import Willpower from "./Willpower.js";
-import Merit from "./Merit.js";
-import Equipment from "./Equipment.js";
-import InventoryItem from "./InventoryItem.js";
-import Note from "./Note.js";
+$(function () {
+    function Character(json) {
+        var self = this;
+        self.name = ko.observable(json.name);
+        self.player = ko.observable(json.player);
+        self.age = ko.observable(json.age);
+        self.vice = ko.observable(json.vice);
+        self.virtue = ko.observable(json.virtue);
+        self.origins = ko.observable(json.origins);
+        self.gender = ko.observable(json.gender);
+        self.concept = ko.observable(json.concept);
+        self.chronicle = ko.observable(json.chronicle);
 
-export default class Character {
-    constructor(json) {
-        this.name = ko.observable(json.name);
-        this.player = ko.observable(json.player);
-        this.age = ko.observable(json.age);
-        this.vice = ko.observable(json.vice);
-        this.virtue = ko.observable(json.virtue);
-        this.origins = ko.observable(json.origins);
-        this.gender = ko.observable(json.gender);
-        this.concept = ko.observable(json.concept);
-        this.chronicle = ko.observable(json.chronicle);
+        self.intelligence = ko.observable(json.intelligence);
+        self.strength = ko.observable(json.strength);
+        self.presence = ko.observable(json.presence);
+        self.wits = ko.observable(json.wits);
+        self.dexterity = ko.observable(json.dexterity);
+        self.manipulation = ko.observable(json.manipulation);
+        self.resolve = ko.observable(json.resolve);
+        self.stamina = ko.observable(json.stamina);
+        self.composure = ko.observable(json.composure);
 
-        this.intelligence = ko.observable(json.intelligence);
-        this.strength = ko.observable(json.strength);
-        this.presence = ko.observable(json.presence);
-        this.wits = ko.observable(json.wits);
-        this.dexterity = ko.observable(json.dexterity);
-        this.manipulation = ko.observable(json.manipulation);
-        this.resolve = ko.observable(json.resolve);
-        this.stamina = ko.observable(json.stamina);
-        this.composure = ko.observable(json.composure);
+        self.damage = new Damage(json.health, json.bashing, json.lethal, json.aggravated);
+        self.magic = new Willpower(json.magic, json.usedMagic);
+        self.willpower = new Willpower(json.willpower, json.usedWillpower);
 
-        this.damage = new Damage(json.health, json.bashing, json.lethal, json.aggravated);
-        this.magic = new Willpower(json.magic, json.usedMagic);
-        this.willpower = new Willpower(json.willpower, json.usedWillpower);
+        self.academics = ko.observable(json.academics);
+        self.robotics = ko.observable(json.robotics);
+        self.crafts = ko.observable(json.crafts);
+        self.investigation = ko.observable(json.investigation);
+        self.medicine = ko.observable(json.medicine);
+        self.occult = ko.observable(json.occult);
+        self.politics = ko.observable(json.politics);
+        self.science = ko.observable(json.science);
 
-        this.academics = ko.observable(json.academics);
-        this.robotics = ko.observable(json.robotics);
-        this.crafts = ko.observable(json.crafts);
-        this.investigation = ko.observable(json.investigation);
-        this.medicine = ko.observable(json.medicine);
-        this.occult = ko.observable(json.occult);
-        this.politics = ko.observable(json.politics);
-        this.science = ko.observable(json.science);
+        self.athletics = ko.observable(json.athletics);
+        self.brawl = ko.observable(json.brawl);
+        self.drive = ko.observable(json.drive);
+        self.ranged = ko.observable(json.ranged);
+        self.larceny = ko.observable(json.larceny);
+        self.stealth = ko.observable(json.stealth);
+        self.survival = ko.observable(json.survival);
+        self.weaponry = ko.observable(json.weaponry);
 
-        this.athletics = ko.observable(json.athletics);
-        this.brawl = ko.observable(json.brawl);
-        this.drive = ko.observable(json.drive);
-        this.ranged = ko.observable(json.ranged);
-        this.larceny = ko.observable(json.larceny);
-        this.stealth = ko.observable(json.stealth);
-        this.survival = ko.observable(json.survival);
-        this.weaponry = ko.observable(json.weaponry);
+        self.animalKen = ko.observable(json.animalKen);
+        self.empathy = ko.observable(json.empathy);
+        self.expression = ko.observable(json.expression);
+        self.intimidation = ko.observable(json.intimidation);
+        self.persuasion = ko.observable(json.persuasion);
+        self.socialize = ko.observable(json.socialize);
+        self.streetwise = ko.observable(json.streetwise);
+        self.subterfuge = ko.observable(json.subterfuge);
 
-        this.animalKen = ko.observable(json.animalKen);
-        this.empathy = ko.observable(json.empathy);
-        this.expression = ko.observable(json.expression);
-        this.intimidation = ko.observable(json.intimidation);
-        this.persuasion = ko.observable(json.persuasion);
-        this.socialize = ko.observable(json.socialize);
-        this.streetwise = ko.observable(json.streetwise);
-        this.subterfuge = ko.observable(json.subterfuge);
+        self.merits = ko.observableArray(json.merits.map(function (m) { return new Merit(m.name, m.value); }));
+        self.spells = ko.observableArray(json.spells.map(function (s) { return new Merit(s.name, s.value); }));
+        self.flaws = ko.observableArray(json.flaws.map(function (f) { return new Merit(f.name, f.value); }));
 
-        this.merits = ko.observableArray(json.merits.map(m => new Merit(m.name, m.value)));
-        this.spells = ko.observableArray(json.spells.map(s => new Merit(s.name, s.value)));
-        this.flaws = ko.observableArray(json.flaws.map(f => new Merit(f.name, f.value)));
+        self.size = ko.observable(json.size);
+        self.speed = ko.computed(function () { return self.strength() + self.dexterity() + 5; });
+        self.defense = ko.computed(function () { return Math.min(self.dexterity(), self.wits()); });
+        self.armor = ko.observable(json.armor);
+        self.initiative = ko.computed(function () { return self.dexterity() + self.composure(); });
+        self.experience = ko.observable(json.experience);
+        self.morality = ko.observable(json.morality);
 
-        this.size = ko.observable(json.size);
-        this.speed = ko.computed(() => this.strength() + this.dexterity() + 5, this);
-        this.defense = ko.computed(() => Math.min(this.dexterity(), this.wits()), this);
-        this.armor = ko.observable(json.armor);
-        this.initiative = ko.computed(() => this.dexterity() + this.composure(), this);
-        this.experience = ko.observable(json.experience);
-        this.morality = ko.observable(json.morality);
+        self.weapons = ko.observableArray(json.weapons.map(function (w) { return new Equipment(w.name, w.description); }));
+        self.equipment = ko.observableArray(json.equipment.map(function (e) { return new Equipment(e.name, e.description); }));
+        self.inventory = ko.observableArray(json.inventory.map(function(i) { return new InventoryItem(i.name, i.description, i.quantity); }));
 
-        this.weapons = ko.observableArray(json.weapons.map(w => new Equipment(w.name, w.description)));
-        this.equipment = ko.observableArray(json.equipment.map(e => new Equipment(e.name, e.description)));
-        this.inventory = ko.observableArray(json.inventory.map(i => new InventoryItem(i.name, i.description, i.quantity)));
-
-        this.notes = ko.observableArray(json.notes.map(n => new Note(n)));
+        self.notes = ko.observableArray(json.notes.map(function (n) { return new Note(n); }));
     }
 
-    static newCharacter() {
-        const json = {
+    Character.newCharacter = function () {
+        var json = {
             name: randomName(),
             player: "",
             age: 0,
@@ -147,281 +141,296 @@ export default class Character {
         };
 
         return new Character(json);
-    }
+    };
 
-    static fromJson(json) {
+    Character.fromJson = function (json) {
         return new Character(json);
-    }
+    };
 
-    onComponentClick(char, e) {
+    Character.prototype.onComponentClick = function(char, e) {
         e.currentTarget.getElementsByTagName("input")[0].focus();
-    }
+    };
 
-    newMerit() {
+    Character.prototype.newMerit = function () {
         this.merits.push(new Merit("", 0));
-    }
+    };
 
-    removeMerit(merit) {
+    Character.prototype.removeMerit = function (merit) {
         this.merits.remove(merit);
-    }
+    };
 
-    newSpell() {
+    Character.prototype.newSpell = function () {
         this.spells.push(new Merit("", 0));
-    }
+    };
 
-    removeSpell(spell) {
+    Character.prototype.removeSpell = function (spell) {
         this.spells.remove(spell);
-    }
+    };
 
-    newFlaw() {
+    Character.prototype.newFlaw = function () {
         this.flaws.push(new Merit("", 0));
-    }
+    };
 
-    removeFlaw(flaw) {
+    Character.prototype.removeFlaw = function (flaw) {
         this.flaws.remove(flaw);
-    }
+    };
 
-    newWeapon() {
+    Character.prototype.newWeapon = function () {
         this.weapons.push(new Equipment("", ""));
-    }
+    };
 
-    removeWeapon(weapon) {
+    Character.prototype.removeWeapon = function (weapon) {
         this.weapons.remove(weapon);
-    }
+    };
 
-    newEquipment() {
+    Character.prototype.newEquipment = function () {
         this.equipment.push(new Equipment("", ""));
-    }
+    };
 
-    removeEquipment(equipment) {
+    Character.prototype.removeEquipment = function (equipment) {
         this.equipment.remove(equipment);
-    }
+    };
 
-    newInventoryItem() {
+    Character.prototype.newInventoryItem = function () {
         this.inventory.push(new InventoryItem("", "", 1));
-    }
+    };
 
-    removeInventoryItem(item) {
+    Character.prototype.removeInventoryItem = function (item) {
         this.inventory.remove(item);
-    }
+    };
 
-    newNote() {
+    Character.prototype.newNote = function () {
         this.notes.push(new Note(""));
-    }
+    };
 
-    removeNote(note) {
+    Character.prototype.removeNote = function (note) {
         this.notes.remove(note);
-    }
+    };
 
-    toJson() {
+    Character.prototype.toJson = function () {
+        var self = this;
         return {
-            name: this.name(),
-            player: this.player(),
-            age: this.age(),
-            vice: this.vice(),
-            virtue: this.virtue(),
-            origins: this.origins(),
-            gender: this.gender(),
-            concept: this.concept(),
-            chronicle: this.chronicle(),
+            name: self.name(),
+            player: self.player(),
+            age: self.age(),
+            vice: self.vice(),
+            virtue: self.virtue(),
+            origins: self.origins(),
+            gender: self.gender(),
+            concept: self.concept(),
+            chronicle: self.chronicle(),
 
-            intelligence: this.intelligence(),
-            wits: this.wits(),
-            resolve: this.resolve(),
-            strength: this.strength(),
-            dexterity: this.dexterity(),
-            stamina: this.stamina(),
-            presence: this.presence(),
-            manipulation: this.manipulation(),
-            composure: this.composure(),
+            intelligence: self.intelligence(),
+            wits: self.wits(),
+            resolve: self.resolve(),
+            strength: self.strength(),
+            dexterity: self.dexterity(),
+            stamina: self.stamina(),
+            presence: self.presence(),
+            manipulation: self.manipulation(),
+            composure: self.composure(),
 
-            health: this.damage.totalHealth(),
-            bashing: this.damage.bashing(),
-            lethal: this.damage.lethal(),
-            aggravated: this.damage.aggravated(),
-            magic: this.magic.total(),
-            usedMagic: this.magic.used(),
-            willpower: this.willpower.total(),
-            usedWillpower: this.willpower.used(),
+            health: self.damage.totalHealth(),
+            bashing: self.damage.bashing(),
+            lethal: self.damage.lethal(),
+            aggravated: self.damage.aggravated(),
+            magic: self.magic.total(),
+            usedMagic: self.magic.used(),
+            willpower: self.willpower.total(),
+            usedWillpower: self.willpower.used(),
 
-            academics: this.academics(),
-            robotics: this.robotics(),
-            crafts: this.crafts(),
-            investigation: this.investigation(),
-            medicine: this.medicine(),
-            occult: this.occult(),
-            politics: this.politics(),
-            science: this.science(),
+            academics: self.academics(),
+            robotics: self.robotics(),
+            crafts: self.crafts(),
+            investigation: self.investigation(),
+            medicine: self.medicine(),
+            occult: self.occult(),
+            politics: self.politics(),
+            science: self.science(),
 
-            athletics: this.athletics(),
-            brawl: this.brawl(),
-            drive: this.drive(),
-            ranged: this.ranged(),
-            larceny: this.larceny(),
-            stealth: this.stealth(),
-            survival: this.survival(),
-            weaponry: this.weaponry(),
+            athletics: self.athletics(),
+            brawl: self.brawl(),
+            drive: self.drive(),
+            ranged: self.ranged(),
+            larceny: self.larceny(),
+            stealth: self.stealth(),
+            survival: self.survival(),
+            weaponry: self.weaponry(),
 
-            animalKen: this.animalKen(),
-            empathy: this.empathy(),
-            expression: this.expression(),
-            intimidation: this.intimidation(),
-            persuasion: this.persuasion(),
-            socialize: this.socialize(),
-            streetwise: this.streetwise(),
-            subterfuge: this.subterfuge(),
+            animalKen: self.animalKen(),
+            empathy: self.empathy(),
+            expression: self.expression(),
+            intimidation: self.intimidation(),
+            persuasion: self.persuasion(),
+            socialize: self.socialize(),
+            streetwise: self.streetwise(),
+            subterfuge: self.subterfuge(),
 
-            merits: this.merits().map(m => { return { name: m.name(), value: m.value() }; }),
-            spells: this.spells().map(s => { return { name: s.name(), value: s.value() }; }),
-            flaws: this.flaws().map(f => { return { name: f.name(), value: f.value() }; }),
+            merits: self.merits().map(function (m) { return { name: m.name(), value: m.value() }; }),
+            spells: self.spells().map(function (s) { return { name: s.name(), value: s.value() }; }),
+            flaws: self.flaws().map(function (f) { return { name: f.name(), value: f.value() }; }),
 
-            size: this.size(),
-            armor: this.armor(),
-            experience: this.experience(),
-            morality: this.morality(),
+            size: self.size(),
+            armor: self.armor(),
+            experience: self.experience(),
+            morality: self.morality(),
 
-            weapons: this.weapons().map(w => { return { name: w.name(), description: w.description() }; }),
-            equipment: this.equipment().map(e => { return { name: e.name(), description: e.description() }; }),
-            inventory: this.inventory().map(i => { return { name: i.name(), description: i.description(), quantity: i.quantity() }; }),
+            weapons: self.weapons().map(function (w) { return { name: w.name(), description: w.description() }; }),
+            equipment: self.equipment().map(function (e) { return { name: e.name(), description: e.description() }; }),
+            inventory: self.inventory().map(function (i) { return { name: i.name(), description: i.description(), quantity: i.quantity() }; }),
 
-            notes: this.notes().map(n => n.value())
+            notes: self.notes().map(n => n.value())
         };
-    }
-}
+    };
 
-const alphabet = "abcdefghijklmnopqrstuvwxyz";
-function randomName() {
-    const firstNameLength = randomInteger(5, 12);
-    const lastNameLength = randomInteger(5, 12);
-    let firstName = "";
-    let lastName = "";
+    var alphabet = "abcdefghijklmnopqrstuvwxyz";
+    function randomName() {
+        var firstNameLength = randomInteger(5, 12);
+        var lastNameLength = randomInteger(5, 12);
+        var firstName = "";
+        var lastName = "";
 
-    for (let i = 0; i < firstNameLength; i++) {
-        let newLetter = alphabet.charAt(randomInteger(0, alphabet.length));
-        if (i === 0) newLetter = newLetter.toUpperCase();
+        for (var i = 0; i < firstNameLength; i++) {
+            var newLetter = alphabet.charAt(randomInteger(0, alphabet.length));
+            if (i === 0) newLetter = newLetter.toUpperCase();
 
-        firstName += newLetter;
-    }
-
-    for (let i = 0; i < lastNameLength; i++) {
-        let newLetter = alphabet.charAt(randomInteger(0, alphabet.length));
-        if (i === 0) newLetter = newLetter.toUpperCase();
-
-        lastName += newLetter;
-    }
-
-    return `${firstName} ${lastName}`;
-}
-
-function randomInteger(minInclusive = 0, maxExclusive = 10) {
-    if (maxExclusive < minInclusive) {
-        [minInclusive, maxExclusive] = [maxExclusive, minInclusive];
-    }
-
-    return Math.floor(Math.random() * (maxExclusive - minInclusive)) + minInclusive;
-}
-
-ko.bindingHandlers.attribute = {
-    init: function (element, valueAccessor) {
-        const dots = [];
-        for (let i = 0; i < 5; i++) {
-            const dot = document.createElement("span");
-            dot.classList.add("attribute-dot");
-            element.appendChild(dot);
-
-            dots.push(dot);
-            const captureDots = dots.map(dot => dot);
-
-            dot.addEventListener("pointerenter", () => {
-                captureDots.forEach(dot => dot.classList.add("hoverFilled"));
-            });
-            dot.addEventListener("pointerleave", () => {
-                captureDots.forEach(dot => dot.classList.remove("hoverFilled"));
-            });
+            firstName += newLetter;
         }
-        dots.forEach((dot, index) => {
-            dot.addEventListener("click", () => {
-                const params = valueAccessor();
-                const observable = params.value;
-                observable(index + 1);
+
+        for (var i = 0; i < lastNameLength; i++) {
+            var newLetter = alphabet.charAt(randomInteger(0, alphabet.length));
+            if (i === 0) newLetter = newLetter.toUpperCase();
+
+            lastName += newLetter;
+        }
+
+        return firstName + " " + lastName;
+    }
+
+    function randomInteger(minInclusive, maxExclusive) {
+        if (!minInclusive) minInclusive = 0;
+        if (!maxExclusive) maxExclusive = 10;
+        if (maxExclusive < minInclusive) {
+            [minInclusive, maxExclusive] = [maxExclusive, minInclusive];
+        }
+    
+        return Math.floor(Math.random() * (maxExclusive - minInclusive)) + minInclusive;
+    }
+
+    ko.bindingHandlers.attribute = {
+        init: function (element, valueAccessor) {
+            var dots = [];
+            for (var i = 0; i < 5; i++) {
+                var dot = document.createElement("span");
+                dot.classList.add("attribute-dot");
+                dot.dataset.index = i;
+                element.appendChild(dot);
+    
+                dots.push(dot);
+    
+                dot.addEventListener("pointerenter", function () {
+                    var dotIndex = parseInt(this.dataset.index);
+                    dots.forEach(function (dot, index) {
+                        if (index <= dotIndex) dot.classList.add("hoverFilled");
+                    });
+                });
+                dot.addEventListener("pointerleave", function () {
+                    dots.forEach(function (dot) {
+                        dot.classList.remove("hoverFilled");
+                    });
+                });
+            }
+            dots.forEach(function (dot, index) {
+                dot.addEventListener("click", function () {
+                    var params = valueAccessor();
+                    var observable = params.value;
+                    observable(index + 1);
+                });
             });
-        });
-    },
-    update: function (element, valueAccessor) {
-        const value = valueAccessor().value();
-        const color = valueAccessor().color;
-        const dots = element.getElementsByTagName("span");
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].style.backgroundColor = null;
-            dots[i].style.borderColor = null;
-            if (i < value) {
-                dots[i].style.backgroundColor = color;
-                dots[i].style.borderColor = color;
+        },
+        update: function (element, valueAccessor) {
+            var value = valueAccessor().value();
+            var color = valueAccessor().color;
+            var dots = element.getElementsByTagName("span");
+            for (var i = 0; i < dots.length; i++) {
+                dots[i].style.backgroundColor = null;
+                dots[i].style.borderColor = null;
+                if (i < value) {
+                    dots[i].style.backgroundColor = color;
+                    dots[i].style.borderColor = color;
+                }
             }
         }
-    }
-};
-
-ko.bindingHandlers.readOnlyAttribute = {
-    init: function (element) {
-        for (let i = 0; i < 5; i++) {
-            const dot = document.createElement("span");
-            dot.classList.add("attribute-dot");
-            element.appendChild(dot);
-        }
-    },
-    update: function (element, valueAccessor) {
-        const value = valueAccessor()();
-        const dots = element.getElementsByTagName("span");
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].classList.remove("filled");
-            if (i < value) {
-                dots[i].classList.add("filled");
+    };
+    
+    ko.bindingHandlers.readOnlyAttribute = {
+        init: function (element) {
+            for (var i = 0; i < 5; i++) {
+                var dot = document.createElement("span");
+                dot.classList.add("attribute-dot");
+                element.appendChild(dot);
+            }
+        },
+        update: function (element, valueAccessor) {
+            var value = valueAccessor()();
+            var dots = element.getElementsByTagName("span");
+            for (var i = 0; i < dots.length; i++) {
+                dots[i].classList.remove("filled");
+                if (i < value) {
+                    dots[i].classList.add("filled");
+                }
             }
         }
-    }
-};
-
-ko.bindingHandlers.capacity = {
-    init: function (element, valueAccessor) {
-        const dots = [];
-        for (let i = 0; i < 12; i++) {
-            const dot = document.createElement("span");
-            dot.classList.add("attribute-dot");
-            element.appendChild(dot);
-
-            dots.push(dot);
-            const captureDots = dots.map(dot => dot);
-
-            dot.addEventListener("pointerenter", () => {
-                captureDots.forEach(dot => dot.classList.add("hoverFilled"));
+    };
+    
+    ko.bindingHandlers.capacity = {
+        init: function (element, valueAccessor) {
+            var dots = [];
+            for (let i = 0; i < 12; i++) {
+                var dot = document.createElement("span");
+                dot.classList.add("attribute-dot");
+                dot.dataset.index = i;
+                element.appendChild(dot);
+    
+                dots.push(dot);
+    
+                dot.addEventListener("pointerenter", function () {
+                    var dotIndex = parseInt(this.dataset.index);
+                    dots.forEach(function (dot, index) {
+                        if (index <= dotIndex) dot.classList.add("hoverFilled");
+                    });
+                });
+                dot.addEventListener("pointerleave", function () {
+                    dots.forEach(function (dot) {
+                        dot.classList.remove("hoverFilled");
+                    });
+                });
+            }
+            dots.forEach(function (dot, index) {
+                dot.addEventListener("click", function () {
+                    var observable = valueAccessor();
+                    observable(index + 1);
+                });
             });
-            dot.addEventListener("pointerleave", () => {
-                captureDots.forEach(dot => dot.classList.remove("hoverFilled"));
-            });
-        }
-        dots.forEach((dot, index) => {
-            dot.addEventListener("click", () => {
-                const observable = valueAccessor();
-                observable(index + 1);
-            });
-        });
-    },
-    update: function (element, valueAccessor) {
-        const value = valueAccessor()();
-        const dots = element.getElementsByTagName("span");
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].classList.remove("filled");
-            if (i < value) {
-                dots[i].classList.add("filled");
+        },
+        update: function (element, valueAccessor) {
+            var value = valueAccessor()();
+            var dots = element.getElementsByTagName("span");
+            for (var i = 0; i < dots.length; i++) {
+                dots[i].classList.remove("filled");
+                if (i < value) {
+                    dots[i].classList.add("filled");
+                }
             }
         }
-    }
-};
+    };
+    
+    ko.bindingHandlers.tooltip = {
+        update: function (element, valueAccessor) {
+            $(element).tooltip("dispose");
+            $(element).tooltip({ title: valueAccessor()() });
+        }
+    };
 
-ko.bindingHandlers.tooltip = {
-    update: function (element, valueAccessor) {
-        $(element).tooltip("dispose");
-        $(element).tooltip({ title: valueAccessor()() });
-    }
-};
+    window.Character = Character;
+});

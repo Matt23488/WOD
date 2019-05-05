@@ -1,5 +1,8 @@
-export default class Note {
-    constructor(value) {
-        this.value = ko.observable(value);
+$(function () {
+    function Note(value) {
+        var self = this;
+        self.value = ko.observable(value);
     }
-}
+
+    window.Note = Note;
+});

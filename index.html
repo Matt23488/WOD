@@ -111,18 +111,15 @@
                 <br />
                 <div class="row">
                     <div class="col-lg">
-                        <h2>Health</h2>
-                        <div class="row">
-                            <div class="col-xl"><label>Total:</label></div>
-                            <div class="col-xl"><div data-bind="capacity: damage.totalHealth"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl"><label>Damage:</label></div>
-                            <div class="col-xl"><div data-bind="damage: { damage: damage, app: $root }"></div></div>
-                        </div>
-                        <div class="row" data-bind="with: damage">
-                            <div class="col-xl"></div>
-                            <div class="col-xl btn-group">
+                        <h2>Health <button class="btn btn-sm btn-outline-light" data-bind="click: damage.clearAll.bind(damage)">Heal All</button></h2>
+                        <div class="col-12"><label>Total:</label></div>
+                        <div class="col-12"><div data-bind="capacity: damage.totalHealth"></div></div>
+                        <br />
+                        <div class="col-12"><label>Damage:</label></div>
+                        <div class="col-12"><div data-bind="damage: { damage: damage, app: $root }"></div></div>
+                        <br />
+                        <div class="col-12" data-bind="with: damage">
+                            <div class="btn-group">
                                 <button class="btn btn-outline-light btn-sm" data-bind="click: addBashing">Bashing</button>
                                 <button class="btn btn-outline-light btn-sm" data-bind="click: addLethal">Lethal</button>
                                 <button class="btn btn-outline-light btn-sm" data-bind="click: addAggravated">Aggravated</button>
@@ -131,39 +128,21 @@
                         <br />
                     </div>
                     <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: magic">
-                        <h2>Magic</h2>
-                        <div class="row">
-                            <div class="col-xl"><label>Total:</label></div>
-                            <div class="col-xl"><div data-bind="capacity: magic.total"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl"><label>Used:</label></div>
-                            <div class="col-xl"><div data-bind="willpower: { willpower: magic, app: $root }"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl"></div>
-                            <div class="col-xl" data-bind="with: magic">
-                                <button class="btn btn-outline-light btn-sm" data-bind="click: clearUsed">Heal All</button>
-                            </div>
-                        </div>
+                        <h2>Magic <button class="btn btn-outline-light btn-sm" data-bind="click: magic.clearUsed.bind(magic)">Heal All</button></h2>
+                        <div class="col-12"><label>Total:</label></div>
+                        <div class="col-12"><div data-bind="capacity: magic.total"></div></div>
+                        <br />
+                        <div class="col-12"><label>Used:</label></div>
+                        <div class="col-12"><div data-bind="willpower: { willpower: magic, app: $root }"></div></div>
                         <br />
                     </div>
                     <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: willpower">
-                        <h2>Willpower</h2>
-                        <div class="row">
-                            <div class="col-xl"><label>Total:</label></div>
-                            <div class="col-xl"><div data-bind="capacity: willpower.total"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl"><label>Used:</label></div>
-                            <div class="col-xl"><div data-bind="willpower: { willpower: willpower, app: $root }"></div></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl"></div>
-                            <div class="col-xl" data-bind="with: willpower">
-                                <button class="btn btn-outline-light btn-sm" data-bind="click: clearUsed">Heal All</button>
-                            </div>
-                        </div>
+                        <h2>Willpower <button class="btn btn-outline-light btn-sm" data-bind="click: willpower.clearUsed.bind(willpower)">Heal All</button></h2>
+                        <div class="col-12"><label>Total:</label></div>
+                        <div class="col-12"><div data-bind="capacity: willpower.total"></div></div>
+                        <br />
+                        <div class="col-12"><label>Used:</label></div>
+                        <div class="col-12"><div data-bind="willpower: { willpower: willpower, app: $root }"></div></div>
                     </div>
                 </div>
                 <br />
@@ -525,6 +504,15 @@
             </div>
 
         </div>
-        <script src="js/main.js" type="module"></script>
+        <script src="js/Character/Damage.js"></script>
+        <script src="js/Character/Equipment.js"></script>
+        <script src="js/Character/InventoryItem.js"></script>
+        <script src="js/Character/Merit.js"></script>
+        <script src="js/Character/Note.js"></script>
+        <script src="js/Character/Willpower.js"></script>
+        <script src="js/Character/Character.js"></script>
+        <script src="js/Dice.js"></script>
+        <script src="js/Application.js"></script>
+        <script src="js/main.js"></script>
     </body>
 </html>

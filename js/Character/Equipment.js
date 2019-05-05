@@ -1,6 +1,9 @@
-export default class Equipment {
-    constructor(name, description) {
-        this.name = ko.observable(name);
-        this.description = ko.observable(description);
+$(function () {
+    function Equipment(name, description) {
+        var self = this;
+        self.name = ko.observable(name);
+        self.description = ko.observable(description);
     }
-}
+
+    window.Equipment = Equipment;
+});

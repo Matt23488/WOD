@@ -1,12 +1,15 @@
-export default class InventoryItem {
-    constructor(name, description, quantity) {
-        this.name = ko.observable(name);
-        this.description = ko.observable(description);
-        this.quantity = ko.observable(quantity);
-        this.displayText = ko.computed(this.getDisplayText, this);
+$(function () {
+    function InventoryItem(name, description, quantity) {
+        var self = this;
+        self.name = ko.observable(name);
+        self.description = ko.observable(description);
+        self.quantity = ko.observable(quantity);
+        self.displayText = ko.computed(self.getDisplayText, self);
     }
 
-    getDisplayText() {
-        return `${this.quantity()} ${this.name()}`;
-    }
-}
+    InventoryItem.prototype.getDisplayText = function () {
+        return this.quantity() + " " + this.name();
+    };
+
+    window.InventoryItem = InventoryItem;
+});

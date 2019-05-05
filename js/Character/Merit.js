@@ -1,6 +1,9 @@
-export default class Merit {
-    constructor(name, value) {
-        this.name = ko.observable(name);
-        this.value = ko.observable(value);
+$(function () {
+    function Merit(name, value) {
+        var self = this;
+        self.name = ko.observable(name);
+        self.value = ko.observable(value);
     }
-}
+
+    window.Merit = Merit;
+});
