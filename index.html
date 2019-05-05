@@ -259,7 +259,9 @@
                 <div class="row">
                     <div class="col-lg clickable pointer" data-bind="click: $root.switchMode('merits').bind($root)">
                         <h2>Merits</h2>
-                        <span style="font-style: italic;" data-bind="visible: merits().length === 0">None</span>
+                        <div class="row" data-bind="visible: merits().length === 0">
+                            <div class="col"><span style="font-style: italic;">None</span></div>
+                        </div>
                         <!-- ko foreach: merits -->
                         <div class="row">
                             <div class="col"><label data-bind="text: name"></label></div>
@@ -270,7 +272,9 @@
                     </div>
                     <div class="col-lg clickable pointer" data-bind="click: $root.switchMode('spells').bind($root)">
                         <h2>Spells</h2>
-                        <span style="font-style: italic;" data-bind="visible: spells().length === 0">None</span>
+                        <div class="row" data-bind="visible: spells().length === 0">
+                            <div class="col"><span style="font-style: italic;">None</span></div>
+                        </div>
                         <!-- ko foreach: spells -->
                         <div class="row">
                             <div class="col"><label data-bind="text: name"></label></div>
@@ -281,7 +285,9 @@
                     </div>
                     <div class="col-lg clickable pointer" data-bind="click: $root.switchMode('flaws').bind($root)">
                         <h2>Flaws</h2>
-                        <span style="font-style: italic;" data-bind="visible: flaws().length === 0">None</span>
+                        <div class="row" data-bind="visible: flaws().length === 0">
+                            <div class="col"><span style="font-style: italic;">None</span></div>
+                        </div>
                         <!-- ko foreach: flaws -->
                         <div class="row">
                             <div class="col"><label data-bind="text: name"></label></div>
