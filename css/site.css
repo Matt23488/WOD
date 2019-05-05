@@ -78,6 +78,25 @@ label {
     margin-left: 3px;
 }
 
+@media only screen and (max-width: 992px) {
+    .attribute-dot {
+        width: 2em;
+        height: 2em;
+        border-radius: 1em;
+        margin: 5px 10px 5px 0;
+    }
+
+    .damage {
+        width: calc(2em - 2px);
+        height: calc(2em - 2px);
+        margin: 0 5px;
+        border: 1px solid var(--body-color);
+        display: inline-block;
+        box-sizing: content-box;
+        background-size: calc(2em - 1px) calc(2em - 1px);
+    }
+}
+
 .filled {
     background-color: var(--body-color);
 }
