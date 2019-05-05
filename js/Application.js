@@ -107,26 +107,5 @@ $(function () {
         };
     };
 
-    ko.bindingHandlers.dice = {
-        update: function (element, valueAccessor) {
-            element.innerHTML = "";
-            var rollRounds = valueAccessor()();
-            for (var i = 0; i < rollRounds.length; i++) {
-                var rolls = rollRounds[i];
-                var div = document.createElement("div");
-                div.style.marginBottom = "25px";
-                for (var j = 0; j < rolls.length; j++) {
-                    var roll = rolls[j];
-                    var img = document.createElement("img");
-                    img.src = "images/dice-" + roll + ".png";
-                    img.style.width = "72px";
-                    img.style.height = "72px";
-                    div.appendChild(img);
-                }
-                element.appendChild(div);
-            }
-        }
-    };
-
     window.Application = Application;
 });
