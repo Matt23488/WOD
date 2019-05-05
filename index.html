@@ -380,17 +380,12 @@
 
             <div class="diceContainer" data-bind="visible: mode() === 'dice', with: dice">
                 <h1>Roll Dice</h1>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-outline-light" data-bind="click: incrementDicePool(-1)"><i class="fas fa-minus"></i></button>
-                        <button class="btn btn-outline-light" data-bind="click: incrementDicePool(1)"><i class="fas fa-plus"></i></button>
-                    </div>
-                    <span class="form-control" data-bind="text: dicePool"></span>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-light" data-bind="click: rollDice"><i class="fas fa-check"></i> Roll</button>
-                    </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline-light" data-bind="click: incrementDicePool(-1)"><i class="fas fa-minus"></i></button>
+                    <button class="btn btn-outline-light" data-bind="click: rollDice, text: dicePool"></button>
+                    <button class="btn btn-outline-light" data-bind="click: incrementDicePool(1)"><i class="fas fa-plus"></i></button>
                 </div>
-                <span style="font-size: 2.5em; margin-left: 10px;">
+                <span style="font-size: 1.3em; margin-left: 10px;">
                     <label>Total Successes:</label>
                     <span data-bind="text: totalDiceSuccesses"></span>
                 </span>
