@@ -37,7 +37,7 @@
             </div>
 
             <div class="listContainer" data-bind="visible: mode() === 'list'">
-                <h1>Characters <button class="btn btn-sm btn-outline-success" data-bind="click: newCharacter"><i class="fas fa-plus"></i></button></h1>
+                <h1>Characters <button class="btn btn-outline-success" data-bind="click: newCharacter"><i class="fas fa-plus"></i></button></h1>
                 <ul class="characterList" data-bind="foreach: realCharacters">
                     <li class="clickable pointer" data-bind="text: name, click: $root.selectCharacter.bind($root)"></li>
                 </ul>
@@ -111,7 +111,7 @@
                 <br />
                 <div class="row">
                     <div class="col-lg">
-                        <h2>Health <button class="btn btn-sm btn-outline-light" data-bind="click: damage.clearAll.bind(damage)">Heal All</button></h2>
+                        <h2>Health <button class="btn btn-outline-light" data-bind="click: damage.clearAll.bind(damage)">Heal All</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: damage.totalHealth"></div></div>
                         <br />
@@ -120,15 +120,15 @@
                         <br />
                         <div class="col-12" data-bind="with: damage">
                             <div class="btn-group">
-                                <button class="btn btn-outline-light btn-sm" data-bind="click: addBashing">Bashing</button>
-                                <button class="btn btn-outline-light btn-sm" data-bind="click: addLethal">Lethal</button>
-                                <button class="btn btn-outline-light btn-sm" data-bind="click: addAggravated">Aggravated</button>
+                                <button class="btn btn-outline-light" data-bind="click: addBashing">Bashing</button>
+                                <button class="btn btn-outline-light" data-bind="click: addLethal">Lethal</button>
+                                <button class="btn btn-outline-light" data-bind="click: addAggravated">Aggravated</button>
                             </div>
                         </div>
                         <br />
                     </div>
                     <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: magic">
-                        <h2>Magic <button class="btn btn-outline-light btn-sm" data-bind="click: magic.clearUsed.bind(magic)">Heal All</button></h2>
+                        <h2>Magic <button class="btn btn-outline-light" data-bind="click: magic.clearUsed.bind(magic)">Heal All</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: magic.total"></div></div>
                         <br />
@@ -137,7 +137,7 @@
                         <br />
                     </div>
                     <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: willpower">
-                        <h2>Willpower <button class="btn btn-outline-light btn-sm" data-bind="click: willpower.clearUsed.bind(willpower)">Heal All</button></h2>
+                        <h2>Willpower <button class="btn btn-outline-light" data-bind="click: willpower.clearUsed.bind(willpower)">Heal All</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: willpower.total"></div></div>
                         <br />
@@ -372,7 +372,7 @@
             </div>
 
             <div class="notesContainer" data-bind="visible: mode() === 'notes', with: character">
-                <h1>Notes <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newNote"><i class="fas fa-plus"></i></button></h1>
+                <h1>Notes <button type="button" class="btn btn-outline-success" data-bind="click: newNote"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -390,7 +390,7 @@
             </div>
 
             <div class="meritsContainer" data-bind="visible: mode() === 'merits', with: character">
-                <h1>Merits <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newMerit"><i class="fas fa-plus"></i></button></h1>
+                <h1>Merits <button type="button" class="btn btn-outline-success" data-bind="click: newMerit"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -410,7 +410,7 @@
             </div>
 
             <div class="spellsContainer" data-bind="visible: mode() === 'spells', with: character">
-                <h1>Spells <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newSpell"><i class="fas fa-plus"></i></button></h1>
+                <h1>Spells <button type="button" class="btn btn-outline-success" data-bind="click: newSpell"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -430,7 +430,7 @@
             </div>
 
             <div class="flawsContainer" data-bind="visible: mode() === 'flaws', with: character">
-                <h1>Flaws <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newFlaw"><i class="fas fa-plus"></i></button></h1>
+                <h1>Flaws <button type="button" class="btn btn-outline-success" data-bind="click: newFlaw"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -450,7 +450,7 @@
             </div>
 
             <div class="weaponsContainer" data-bind="visible: mode() === 'weapons', with: character">
-                <h1>Weapons <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newWeapon"><i class="fas fa-plus"></i></button></h1>
+                <h1>Weapons <button type="button" class="btn btn-outline-success" data-bind="click: newWeapon"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -470,7 +470,7 @@
             </div>
 
             <div class="equipmentContainer" data-bind="visible: mode() === 'equipment', with: character">
-                <h1>Equipment <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newEquipment"><i class="fas fa-plus"></i></button></h1>
+                <h1>Equipment <button type="button" class="btn btn-outline-success" data-bind="click: newEquipment"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
@@ -490,7 +490,7 @@
             </div>
 
             <div class="inventoryContainer" data-bind="visible: mode() === 'inventory', with: character">
-                <h1>Inventory <button type="button" class="btn btn-sm btn-outline-success" data-bind="click: newInventoryItem"><i class="fas fa-plus"></i></button></h1>
+                <h1>Inventory <button type="button" class="btn btn-outline-success" data-bind="click: newInventoryItem"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <thead>
                         <tr>
