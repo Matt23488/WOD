@@ -16,12 +16,13 @@ body {
 }
 
 .damage {
-    width: 11px;
-    height: 11px;
+    width: calc(1em - 1px);
+    height: calc(1em - 1px);
     margin: 0 2px;
     border: 1px solid var(--body-color);
     display: inline-block;
     box-sizing: content-box;
+    background-size: calc(1em - 1px) calc(1em - 1px);
 }
 
 .none {
@@ -48,6 +49,11 @@ input, textarea, span.form-control {
     color: var(--body-color) !important;
 }
 
+.input-group span.form-control {
+    border-top: 1px solid var(--body-color) !important;
+    border-bottom: 1px solid var(--body-color) !important;
+}
+
 table {
     color: var(--body-color) !important;
 }
@@ -65,10 +71,10 @@ label {
 }
 
 .attribute-dot {
-    width: 12px;
-    height: 12px;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
     border: 1px solid var(--body-color);
-    border-radius: 6px;
     margin: 0 5px 0 0;
     display: inline-block;
 }

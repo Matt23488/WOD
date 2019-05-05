@@ -11,6 +11,12 @@ $(function () {
             }, 0);
         });
     }
+
+    Dice.prototype.incrementDicePool = function (amount) {
+        return function () {
+            this.dicePool(this.dicePool() + amount);
+        };
+    };
     
     Dice.prototype.rollDice = function () {
         var self = this;
