@@ -1,5 +1,8 @@
 :root {
     --body-color: rgb(255, 255, 255);
+    --bashing-img: url("../images/bashing-lt.png");
+    --lethal-img: url("../images/lethal-lt.png");
+    --aggravated-img: url("../images/aggravated-lt.png");
 }
 
 body {
@@ -10,6 +13,31 @@ body {
 
 .HIDDEN {
     display: none !important;
+}
+
+.damage {
+    width: 11px;
+    height: 11px;
+    margin: 0 2px;
+    border: 1px solid var(--body-color);
+    display: inline-block;
+    box-sizing: content-box;
+}
+
+.none {
+    background-image: url("../images/none.png");
+}
+
+.bashing {
+    background-image: var(--bashing-img);
+}
+
+.lethal {
+    background-image: var(--lethal-img);
+}
+
+.aggravated {
+    background-image: var(--aggravated-img);
 }
 
 input, textarea, span.form-control {

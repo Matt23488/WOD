@@ -35,46 +35,43 @@ $(function () {
             self.aggravated(self.aggravated() + 1);
         }
         else {
-            // TODO: Figure out how damage accumulates
             alert("you ded");
         }
     };
 
     Damage.prototype.addLethal = function () {
         var self = this;
-        if (self.bashing() > 0) {
+        if (self.anyEmpty()) {
+            self.lethal(self.lethal() + 1);
+        }
+        else if (self.bashing() > 0) {
             self.bashing(self.bashing() - 1);
             self.lethal(self.lethal() + 1);
         }
+        else if (self.lethal() > 0) {
+            self.lethal(self.lethal() - 1);
+            self.aggravated(self.aggravated() + 1);
+        }
         else {
-            if (self.anyEmpty()) {
-                self.lethal(self.lethal() + 1);
-            }
-            else {
-                // TODO: Figure out how damage accumulates
-                alert("you ded");
-            }
+            alert("you ded");
         }
     };
 
     Damage.prototype.addAggravated = function () {
         var self = this;
-        if (self.lethal() > 0) {
-            self.lethal(self.lethal() - 1);
+        if (self.anyEmpty()) {
             self.aggravated(self.aggravated() + 1);
         }
         else if (self.bashing() > 0) {
             self.bashing(self.bashing() - 1);
             self.aggravated(self.aggravated() + 1);
         }
+        else if (self.lethal() > 0) {
+            self.lethal(self.lethal() - 1);
+            self.aggravated(self.aggravated() + 1);
+        }
         else {
-            if (self.anyEmpty()) {
-                self.aggravated(self.aggravated() + 1);
-            }
-            else {
-                // TODO: Figure out how damage accumulates
-                alert("you ded");
-            }
+            alert("you ded");
         }
     };
 
@@ -90,26 +87,38 @@ $(function () {
 
     function updateDamageDisplay(element, valueAccessor) {
         var damageObj = valueAccessor().damage;
-        var imgs = element.getElementsByTagName("img");
-        for (var i = 0; i < imgs.length; i++) {
+        var spans = element.getElementsByTagName("span");
+        for (var i = 0; i < spans.length; i++) {
             if (i < damageObj.aggravated()) {
-                imgs[i].src = "images/aggravated.png";
+                spans[i].classList.remove("none");
+                spans[i].classList.remove("bashing");
+                spans[i].classList.remove("lethal");
+                spans[i].classList.add("aggravated");
             }
             else if (i - damageObj.aggravated() < damageObj.lethal()) {
-                imgs[i].src = "images/lethal.png";
+                spans[i].classList.remove("none");
+                spans[i].classList.remove("bashing");
+                spans[i].classList.remove("aggravated");
+                spans[i].classList.add("lethal");
             }
             else if (i - damageObj.aggravated() - damageObj.lethal() < damageObj.bashing()) {
-                imgs[i].src = "images/bashing.png";
+                spans[i].classList.remove("none");
+                spans[i].classList.remove("lethal");
+                spans[i].classList.remove("aggravated");
+                spans[i].classList.add("bashing");
             }
             else {
-                imgs[i].src = "images/none.png";
+                spans[i].classList.remove("bashing");
+                spans[i].classList.remove("lethal");
+                spans[i].classList.remove("aggravated");
+                spans[i].classList.add("none");
             }
 
             if (i < damageObj.totalHealth()) {
-                imgs[i].classList.remove("HIDDEN");
+                spans[i].classList.remove("HIDDEN");
             }
             else {
-                imgs[i].classList.add("HIDDEN");
+                spans[i].classList.add("HIDDEN");
             }
         }
     }
@@ -121,11 +130,10 @@ $(function () {
             function setup() {
                 var damageObj = valueAccessor().damage;
                 for (var i = 0; i < 12; i++) {
-                    var cb = document.createElement("img");
-                    cb.style.border = "1px solid var(--body-color)";
-                    cb.style.margin = "0 2px";
-                    cb.src = "images/none.png";
-                    element.appendChild(cb);
+                    var span = document.createElement("span");
+                    span.classList.add("damage");
+                    span.classList.add("none");
+                    element.appendChild(span);
                 }
 
                 updateDamageDisplay(element, valueAccessor);
