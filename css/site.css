@@ -1,7 +1,8 @@
 :root {
-    --primary-color: rgb(63, 0, 146);
+    /* --primary-color: rgb(63, 0, 146); */
+    --primary-color: rgb(30, 30, 30);
 
-    --body-color: rgb(255, 255, 255);
+    --body-color: rgb(200, 200, 200);
     --bashing-img: url("../images/bashing-lt.png");
     --lethal-img: url("../images/lethal-lt.png");
     --aggravated-img: url("../images/aggravated-lt.png");
@@ -16,7 +17,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgb(34, 0, 81);
+    background-color: var(--body-color);/* rgb(34, 0, 81);*/
     border-radius: 5px;
 }
 
@@ -26,7 +27,7 @@
 
 body {
     /* background-image: linear-gradient(to bottom right, rgb(63, 0, 146), rgb(200, 0, 255)); */
-    background-color: rgb(63, 0, 146);
+    background-color: var(--primary-color);
     color: var(--body-color);
 }
 
