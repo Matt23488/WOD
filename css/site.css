@@ -5,6 +5,23 @@
     --aggravated-img: url("../images/aggravated-lt.png");
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(34, 0, 81);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: gold;
+}
+
 body {
     /* background-image: linear-gradient(to bottom right, rgb(63, 0, 146), rgb(200, 0, 255)); */
     background-color: rgb(63, 0, 146);
