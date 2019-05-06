@@ -207,6 +207,19 @@ $(function () {
         this.notes.remove(note);
     };
 
+    Character.prototype.moveItem = function (observableArray, direction) {
+        var self = this;
+        return function (item) {
+            var index = observableArray.indexOf(item);
+            var newIndex = index + direction;
+
+            if (newIndex < 0 || newIndex >= observableArray().length) return;
+
+            observableArray.splice(index, 1);
+            observableArray.splice(newIndex, 0, item);
+        };
+    };
+
     Character.prototype.toJson = function () {
         var self = this;
         return {
