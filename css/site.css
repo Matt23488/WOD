@@ -1,4 +1,6 @@
 :root {
+    --primary-color: rgb(63, 0, 146);
+
     --body-color: rgb(255, 255, 255);
     --bashing-img: url("../images/bashing-lt.png");
     --lethal-img: url("../images/lethal-lt.png");
@@ -26,6 +28,20 @@ body {
     /* background-image: linear-gradient(to bottom right, rgb(63, 0, 146), rgb(200, 0, 255)); */
     background-color: rgb(63, 0, 146);
     color: var(--body-color);
+}
+
+.toolbar {
+    position: fixed;
+    margin: -48px 0 0 12px;
+    z-index: 999;
+}
+
+.body-content {
+    margin-top: 60px;
+}
+
+.btn-outline {
+    background-color: var(--primary-color);
 }
 
 .HIDDEN {

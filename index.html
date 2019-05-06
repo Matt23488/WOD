@@ -45,17 +45,16 @@
             <img src="images/aggravated.png" />
             <img src="images/aggravated-lt.png" />
         </div>
-        <div class="container-fluid">
-            <div>
-                <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: goBack, visible: mode() !== 'list'"><i class="fas fa-arrow-left"></i></button>
-                <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('dice'), visible: mode() === 'sheet'"><i class="fas fa-dice"></i></button>
-                <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('notes'), visible: mode() === 'sheet'"><i class="fas fa-clipboard"></i></button>
-                <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: saveCharacters"><i class="fas fa-save"></i></button>
-                <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: downloadCharacter, visible: mode() === 'sheet'"><i class="fas fa-download"></i></button>
-                <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: uploadCharacter, visible: mode() === 'list'"><i class="fas fa-upload"></i></button>
-                <button class="btn btn-lg btn-outline btn-outline-danger" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
-            </div>
-
+        <div class="toolbar">
+            <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: goBack, visible: mode() !== 'list'"><i class="fas fa-arrow-left"></i></button>
+            <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('dice'), visible: mode() === 'sheet'"><i class="fas fa-dice"></i></button>
+            <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('notes'), visible: mode() === 'sheet'"><i class="fas fa-clipboard"></i></button>
+            <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: saveCharacters"><i class="fas fa-save"></i></button>
+            <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: downloadCharacter, visible: mode() === 'sheet'"><i class="fas fa-download"></i></button>
+            <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: uploadCharacter, visible: mode() === 'list'"><i class="fas fa-upload"></i></button>
+            <button class="btn btn-lg btn-outline btn-outline-danger" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
+        </div>
+        <div class="container-fluid body-content">
             <div class="listContainer" data-bind="visible: mode() === 'list'">
                 <h1>Characters <button class="btn btn-lg btn-outline-success" data-bind="click: newCharacter"><i class="fas fa-plus"></i></button></h1>
                 <ul class="characterList" data-bind="foreach: realCharacters">
