@@ -26,7 +26,7 @@ $(function () {
             var rerolls = 0;
             var currentRound = [];
             for (var i = 0; i < numRolls; i++) {
-                var roll = Math.floor(Math.random() * 10) + 1;
+                var roll = randomInteger(1, 11);
                 if (roll === 10) rerolls++;
                 currentRound.push(roll)
             }

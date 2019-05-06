@@ -307,16 +307,6 @@ $(function () {
         return firstName + " " + lastName;
     }
 
-    function randomInteger(minInclusive, maxExclusive) {
-        if (!minInclusive) minInclusive = 0;
-        if (!maxExclusive) maxExclusive = 10;
-        if (maxExclusive < minInclusive) {
-            [minInclusive, maxExclusive] = [maxExclusive, minInclusive];
-        }
-    
-        return Math.floor(Math.random() * (maxExclusive - minInclusive)) + minInclusive;
-    }
-
     ko.bindingHandlers.attribute = {
         init: function (element, valueAccessor) {
             var dots = [];
