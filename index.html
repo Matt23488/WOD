@@ -277,7 +277,7 @@
                 </div>
                 <br />
                 <div class="row">
-                    <div class="col-lg clickable pointer" data-bind="click: $root.switchMode('merits').bind($root)">
+                    <div id="merits" class="col-lg clickable pointer" data-bind="click: $root.switchMode('merits').bind($root)">
                         <h2>Merits</h2>
                         <div class="row" data-bind="visible: merits().length === 0">
                             <div class="col"><span style="font-style: italic;">None</span></div>
@@ -290,7 +290,7 @@
                         <!-- /ko -->
                         <br />
                     </div>
-                    <div class="col-lg clickable pointer" data-bind="click: $root.switchMode('spells').bind($root)">
+                    <div id="spells" class="col-lg clickable pointer" data-bind="click: $root.switchMode('spells').bind($root)">
                         <h2>Spells</h2>
                         <div class="row" data-bind="visible: spells().length === 0">
                             <div class="col"><span style="font-style: italic;">None</span></div>
@@ -303,7 +303,7 @@
                         <!-- /ko -->
                         <br />
                     </div>
-                    <div class="col-lg clickable pointer" data-bind="click: $root.switchMode('flaws').bind($root)">
+                    <div id="flaws" class="col-lg clickable pointer" data-bind="click: $root.switchMode('flaws').bind($root)">
                         <h2>Flaws</h2>
                         <div class="row" data-bind="visible: flaws().length === 0">
                             <div class="col"><span style="font-style: italic;">None</span></div>
@@ -350,7 +350,7 @@
                         </div>
                         <br />
                     </div>
-                    <div class="col-lg clickable pointer" data-bind="click: $root.switchMode('weapons').bind($root)">
+                    <div id="weapons" class="col-lg clickable pointer" data-bind="click: $root.switchMode('weapons').bind($root)">
                         <h2>Weapons</h2>
                         <span style="font-style: italic;" data-bind="visible: weapons().length === 0">None</span>
                         <div class="row font20" data-bind="foreach: weapons">
@@ -358,7 +358,7 @@
                         </div>
                         <br />
                     </div>
-                    <div class="col-lg clickable pointer" data-bind="click: $root.switchMode('equipment').bind($root)">
+                    <div id="equipment" class="col-lg clickable pointer" data-bind="click: $root.switchMode('equipment').bind($root)">
                         <h2>Equipment</h2>
                         <span style="font-style: italic;" data-bind="visible: equipment().length === 0">None</span>
                         <div class="row font20" data-bind="foreach: equipment">
@@ -368,7 +368,7 @@
                 </div>
                 <br />
                 <div class="row">
-                    <div class="col clickable pointer" data-bind="click: $root.switchMode('inventory').bind($root)">
+                    <div id="inventory" class="col clickable pointer" data-bind="click: $root.switchMode('inventory').bind($root)">
                         <h2>Inventory</h2>
                         <span style="font-style: italic;" data-bind="visible: inventory().length === 0">None</span>
                         <div class="row font20" data-bind="foreach: inventory">

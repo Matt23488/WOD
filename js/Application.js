@@ -15,12 +15,19 @@ $(function () {
         });
         self.character = ko.computed(function () { return self.characters()[self.characterId()]; });
         self.dice = new Dice();
+        self.previousSection = null;
     }
 
     Application.prototype.goBack = function () {
         var self = this;
         if (self.mode() === "sheet") self.mode("list");
-        else self.mode("sheet");
+        else {
+            self.mode("sheet");
+
+            if (self.previousSection) {
+                window.location.hash = self.previousSection;
+            }
+        }
     };
 
     Application.prototype.newCharacter = function () {
@@ -103,6 +110,12 @@ $(function () {
     Application.prototype.switchMode = function (mode) {
         var self = this;
         return function () {
+            if (self.mode() !== "list" && document.getElementById(mode)) {
+                self.previousSection = mode;
+            }
+            else self.previousSection = null;
+            window.location.hash = "";
+
             self.mode(mode);
         };
     };
