@@ -201,3 +201,15 @@ label {
     display: inline-block;
     background-size: 72px 72px;
 }
+
+/* Sweet Alert custom styling */
+.swal-modal,
+.swal-icon--success:after,
+.swal-icon--success:before,
+.swal-icon--success__hide-corners {
+    background-color: var(--primary-color) !important;
+}
+
+.swal-text {
+    color: var(--body-color) !important;
+}
