@@ -84,57 +84,53 @@ $(function () {
     Damage.prototype.anyEmpty = function () {
         return this.bashing() + this.lethal() + this.aggravated() < this.totalHealth();
     };
-
-    function updateDamageDisplay(element, valueAccessor) {
-        var damageObj = valueAccessor().value;
-        var spans = element.getElementsByTagName("span");
-        for (var i = 0; i < spans.length; i++) {
-            if (i < damageObj.aggravated()) {
-                spans[i].classList.remove("none");
-                spans[i].classList.remove("bashing");
-                spans[i].classList.remove("lethal");
-                spans[i].classList.add("aggravated");
-            }
-            else if (i - damageObj.aggravated() < damageObj.lethal()) {
-                spans[i].classList.remove("none");
-                spans[i].classList.remove("bashing");
-                spans[i].classList.remove("aggravated");
-                spans[i].classList.add("lethal");
-            }
-            else if (i - damageObj.aggravated() - damageObj.lethal() < damageObj.bashing()) {
-                spans[i].classList.remove("none");
-                spans[i].classList.remove("lethal");
-                spans[i].classList.remove("aggravated");
-                spans[i].classList.add("bashing");
-            }
-            else {
-                spans[i].classList.remove("bashing");
-                spans[i].classList.remove("lethal");
-                spans[i].classList.remove("aggravated");
-                spans[i].classList.add("none");
-            }
-
-            if (i < damageObj.totalHealth()) {
-                spans[i].classList.remove("HIDDEN");
-            }
-            else {
-                spans[i].classList.add("HIDDEN");
-            }
-        }
-    }
     
     ko.bindingHandlers.damage = {
-        init: function (element, valueAccessor) {
+        init: function (element) {
             for (var i = 0; i < 12; i++) {
                 var span = document.createElement("span");
                 span.classList.add("damage");
                 span.classList.add("none");
                 element.appendChild(span);
             }
-
-            valueAccessor().character.subscribe(updateDamageDisplay.bind(this, element, valueAccessor));
         },
-        update: updateDamageDisplay
+        update: function (element, valueAccessor) {
+            var damageObj = valueAccessor().value;
+            var spans = element.getElementsByTagName("span");
+            for (var i = 0; i < spans.length; i++) {
+                if (i < damageObj.aggravated()) {
+                    spans[i].classList.remove("none");
+                    spans[i].classList.remove("bashing");
+                    spans[i].classList.remove("lethal");
+                    spans[i].classList.add("aggravated");
+                }
+                else if (i - damageObj.aggravated() < damageObj.lethal()) {
+                    spans[i].classList.remove("none");
+                    spans[i].classList.remove("bashing");
+                    spans[i].classList.remove("aggravated");
+                    spans[i].classList.add("lethal");
+                }
+                else if (i - damageObj.aggravated() - damageObj.lethal() < damageObj.bashing()) {
+                    spans[i].classList.remove("none");
+                    spans[i].classList.remove("lethal");
+                    spans[i].classList.remove("aggravated");
+                    spans[i].classList.add("bashing");
+                }
+                else {
+                    spans[i].classList.remove("bashing");
+                    spans[i].classList.remove("lethal");
+                    spans[i].classList.remove("aggravated");
+                    spans[i].classList.add("none");
+                }
+    
+                if (i < damageObj.totalHealth()) {
+                    spans[i].classList.remove("HIDDEN");
+                }
+                else {
+                    spans[i].classList.add("HIDDEN");
+                }
+            }
+        }
     };
 
     window.Damage = Damage;

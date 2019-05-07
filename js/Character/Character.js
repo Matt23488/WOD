@@ -297,7 +297,9 @@ $(function () {
                 var dot = document.createElement("span");
                 dot.classList.add("attribute-dot");
                 dot.dataset.index = i;
-                element.appendChild(dot);
+                dot.dataset.toggle = "tooltip";
+                dot.title = i + 1;
+                $(dot).tooltip();
     
                 dots.push(dot);
     
@@ -313,7 +315,20 @@ $(function () {
                     });
                 });
             }
+
+            var clearDot = document.createElement("div");
+            clearDot.classList.add("clear-dot");
+            clearDot.innerHTML = "&times;";
+            clearDot.dataset.toggle = "tooltip";
+            clearDot.title = "Clear";
+            clearDot.addEventListener("click", function () {
+                valueAccessor().value(0);
+            });
+            element.appendChild(clearDot);
+            $(clearDot).tooltip();
+
             dots.forEach(function (dot, index) {
+                element.appendChild(dot);
                 dot.addEventListener("click", function () {
                     var params = valueAccessor();
                     var observable = params.value;
@@ -323,7 +338,7 @@ $(function () {
         },
         update: function (element, valueAccessor) {
             var value = valueAccessor().value();
-            var dots = element.getElementsByTagName("span");
+            var dots = element.getElementsByClassName("attribute-dot");
             for (var i = 0; i < dots.length; i++) {
                 dots[i].style.backgroundColor = null;
                 dots[i].style.borderColor = null;
@@ -355,23 +370,8 @@ $(function () {
         }
     };
     
-    function updateUsedDisplay(element, valueAccessor) {
-        var used = valueAccessor().value();
-        var total = valueAccessor().total();
-        var dots = element.getElementsByTagName("span");
-        for (var i = 0; i < dots.length; i++) {
-            if (i < used) dots[i].classList.add("filled-red");
-            else dots[i].classList.remove("filled-red");
-
-            if (i < total) dots[i].classList.remove("HIDDEN");
-            else dots[i].classList.add("HIDDEN");
-        }
-    }
-    
     ko.bindingHandlers.used = {
         init: function (element, valueAccessor) {
-            var usedObservable = valueAccessor().value;
-            var character = valueAccessor().character;
             var dots = [];
             for (var i = 0; i < 12; i++) {
                 var dot = document.createElement("span");
@@ -395,13 +395,22 @@ $(function () {
             }
             dots.forEach(function (dot, index) {
                 dot.addEventListener("click", function () {
-                    usedObservable(index + 1);
+                    valueAccessor().value(index + 1);
                 });
             });
-    
-            character.subscribe(updateUsedDisplay.bind(this, element, valueAccessor));
         },
-        update: updateUsedDisplay
+        update: function (element, valueAccessor) {
+            var used = valueAccessor().value();
+            var total = valueAccessor().total();
+            var dots = element.getElementsByTagName("span");
+            for (var i = 0; i < dots.length; i++) {
+                if (i < used) dots[i].classList.add("filled-red");
+                else dots[i].classList.remove("filled-red");
+    
+                if (i < total) dots[i].classList.remove("HIDDEN");
+                else dots[i].classList.add("HIDDEN");
+            }
+        }
     };
 
     ko.bindingHandlers.focusOnCreation = {

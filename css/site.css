@@ -108,13 +108,32 @@ label {
     display: inline-block;
     -webkit-transition: background-color 0.25s, border-color 0.25s;
     transition: background-color 0.25s, border-color 0.25s;
+    cursor: pointer;
 }
 
-.attribute-dot:first-child {
+.attribute-dot:first-of-type {
     margin-left: 3px;
 }
 
-@media only screen and (max-width: 992px) {
+div.clear-dot {
+    display: inline;
+}
+
+.attribute .clear-dot {
+    visibility: hidden;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
+    font-size: 1.7em;
+    cursor: pointer;
+    position: relative;
+}
+
+.attribute:hover .clear-dot {
+    visibility: initial;
+}
+
+@media only screen and (max-width: 991px) {
     .attribute-dot {
         width: 2em;
         height: 2em;
@@ -130,6 +149,15 @@ label {
         display: inline-block;
         box-sizing: content-box;
         background-size: calc(2em - 1px) calc(2em - 1px);
+    }
+
+    .attribute .clear-dot {
+        visibility: initial;
+        width: 2em;
+        height: 2em;
+        border-radius: 1em;
+        font-size: 3em;
+        bottom: 7px;
     }
 }
 
