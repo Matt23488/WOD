@@ -395,8 +395,13 @@
             </div>
 
             <div class="notesContainer" data-bind="visible: mode() === 'notes', with: character">
-                <h1>Notes <button type="button" class="btn btn-outline-success" data-bind="click: newNote"><i class="fas fa-plus"></i></button></h1>
+                <h1>Notes <button type="button" class="btn btn-outline-success" data-bind="click: newItem(notes, Note)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
+                    <colgroup>
+                        <col style="width: 1%" />
+                        <col style="width: 1%" />
+                        <col />
+                    </colgroup>
                     <thead>
                         <tr>
                             <th></th>
@@ -408,20 +413,26 @@
                         <tr>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.notes, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.notes, 1), enable: $index() < $parent.notes().length - 1"><i class="fas fa-chevron-down"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.notes, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.notes, 1), enable: $index() < $parent.notes().length - 1"><i class="fas fa-chevron-down"></i></button>
                                 </div>
                             </td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.notes)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><textarea class="form-control" data-bind="textInput: value"></textarea></td>
-                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeNote.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="meritsContainer" data-bind="visible: mode() === 'merits', with: character">
-                <h1>Merits <button type="button" class="btn btn-outline-success" data-bind="click: newMerit"><i class="fas fa-plus"></i></button></h1>
+                <h1>Merits <button type="button" class="btn btn-outline-success" data-bind="click: newItem(merits, Merit)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
+                    <colgroup>
+                        <col style="width: 1%" />
+                        <col style="width: 1%" />
+                        <col />
+                        <col />
+                    </colgroup>
                     <thead>
                         <tr>
                             <th></th>
@@ -434,21 +445,27 @@
                         <tr>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.merits, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.merits, 1), enable: $index() < $parent.merits().length - 1"><i class="fas fa-chevron-down"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.merits, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.merits, 1), enable: $index() < $parent.merits().length - 1"><i class="fas fa-chevron-down"></i></button>
                                 </div>
                             </td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.merits)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
                             <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
-                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeMerit.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="spellsContainer" data-bind="visible: mode() === 'spells', with: character">
-                <h1>Spells <button type="button" class="btn btn-outline-success" data-bind="click: newSpell"><i class="fas fa-plus"></i></button></h1>
+                <h1>Spells <button type="button" class="btn btn-outline-success" data-bind="click: newItem(spells, Merit)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
+                    <colgroup>
+                        <col style="width: 1%" />
+                        <col style="width: 1%" />
+                        <col />
+                        <col />
+                    </colgroup>
                     <thead>
                         <tr>
                             <th></th>
@@ -461,21 +478,27 @@
                         <tr>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.spells, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.spells, 1), enable: $index() < $parent.spells().length - 1"><i class="fas fa-chevron-down"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.spells, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.spells, 1), enable: $index() < $parent.spells().length - 1"><i class="fas fa-chevron-down"></i></button>
                                 </div>
                             </td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.spells)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
                             <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
-                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeSpell.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="flawsContainer" data-bind="visible: mode() === 'flaws', with: character">
-                <h1>Flaws <button type="button" class="btn btn-outline-success" data-bind="click: newFlaw"><i class="fas fa-plus"></i></button></h1>
+                <h1>Flaws <button type="button" class="btn btn-outline-success" data-bind="click: newItem(flaws, Merit)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
+                    <colgroup>
+                        <col style="width: 1%" />
+                        <col style="width: 1%" />
+                        <col />
+                        <col />
+                    </colgroup>
                     <thead>
                         <tr>
                             <th></th>
@@ -488,21 +511,27 @@
                         <tr>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.flaws, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.flaws, 1), enable: $index() < $parent.flaws().length - 1"><i class="fas fa-chevron-down"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.flaws, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.flaws, 1), enable: $index() < $parent.flaws().length - 1"><i class="fas fa-chevron-down"></i></button>
                                 </div>
                             </td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.flaws)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
                             <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
-                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeFlaw.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="weaponsContainer" data-bind="visible: mode() === 'weapons', with: character">
-                <h1>Weapons <button type="button" class="btn btn-outline-success" data-bind="click: newWeapon"><i class="fas fa-plus"></i></button></h1>
+                <h1>Weapons <button type="button" class="btn btn-outline-success" data-bind="click: newItem(weapons, Equipment)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
+                    <colgroup>
+                        <col style="width: 1%" />
+                        <col style="width: 1%" />
+                        <col />
+                        <col />
+                    </colgroup>
                     <thead>
                         <tr>
                             <th></th>
@@ -515,21 +544,27 @@
                         <tr>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.weapons, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.weapons, 1), enable: $index() < $parent.weapons().length - 1"><i class="fas fa-chevron-down"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.weapons, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.weapons, 1), enable: $index() < $parent.weapons().length - 1"><i class="fas fa-chevron-down"></i></button>
                                 </div>
                             </td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.weapons)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeWeapon.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="equipmentContainer" data-bind="visible: mode() === 'equipment', with: character">
-                <h1>Equipment <button type="button" class="btn btn-outline-success" data-bind="click: newEquipment"><i class="fas fa-plus"></i></button></h1>
+                <h1>Equipment <button type="button" class="btn btn-outline-success" data-bind="click: newItem(equipment, Equipment)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
+                    <colgroup>
+                        <col style="width: 1%" />
+                        <col style="width: 1%" />
+                        <col />
+                        <col />
+                    </colgroup>
                     <thead>
                         <tr>
                             <th></th>
@@ -542,42 +577,49 @@
                         <tr>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.equipment, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
-                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.equipment, 1), enable: $index() < $parent.equipment().length - 1"><i class="fas fa-chevron-down"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.equipment, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
+                                    <button class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.equipment, 1), enable: $index() < $parent.equipment().length - 1"><i class="fas fa-chevron-down"></i></button>
                                 </div>
                             </td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.equipment)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeEquipment.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="inventoryContainer" data-bind="visible: mode() === 'inventory', with: character">
-                <h1>Inventory <button type="button" class="btn btn-outline-success" data-bind="click: newInventoryItem"><i class="fas fa-plus"></i></button></h1>
+                <h1>Inventory <button type="button" class="btn btn-outline-success" data-bind="click: newItem(inventory, InventoryItem)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
+                    <colgroup>
+                        <col style="width: 1%" />
+                        <col style="width: 1%" />
+                        <col />
+                        <col />
+                        <col />
+                    </colgroup>
                     <thead>
                         <tr>
+                            <th></th>
                             <th></th>
                             <th>Quantity</th>
                             <th>Name</th>
                             <th>Description</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody data-bind="foreach: inventory">
                         <tr>
                             <td>
                                 <div class="btn-group-vertical">
-                                    <button type="button" class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.inventory, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
-                                    <button type="button" class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem.bind($parent)($parent.inventory, 1), enable: $index() < $parent.inventory().length - 1"><i class="fas fa-chevron-down"></i></button>
+                                    <button type="button" class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.inventory, -1), enable: $index() > 0"><i class="fas fa-chevron-up"></i></button>
+                                    <button type="button" class="btn btn-sm btn-outline-light" data-bind="click: $parent.moveItem($parent.inventory, 1), enable: $index() < $parent.inventory().length - 1"><i class="fas fa-chevron-down"></i></button>
                                 </div>
                             </td>
+                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.inventory)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><input type="number" style="width: 100%;" data-bind="textInput: quantity" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                            <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeInventoryItem.bind($parent)"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                     </tbody>
                 </table>

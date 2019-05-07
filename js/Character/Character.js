@@ -151,64 +151,19 @@ $(function () {
         e.currentTarget.getElementsByTagName("input")[0].focus();
     };
 
-    Character.prototype.newMerit = function () {
-        this.merits.push(new Merit("", 0));
+    Character.prototype.newItem = function (observableArray, constructor) {
+        return function () {
+            observableArray.push(new constructor());
+        }
     };
 
-    Character.prototype.removeMerit = function (merit) {
-        this.merits.remove(merit);
-    };
-
-    Character.prototype.newSpell = function () {
-        this.spells.push(new Merit("", 0));
-    };
-
-    Character.prototype.removeSpell = function (spell) {
-        this.spells.remove(spell);
-    };
-
-    Character.prototype.newFlaw = function () {
-        this.flaws.push(new Merit("", 0));
-    };
-
-    Character.prototype.removeFlaw = function (flaw) {
-        this.flaws.remove(flaw);
-    };
-
-    Character.prototype.newWeapon = function () {
-        this.weapons.push(new Equipment("", ""));
-    };
-
-    Character.prototype.removeWeapon = function (weapon) {
-        this.weapons.remove(weapon);
-    };
-
-    Character.prototype.newEquipment = function () {
-        this.equipment.push(new Equipment("", ""));
-    };
-
-    Character.prototype.removeEquipment = function (equipment) {
-        this.equipment.remove(equipment);
-    };
-
-    Character.prototype.newInventoryItem = function () {
-        this.inventory.push(new InventoryItem("", "", 1));
-    };
-
-    Character.prototype.removeInventoryItem = function (item) {
-        this.inventory.remove(item);
-    };
-
-    Character.prototype.newNote = function () {
-        this.notes.push(new Note(""));
-    };
-
-    Character.prototype.removeNote = function (note) {
-        this.notes.remove(note);
-    };
+    Character.prototype.removeItem = function (observableArray) {
+        return function (item) {
+            observableArray.remove(item);
+        };
+    }
 
     Character.prototype.moveItem = function (observableArray, direction) {
-        var self = this;
         return function (item) {
             var index = observableArray.indexOf(item);
             var newIndex = index + direction;

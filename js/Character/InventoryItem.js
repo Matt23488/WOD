@@ -1,9 +1,9 @@
 $(function () {
     function InventoryItem(name, description, quantity) {
         var self = this;
-        self.name = ko.observable(name);
-        self.description = ko.observable(description);
-        self.quantity = ko.observable(quantity);
+        self.name = ko.observable(name || "");
+        self.description = ko.observable(description || "");
+        self.quantity = ko.observable(quantity || 1);
         self.displayText = ko.computed(self.getDisplayText, self);
     }
 
