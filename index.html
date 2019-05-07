@@ -418,7 +418,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.notes)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><textarea class="form-control" data-bind="textInput: value"></textarea></td>
+                            <td><textarea class="form-control" data-bind="textInput: value, focusOnCreation"></textarea></td>
                         </tr>
                     </tbody>
                 </table>
@@ -450,7 +450,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.merits)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
                             <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
                         </tr>
                     </tbody>
@@ -483,7 +483,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.spells)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
                             <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
                         </tr>
                     </tbody>
@@ -516,7 +516,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.flaws)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
                             <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
                         </tr>
                     </tbody>
@@ -549,7 +549,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.weapons)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
                         </tr>
                     </tbody>
@@ -582,7 +582,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.equipment)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
                         </tr>
                     </tbody>
@@ -597,15 +597,15 @@
                         <col style="width: 1%" />
                         <col />
                         <col />
-                        <col />
+                        <col style="width: 1%" />
                     </colgroup>
                     <thead>
                         <tr>
                             <th></th>
                             <th></th>
-                            <th>Quantity</th>
                             <th>Name</th>
                             <th>Description</th>
+                            <th>Quantity</th>
                         </tr>
                     </thead>
                     <tbody data-bind="foreach: inventory">
@@ -617,9 +617,9 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.inventory)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="number" style="width: 100%;" data-bind="textInput: quantity" /></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
+                            <td><input type="number" style="width: 100%;" data-bind="textInput: quantity" /></td>
                         </tr>
                     </tbody>
                 </table>

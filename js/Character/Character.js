@@ -147,7 +147,7 @@ $(function () {
         return new Character(json);
     };
 
-    Character.prototype.onComponentClick = function(char, e) {
+    Character.prototype.onComponentClick = function(_, e) {
         e.currentTarget.getElementsByTagName("input")[0].focus();
     };
 
@@ -380,6 +380,14 @@ $(function () {
                     dots[i].classList.add("filled");
                 }
             }
+        }
+    };
+
+    ko.bindingHandlers.focusOnCreation = {
+        init: function (element) {
+            window.setTimeout(function () {
+                element.focus();
+            }, 1);
         }
     };
 
