@@ -355,48 +355,6 @@ $(function () {
         }
     };
     
-    ko.bindingHandlers.capacity = {
-        init: function (element, valueAccessor) {
-            var dots = [];
-            for (let i = 0; i < 12; i++) {
-                var dot = document.createElement("span");
-                dot.classList.add("attribute-dot");
-                dot.dataset.index = i;
-                element.appendChild(dot);
-    
-                dots.push(dot);
-    
-                dot.addEventListener("pointerenter", function () {
-                    var dotIndex = parseInt(this.dataset.index);
-                    dots.forEach(function (dot, index) {
-                        if (index <= dotIndex) dot.classList.add("hoverFilled");
-                    });
-                });
-                dot.addEventListener("pointerleave", function () {
-                    dots.forEach(function (dot) {
-                        dot.classList.remove("hoverFilled");
-                    });
-                });
-            }
-            dots.forEach(function (dot, index) {
-                dot.addEventListener("click", function () {
-                    var observable = valueAccessor();
-                    observable(index + 1);
-                });
-            });
-        },
-        update: function (element, valueAccessor) {
-            var value = valueAccessor()();
-            var dots = element.getElementsByTagName("span");
-            for (var i = 0; i < dots.length; i++) {
-                dots[i].classList.remove("filled");
-                if (i < value) {
-                    dots[i].classList.add("filled");
-                }
-            }
-        }
-    };
-    
     function updateUsedDisplay(element, valueAccessor) {
         var used = valueAccessor().value();
         var total = valueAccessor().total();
