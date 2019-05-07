@@ -68,7 +68,7 @@
                     <div class="col-lg">
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Name:</label> <input class="form-control" type="text" data-bind="textInput: name" /></div>
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Player:</label> <input class="form-control" type="text" data-bind="textInput: player" /></div>
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Age:</label> <input class="form-control" type="number" data-bind="textInput: age" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Age:</label> <input class="form-control" type="number" data-bind="textInput: age, numeric: age" /></div>
                     </div>
                     <div class="col-lg">
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Vice:</label> <input class="form-control" type="text" data-bind="textInput: vice" /></div>
@@ -87,43 +87,43 @@
                     <div class="col-lg">
                         <div class="row">
                             <div class="col"><label>Intelligence:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: intelligence, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: intelligence, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Wits:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: wits, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: wits, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Resolve:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: resolve, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: resolve, max: 5 }"></div></div>
                         </div>
                     </div>
                     <div class="col-lg">
                         <div class="row">
                             <div class="col"><label>Strength:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: strength, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: strength, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Dexterity:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: dexterity, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: dexterity, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Stamina:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: stamina, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: stamina, max: 5 }"></div></div>
                         </div>
                     </div>
                     <div class="col-lg">
                         <div class="row">
                             <div class="col"><label>Presence:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: presence, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: presence, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Manipulation:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: manipulation, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: manipulation, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Composure:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: composure, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: composure, max: 5 }"></div></div>
                         </div>
                     </div>
                 </div>
@@ -132,10 +132,10 @@
                     <div class="col-lg">
                         <h2>Health <button class="btn btn-outline-light" data-bind="click: damage.clearAll.bind(damage)"><i class="fas fa-medkit"></i> Heal</button></h2>
                         <div class="col-12"><label>Total:</label></div>
-                        <div class="col-12"><div data-bind="capacity: damage.totalHealth"></div></div>
+                        <div class="col-12"><div data-bind="readOnlyAttribute: { value: health, max: 12 }"></div></div>
                         <br />
                         <div class="col-12"><label>Damage:</label></div>
-                        <div class="col-12"><div data-bind="damage: { damage: damage, app: $root }"></div></div>
+                        <div class="col-12"><div data-bind="damage: { value: damage, character: $root.character }"></div></div>
                         <br />
                         <div class="col-12" data-bind="with: damage">
                             <div class="btn-group">
@@ -147,21 +147,21 @@
                         <br />
                     </div>
                     <div class="col-lg">
-                        <h2>Magic <button class="btn btn-outline-light" data-bind="click: magic.clearUsed.bind(magic)"><i class="fas fa-medkit"></i> Heal</button></h2>
+                        <h2>Magic <button class="btn btn-outline-light" data-bind="click: clearUsed(usedMagic)"><i class="fas fa-medkit"></i> Heal</button></h2>
                         <div class="col-12"><label>Total:</label></div>
-                        <div class="col-12"><div data-bind="capacity: magic.total"></div></div>
+                        <div class="col-12"><div data-bind="readOnlyAttribute: { value: magic, max: 12 }"></div></div>
                         <br />
                         <div class="col-12"><label>Used:</label></div>
-                        <div class="col-12"><div data-bind="willpower: { willpower: magic, app: $root }"></div></div>
+                        <div class="col-12"><div data-bind="used: { value: usedMagic, total: magic, character: $root.character }"></div></div>
                         <br />
                     </div>
                     <div class="col-lg">
-                        <h2>Willpower <button class="btn btn-outline-light" data-bind="click: willpower.clearUsed.bind(willpower)"><i class="fas fa-medkit"></i> Heal</button></h2>
+                        <h2>Willpower <button class="btn btn-outline-light" data-bind="click: clearUsed(usedWillpower)"><i class="fas fa-medkit"></i> Heal</button></h2>
                         <div class="col-12"><label>Total:</label></div>
-                        <div class="col-12"><div data-bind="capacity: willpower.total"></div></div>
+                        <div class="col-12"><div data-bind="readOnlyAttribute: { value: willpower, max: 12 }"></div></div>
                         <br />
                         <div class="col-12"><label>Used:</label></div>
-                        <div class="col-12"><div data-bind="willpower: { willpower: willpower, app: $root }"></div></div>
+                        <div class="col-12"><div data-bind="used: { value: usedWillpower, total: willpower, character: $root.character }"></div></div>
                     </div>
                 </div>
                 <br />
@@ -170,35 +170,35 @@
                         <h2>Mental <small>(-3 Unskilled)</small></h2>
                         <div class="row">
                             <div class="col"><label>Academics:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: academics, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: academics, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Robotics:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: robotics, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: robotics, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Crafts:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: crafts, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: crafts, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Investigation:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: investigation, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: investigation, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Medicine:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: medicine, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: medicine, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Occult:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: occult, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: occult, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Politics:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: politics, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: politics, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Science:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: science, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: science, max: 5 }"></div></div>
                         </div>
                         <br />
                     </div>
@@ -206,35 +206,35 @@
                         <h2>Physical <small>(-1 Unskilled)</small></h2>
                         <div class="row">
                             <div class="col"><label>Athletics:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: athletics, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: athletics, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Brawl:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: brawl, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: brawl, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Drive:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: drive, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: drive, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Ranged:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: ranged, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: ranged, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Larceny:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: larceny, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: larceny, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Stealth:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: stealth, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: stealth, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Survival:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: survival, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: survival, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Weaponry:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: weaponry, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: weaponry, max: 5 }"></div></div>
                         </div>
                         <br />
                     </div>
@@ -242,35 +242,35 @@
                         <h2>Social <small>(-1 Unskilled)</small></h2>
                         <div class="row">
                             <div class="col"><label>Animal Ken:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: animalKen, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: animalKen, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Empathy:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: empathy, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: empathy, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Expression:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: expression, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: expression, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Intimidation:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: intimidation, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: intimidation, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Persuasion:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: persuasion, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: persuasion, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Socialize:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: socialize, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: socialize, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Streetwise:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: streetwise, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: streetwise, max: 5 }"></div></div>
                         </div>
                         <div class="row">
                             <div class="col"><label>Subterfuge:</label></div>
-                            <div class="col"><div data-bind="attribute: { value: subterfuge, color: 'var(--body-color)' }"></div></div>
+                            <div class="col"><div data-bind="attribute: { value: subterfuge, max: 5 }"></div></div>
                         </div>
                     </div>
                 </div>
@@ -284,7 +284,7 @@
                         <!-- ko foreach: merits -->
                         <div class="row">
                             <div class="col"><label data-bind="text: name"></label></div>
-                            <div class="col"><div data-bind="readOnlyAttribute: value"></div></div>
+                            <div class="col"><div data-bind="readOnlyAttribute: { value: value, max: 5 }"></div></div>
                         </div>
                         <!-- /ko -->
                         <br />
@@ -297,7 +297,7 @@
                         <!-- ko foreach: spells -->
                         <div class="row">
                             <div class="col"><label data-bind="text: name"></label></div>
-                            <div class="col"><div data-bind="readOnlyAttribute: value"></div></div>
+                            <div class="col"><div data-bind="readOnlyAttribute: { value: value, max: 5 }"></div></div>
                         </div>
                         <!-- /ko -->
                         <br />
@@ -310,7 +310,7 @@
                         <!-- ko foreach: flaws -->
                         <div class="row">
                             <div class="col"><label data-bind="text: name"></label></div>
-                            <div class="col"><div data-bind="readOnlyAttribute: value"></div></div>
+                            <div class="col"><div data-bind="readOnlyAttribute: { value: value, max: 5 }"></div></div>
                         </div>
                         <!-- /ko -->
                     </div>
@@ -321,7 +321,7 @@
                         <h2>Other Stats</h2>
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick">
                             <label class="label">Size:</label>
-                            <input class="form-control" type="number" data-bind="textInput: size" />
+                            <input class="form-control" type="number" data-bind="textInput: size, numeric: size" />
                         </div>
                         <div class="form-group">
                             <label>Speed:</label>
@@ -333,7 +333,7 @@
                         </div>
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick">
                             <label class="label">Armor:</label>
-                            <input class="form-control" type="number" data-bind="textInput: armor" />
+                            <input class="form-control" type="number" data-bind="textInput: armor, numeric: armor" />
                         </div>
                         <div class="form-group">
                             <label>Initiative:</label>
@@ -341,11 +341,11 @@
                         </div>
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick">
                             <label class="label">Experience:</label>
-                            <input class="form-control" type="number" data-bind="textInput: experience" />
+                            <input class="form-control" type="number" data-bind="textInput: experience, numeric: experience" />
                         </div>
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick">
                             <label class="label">Morality:</label>
-                            <input class="form-control" type="number" data-bind="textInput: morality" />
+                            <input class="form-control" type="number" data-bind="textInput: morality, numeric: morality" />
                         </div>
                         <br />
                     </div>
@@ -451,7 +451,7 @@
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.merits)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
-                            <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
+                            <td><div style="display: inline;" data-bind="attribute: { value: value, max: 5 }"></div></td>
                         </tr>
                     </tbody>
                 </table>
@@ -484,7 +484,7 @@
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.spells)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
-                            <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
+                            <td><div style="display: inline;" data-bind="attribute: { value: value, max: 5 }"></div></td>
                         </tr>
                     </tbody>
                 </table>
@@ -517,7 +517,7 @@
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.flaws)"><i class="fas fa-trash-alt"></i></button></td>
                             <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
-                            <td><div style="display: inline;" data-bind="attribute: { value: value, color: 'var(--body-color)' }"></div></td>
+                            <td><div style="display: inline;" data-bind="attribute: { value: value, max: 5 }"></div></td>
                         </tr>
                     </tbody>
                 </table>
@@ -632,7 +632,6 @@
         <script src="js/Character/InventoryItem.js"></script>
         <script src="js/Character/Merit.js"></script>
         <script src="js/Character/Note.js"></script>
-        <script src="js/Character/Willpower.js"></script>
         <script src="js/Character/Character.js"></script>
         <script src="js/Dice.js"></script>
         <script src="js/Application.js"></script>

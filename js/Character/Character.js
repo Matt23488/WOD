@@ -21,10 +21,6 @@ $(function () {
         self.stamina = ko.observable(json.stamina);
         self.composure = ko.observable(json.composure);
 
-        self.damage = new Damage(json.health, json.bashing, json.lethal, json.aggravated);
-        self.magic = new Willpower(json.magic, json.usedMagic);
-        self.willpower = new Willpower(json.willpower, json.usedWillpower);
-
         self.academics = ko.observable(json.academics);
         self.robotics = ko.observable(json.robotics);
         self.crafts = ko.observable(json.crafts);
@@ -69,6 +65,26 @@ $(function () {
         self.inventory = ko.observableArray(json.inventory.map(function(i) { return new InventoryItem(i.name, i.description, i.quantity); }));
 
         self.notes = ko.observableArray(json.notes.map(function (n) { return new Note(n); }));
+        self.health = ko.computed(function () {
+            return self.stamina() + self.size();
+        });
+        self.damage = new Damage(json.bashing, json.lethal, json.aggravated, self.health);
+
+        self.magic = ko.computed(function () {
+            return self.resolve() + self.composure();
+        });
+        self.usedMagic = ko.observable(json.usedMagic);
+        self.magic.subscribe(function (val) {
+            if (self.usedMagic() > val) self.usedMagic(val);
+        });
+
+        self.willpower = ko.computed(function () {
+            return self.resolve() + self.composure();
+        });
+        self.usedWillpower = ko.observable(json.usedWillpower);
+        self.willpower.subscribe(function (val) {
+            if (self.usedWillpower() > val) self.usedWillpower(val);
+        });
     }
 
     Character.newCharacter = function () {
@@ -92,10 +108,6 @@ $(function () {
             resolve: 1,
             stamina: 1,
             composure: 1,
-
-            health: 0,
-            magic: 0,
-            willpower: 0,
 
             academics: 0,
             robotics: 0,
@@ -175,6 +187,12 @@ $(function () {
         };
     };
 
+    Character.prototype.clearUsed = function (usedObservable) {
+        return function () {
+            usedObservable(0);
+        };
+    }
+
     Character.prototype.toJson = function () {
         var self = this;
         return {
@@ -198,14 +216,11 @@ $(function () {
             manipulation: self.manipulation(),
             composure: self.composure(),
 
-            health: self.damage.totalHealth(),
             bashing: self.damage.bashing(),
             lethal: self.damage.lethal(),
             aggravated: self.damage.aggravated(),
-            magic: self.magic.total(),
-            usedMagic: self.magic.used(),
-            willpower: self.willpower.total(),
-            usedWillpower: self.willpower.used(),
+            usedMagic: self.usedMagic(),
+            usedWillpower: self.usedWillpower(),
 
             academics: self.academics(),
             robotics: self.robotics(),
@@ -278,7 +293,7 @@ $(function () {
     ko.bindingHandlers.attribute = {
         init: function (element, valueAccessor) {
             var dots = [];
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < valueAccessor().max; i++) {
                 var dot = document.createElement("span");
                 dot.classList.add("attribute-dot");
                 dot.dataset.index = i;
@@ -308,29 +323,28 @@ $(function () {
         },
         update: function (element, valueAccessor) {
             var value = valueAccessor().value();
-            var color = valueAccessor().color;
             var dots = element.getElementsByTagName("span");
             for (var i = 0; i < dots.length; i++) {
                 dots[i].style.backgroundColor = null;
                 dots[i].style.borderColor = null;
                 if (i < value) {
-                    dots[i].style.backgroundColor = color;
-                    dots[i].style.borderColor = color;
+                    dots[i].style.backgroundColor = "var(--body-color)";
+                    dots[i].style.borderColor = "var(--body-color)";
                 }
             }
         }
     };
     
     ko.bindingHandlers.readOnlyAttribute = {
-        init: function (element) {
-            for (var i = 0; i < 5; i++) {
+        init: function (element, valueAccessor) {
+            for (var i = 0; i < valueAccessor().max; i++) {
                 var dot = document.createElement("span");
                 dot.classList.add("attribute-dot");
                 element.appendChild(dot);
             }
         },
         update: function (element, valueAccessor) {
-            var value = valueAccessor()();
+            var value = valueAccessor().value();
             var dots = element.getElementsByTagName("span");
             for (var i = 0; i < dots.length; i++) {
                 dots[i].classList.remove("filled");
@@ -382,12 +396,70 @@ $(function () {
             }
         }
     };
+    
+    function updateUsedDisplay(element, valueAccessor) {
+        var used = valueAccessor().value();
+        var total = valueAccessor().total();
+        var dots = element.getElementsByTagName("span");
+        for (var i = 0; i < dots.length; i++) {
+            if (i < used) dots[i].classList.add("filled-red");
+            else dots[i].classList.remove("filled-red");
+
+            if (i < total) dots[i].classList.remove("HIDDEN");
+            else dots[i].classList.add("HIDDEN");
+        }
+    }
+    
+    ko.bindingHandlers.used = {
+        init: function (element, valueAccessor) {
+            var usedObservable = valueAccessor().value;
+            var character = valueAccessor().character;
+            var dots = [];
+            for (var i = 0; i < 12; i++) {
+                var dot = document.createElement("span");
+                dot.classList.add("attribute-dot");
+                dot.dataset.index = i;
+                element.appendChild(dot);
+
+                dots.push(dot);
+
+                dot.addEventListener("pointerenter", function () {
+                    var dotIndex = parseInt(this.dataset.index);
+                    dots.forEach(function (dot, index) {
+                        if (index <= dotIndex) dot.classList.add("hoverFilled");
+                    });
+                });
+                dot.addEventListener("pointerleave", function () {
+                    dots.forEach(function (dot) {
+                        dot.classList.remove("hoverFilled");
+                    });
+                });
+            }
+            dots.forEach(function (dot, index) {
+                dot.addEventListener("click", function () {
+                    usedObservable(index + 1);
+                });
+            });
+    
+            character.subscribe(updateUsedDisplay.bind(this, element, valueAccessor));
+        },
+        update: updateUsedDisplay
+    };
 
     ko.bindingHandlers.focusOnCreation = {
         init: function (element) {
             window.setTimeout(function () {
                 element.focus();
             }, 1);
+        }
+    };
+
+    // Yeah, this isn't efficient, as it will cause subscribers to be notified twice
+    // when the observable changes...
+    ko.bindingHandlers.numeric = {
+        update: function (element, valueAccessor) {
+            var observable = valueAccessor();
+            observable(parseInt(observable()));
         }
     };
 

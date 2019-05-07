@@ -1,12 +1,12 @@
 $(function () {
-    function Damage(totalHealth, bashing, lethal, aggravated) {
+    function Damage(bashing, lethal, aggravated, totalHealthObservable) {
         var self = this;
         self.bashing = ko.observable(bashing || 0);
         self.lethal = ko.observable(lethal || 0);
         self.aggravated = ko.observable(aggravated || 0);
-        self.totalHealth = ko.observable(totalHealth);
+        self.totalHealth = totalHealthObservable;
 
-        self.totalHealth.subscribe(function (val) {
+        totalHealthObservable.subscribe(function (val) {
             while (self.bashing() + self.lethal() + self.aggravated() > val) {
                 if (self.bashing() > 0) {
                     self.bashing(self.bashing() - 1);
@@ -86,7 +86,7 @@ $(function () {
     };
 
     function updateDamageDisplay(element, valueAccessor) {
-        var damageObj = valueAccessor().damage;
+        var damageObj = valueAccessor().value;
         var spans = element.getElementsByTagName("span");
         for (var i = 0; i < spans.length; i++) {
             if (i < damageObj.aggravated()) {
@@ -125,25 +125,14 @@ $(function () {
     
     ko.bindingHandlers.damage = {
         init: function (element, valueAccessor) {
-            var totalHealthSub;
-            var charSub;
-            function setup() {
-                var damageObj = valueAccessor().damage;
-                for (var i = 0; i < 12; i++) {
-                    var span = document.createElement("span");
-                    span.classList.add("damage");
-                    span.classList.add("none");
-                    element.appendChild(span);
-                }
-
-                updateDamageDisplay(element, valueAccessor);
-                if (totalHealthSub) totalHealthSub.dispose();
-                if (charSub) charSub.dispose();
-                totalHealthSub = damageObj.totalHealth.subscribe(updateDamageDisplay.bind(this, element, valueAccessor));
-                charSub = valueAccessor().app.character.subscribe(updateDamageDisplay.bind(this, element, valueAccessor));
+            for (var i = 0; i < 12; i++) {
+                var span = document.createElement("span");
+                span.classList.add("damage");
+                span.classList.add("none");
+                element.appendChild(span);
             }
 
-            setup();
+            valueAccessor().character.subscribe(updateDamageDisplay.bind(this, element, valueAccessor));
         },
         update: updateDamageDisplay
     };
