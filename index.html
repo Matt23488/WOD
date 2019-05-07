@@ -146,7 +146,7 @@
                         </div>
                         <br />
                     </div>
-                    <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: magic">
+                    <div class="col-lg">
                         <h2>Magic <button class="btn btn-outline-light" data-bind="click: magic.clearUsed.bind(magic)"><i class="fas fa-medkit"></i> Heal</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: magic.total"></div></div>
@@ -155,7 +155,7 @@
                         <div class="col-12"><div data-bind="willpower: { willpower: magic, app: $root }"></div></div>
                         <br />
                     </div>
-                    <div class="col-lg" data-toggle="tooltip" data-bind="remainingTooltip: willpower">
+                    <div class="col-lg">
                         <h2>Willpower <button class="btn btn-outline-light" data-bind="click: willpower.clearUsed.bind(willpower)"><i class="fas fa-medkit"></i> Heal</button></h2>
                         <div class="col-12"><label>Total:</label></div>
                         <div class="col-12"><div data-bind="capacity: willpower.total"></div></div>
@@ -353,7 +353,7 @@
                         <h2>Weapons</h2>
                         <span style="font-style: italic;" data-bind="visible: weapons().length === 0">None</span>
                         <div class="row font20" data-bind="foreach: weapons">
-                            <div class="col-lg" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
+                            <div class="col-lg" data-bind="text: name"></div>
                         </div>
                         <br />
                     </div>
@@ -361,7 +361,7 @@
                         <h2>Equipment</h2>
                         <span style="font-style: italic;" data-bind="visible: equipment().length === 0">None</span>
                         <div class="row font20" data-bind="foreach: equipment">
-                            <div class="col-lg" data-toggle="tooltip" data-bind="text: name, tooltip: description"></div>
+                            <div class="col-lg" data-bind="text: name"></div>
                         </div>
                     </div>
                 </div>
@@ -371,7 +371,7 @@
                         <h2>Inventory</h2>
                         <span style="font-style: italic;" data-bind="visible: inventory().length === 0">None</span>
                         <div class="row font20" data-bind="foreach: inventory">
-                            <div class="col-lg" data-toggle="tooltip" data-bind="text: displayText, tooltip: description"></div>
+                            <div class="col-lg" data-bind="text: displayText"></div>
                         </div>
                     </div>
                 </div>
