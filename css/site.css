@@ -223,6 +223,7 @@ label {
     background-color: var(--primary-color) !important;
 }
 
-.swal-text {
+.swal-text,
+.swal-title {
     color: var(--body-color) !important;
 }

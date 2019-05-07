@@ -45,10 +45,21 @@ $(function () {
 
     Application.prototype.deleteCharacter = function () {
         var self = this;
-        var id = self.characterId();
-        self.characterId(id - 1);
-        self.characters.remove(self.characters()[id]);
-        self.mode("list");
+        swal({
+            title: "Delete " + self.character().name(),
+            text: "Are you sure? (As long as you don't click save, your character won't be gone.)",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true
+        })
+        .then(function (willDelete) {
+            if (willDelete) {
+                var id = self.characterId();
+                self.characterId(id - 1);
+                self.characters.remove(self.characters()[id]);
+                self.mode("list");
+            }
+        });
     };
 
     Application.prototype.saveCharacters = function () {
