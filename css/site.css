@@ -106,6 +106,8 @@ label {
     border: 1px solid var(--body-color);
     margin: 0 5px 0 0;
     display: inline-block;
+    -webkit-transition: background-color 0.25s, border-color 0.25s;
+    transition: background-color 0.25s, border-color 0.25s;
 }
 
 .attribute-dot:first-child {
@@ -158,8 +160,19 @@ label {
     cursor: pointer;
 }
 
-.clickable:hover {
-    border: 1px solid var(--body-color);
+.clickable {
+    border-radius: 5px;
+}
+
+.clickable.label,
+.clickable .label {
+    -webkit-transition: color 0.25s;
+    transition: color 0.25s;
+}
+
+.clickable.label:hover,
+.clickable:hover .label {
+    color: gold;
 }
 
 .font20 {
