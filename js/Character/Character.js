@@ -3,7 +3,7 @@ $(function () {
         var self = this;
         self.name = ko.observable(json.name);
         self.player = ko.observable(json.player);
-        self.age = ko.observable(json.age);
+        self.age = ko.observable(json.age).extend({ numeric: { precision: 0 } });
         self.vice = ko.observable(json.vice);
         self.virtue = ko.observable(json.virtue);
         self.origins = ko.observable(json.origins);
@@ -52,13 +52,13 @@ $(function () {
         self.spells = ko.observableArray(json.spells.map(function (s) { return new Merit(s.name, s.value); }));
         self.flaws = ko.observableArray(json.flaws.map(function (f) { return new Merit(f.name, f.value); }));
 
-        self.size = ko.observable(json.size);
+        self.size = ko.observable(json.size).extend({ numeric: { precision: 0, min: 1, max: 10 } });
         self.speed = ko.computed(function () { return self.strength() + self.dexterity() + 5; });
         self.defense = ko.computed(function () { return Math.min(self.dexterity(), self.wits()); });
-        self.armor = ko.observable(json.armor);
+        self.armor = ko.observable(json.armor).extend({ numeric: { precision: 0 } });
         self.initiative = ko.computed(function () { return self.dexterity() + self.composure(); });
-        self.experience = ko.observable(json.experience);
-        self.morality = ko.observable(json.morality);
+        self.experience = ko.observable(json.experience).extend({ numeric: { precision: 0 } });
+        self.morality = ko.observable(json.morality).extend({ numeric: { precision: 0, min: 1, max: 10 } });
 
         self.weapons = ko.observableArray(json.weapons.map(function (w) { return new Equipment(w.name, w.description); }));
         self.equipment = ko.observableArray(json.equipment.map(function (e) { return new Equipment(e.name, e.description); }));
@@ -416,18 +416,47 @@ $(function () {
     ko.bindingHandlers.focusOnCreation = {
         init: function (element) {
             window.setTimeout(function () {
+                if (element.value) return;
                 element.focus();
             }, 1);
         }
     };
 
-    // Yeah, this isn't efficient, as it will cause subscribers to be notified twice
-    // when the observable changes...
-    ko.bindingHandlers.numeric = {
-        update: function (element, valueAccessor) {
-            var observable = valueAccessor();
-            observable(parseInt(observable()));
-        }
+    ko.extenders.numeric = function (target, args) {
+        if (!args.precision) args.precision = 0;
+        if (!args.min) args.min = -Infinity;
+        if (!args.max) args.max = Infinity;
+
+        // Create a writeable computed observable to intercept writes to our observable
+        var result = ko.pureComputed({
+            read: target, // Always return the original observable's value
+            write: function (newValue) {
+                var current = target();
+                var roundingMultiplier = Math.pow(10, args.precision);
+                var newValueAsNum = isNaN(newValue) ? 0 : +newValue;
+                var valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
+                if (valueToWrite < args.min) valueToWrite = args.min;
+                else if (valueToWrite > args.max) valueToWrite = args.max;
+
+                // Only write if it changed
+                if (valueToWrite !== current) {
+                    target(valueToWrite);
+                }
+                else {
+                    // If the rounded value is the same, but a different value was written,
+                    // force a notification for the current field
+                    if (newValue !== current) {
+                        target.notifySubscribers(valueToWrite);
+                    }
+                }
+            }
+        }).extend({ notify: "always" });
+
+        // Initialize with current value to make sure it is rounded appropriately
+        result(target());
+
+        // Return the new computed observable
+        return result;
     };
 
     window.Character = Character;
