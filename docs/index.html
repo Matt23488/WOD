@@ -9,7 +9,8 @@
         <!-- KnockoutJS -->
         <script src="lib/knockout-3.5.0.min.js"></script>
         <!-- SweetAlert -->
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
+        <script src="lib/sweetalert.min.js"></script>
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         <!-- Custom  Styles -->
@@ -135,7 +136,7 @@
                         <div class="col-12"><div data-bind="readOnlyAttribute: { value: health, max: 12 }"></div></div>
                         <br />
                         <div class="col-12"><label>Damage:</label></div>
-                        <div class="col-12"><div data-bind="damage: { value: damage, character: $root.character }"></div></div>
+                        <div class="col-12"><div data-bind="damageDisplay: damage"></div></div>
                         <br />
                         <div class="col-12" data-bind="with: damage">
                             <div class="btn-group">
@@ -389,13 +390,13 @@
                 <button class="btn btn-lg btn-outline-light" data-bind="click: rollDice"><i class="fas fa-check"></i> Roll!</button>
                 <span style="font-size: 1.3em; margin-left: 10px;">
                     <label>Total Successes:</label>
-                    <span data-bind="text: totalDiceSuccesses"></span>
+                    <span data-bind="text: totalDiceSuccessesDisplay"></span>
                 </span>
                 <div data-bind="dice: rollRounds"></div>
             </div>
 
             <div class="notesContainer" data-bind="visible: mode() === 'notes', with: character">
-                <h1>Notes <button type="button" class="btn btn-outline-success" data-bind="click: newItem(notes, Note)"><i class="fas fa-plus"></i></button></h1>
+                <h1>Notes <button type="button" class="btn btn-outline-success" data-bind="click: newItem(notes, constructors.Note)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <colgroup>
                         <col style="width: 1%" />
@@ -425,7 +426,7 @@
             </div>
 
             <div class="meritsContainer" data-bind="visible: mode() === 'merits', with: character">
-                <h1>Merits <button type="button" class="btn btn-outline-success" data-bind="click: newItem(merits, Merit)"><i class="fas fa-plus"></i></button></h1>
+                <h1>Merits <button type="button" class="btn btn-outline-success" data-bind="click: newItem(merits, constructors.Merit)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <colgroup>
                         <col style="width: 1%" />
@@ -458,7 +459,7 @@
             </div>
 
             <div class="spellsContainer" data-bind="visible: mode() === 'spells', with: character">
-                <h1>Spells <button type="button" class="btn btn-outline-success" data-bind="click: newItem(spells, Merit)"><i class="fas fa-plus"></i></button></h1>
+                <h1>Spells <button type="button" class="btn btn-outline-success" data-bind="click: newItem(spells, constructors.Merit)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <colgroup>
                         <col style="width: 1%" />
@@ -491,7 +492,7 @@
             </div>
 
             <div class="flawsContainer" data-bind="visible: mode() === 'flaws', with: character">
-                <h1>Flaws <button type="button" class="btn btn-outline-success" data-bind="click: newItem(flaws, Merit)"><i class="fas fa-plus"></i></button></h1>
+                <h1>Flaws <button type="button" class="btn btn-outline-success" data-bind="click: newItem(flaws, constructors.Merit)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <colgroup>
                         <col style="width: 1%" />
@@ -524,7 +525,7 @@
             </div>
 
             <div class="weaponsContainer" data-bind="visible: mode() === 'weapons', with: character">
-                <h1>Weapons <button type="button" class="btn btn-outline-success" data-bind="click: newItem(weapons, Equipment)"><i class="fas fa-plus"></i></button></h1>
+                <h1>Weapons <button type="button" class="btn btn-outline-success" data-bind="click: newItem(weapons, constructors.Equipment)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <colgroup>
                         <col style="width: 1%" />
@@ -557,7 +558,7 @@
             </div>
 
             <div class="equipmentContainer" data-bind="visible: mode() === 'equipment', with: character">
-                <h1>Equipment <button type="button" class="btn btn-outline-success" data-bind="click: newItem(equipment, Equipment)"><i class="fas fa-plus"></i></button></h1>
+                <h1>Equipment <button type="button" class="btn btn-outline-success" data-bind="click: newItem(equipment, constructors.Equipment)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <colgroup>
                         <col style="width: 1%" />
@@ -590,7 +591,7 @@
             </div>
 
             <div class="inventoryContainer" data-bind="visible: mode() === 'inventory', with: character">
-                <h1>Inventory <button type="button" class="btn btn-outline-success" data-bind="click: newItem(inventory, InventoryItem)"><i class="fas fa-plus"></i></button></h1>
+                <h1>Inventory <button type="button" class="btn btn-outline-success" data-bind="click: newItem(inventory, constructors.InventoryItem)"><i class="fas fa-plus"></i></button></h1>
                 <table class="table table-borderless">
                     <colgroup>
                         <col style="width: 1%" />
@@ -626,15 +627,6 @@
             </div>
 
         </div>
-        <script src="js/utils.js"></script>
-        <script src="js/Character/Damage.js"></script>
-        <script src="js/Character/Equipment.js"></script>
-        <script src="js/Character/InventoryItem.js"></script>
-        <script src="js/Character/Merit.js"></script>
-        <script src="js/Character/Note.js"></script>
-        <script src="js/Character/Character.js"></script>
-        <script src="js/Dice.js"></script>
-        <script src="js/Application.js"></script>
-        <script src="js/main.js"></script>
+        <script src="app.bundle.js"></script>
     </body>
 </html>
