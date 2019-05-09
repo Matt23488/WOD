@@ -102,7 +102,17 @@ class RollState {
 
         this._intervalHandle = window.setInterval(() => {
             const nextRoll = randomInteger(1, 11);
-            if (nextRoll === 10) this._nextRoundRolls++;
+            if (nextRoll === 10) {
+                this._nextRoundRolls++;
+                let critMessage = document.getElementById("critMessage");
+                if (critMessage) {
+                    critMessage.remove();
+                }
+                critMessage = document.createElement("div");
+                critMessage.classList.add("crit-message");
+                critMessage.innerText = "Crit!";
+                document.getElementsByClassName("diceContainer")[0].appendChild(critMessage);
+            }
             this._currentRoundResults[this._currentDice] = nextRoll;
             this._diceObj.rollRounds.replace(this._diceObj.rollRounds()[this._currentRound], this._currentRoundResults);
             this._currentDice++;

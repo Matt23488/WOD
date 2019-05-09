@@ -255,3 +255,27 @@ div.clear-dot {
 .swal-title {
     color: var(--body-color) !important;
 }
+
+@keyframes crit-fade {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.crit-message {
+    position: fixed;
+    font-size: 10em;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: gold;
+    animation: crit-fade 1s 1;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}
