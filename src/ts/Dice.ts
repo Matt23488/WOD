@@ -35,46 +35,6 @@ export default class Dice {
     }
 }
 
-ko.bindingHandlers.dice = {
-    update: (element: HTMLElement, valueAccessor: () => KnockoutObservableArray<Array<number>>) => {
-        const rollRounds = valueAccessor()();
-        if (rollRounds.length === 0) {
-            element.innerHTML = "";
-            return;
-        }
-
-        let divs = element.getElementsByClassName("dice-round");
-        if (divs.length !== rollRounds.length) {
-            const newRound = document.createElement("div");
-            newRound.classList.add("dice-round");
-            const rolls = rollRounds[rollRounds.length - 1];
-            for (let i = 0; i < rolls.length; i++) {
-                const span = document.createElement("span");
-                const delay = randomFloat(0, 0.5);
-                span.style.animation = `rollingDice 0.5s linear -${delay}s infinite alternate`;
-                span.classList.add("dice");
-                newRound.appendChild(span);
-            }
-            element.appendChild(newRound);
-            divs = element.getElementsByClassName("dice-round");
-        }
-
-        for (let i = 0; i < rollRounds.length; i++) {
-            const rolls = rollRounds[i];
-            const spans = divs[i].getElementsByClassName("dice");
-            for (let j = 0; j < rolls.length; j++) {
-                const roll = rolls[j];
-                const span = <HTMLSpanElement>spans[j];
-
-                if (roll !== -1) {
-                    span.style.animation = null;
-                    span.style.backgroundImage = `url('images/dice-${roll}.png')`;
-                }
-            }
-        }
-    }
-};
-
 class RollState {
     private _diceObj: Dice;
     private _currentRound: number;

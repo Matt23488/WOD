@@ -3,6 +3,9 @@ import Equipment from "./Character/Equipment";
 import InventoryItem from "./Character/InventoryItem";
 import Merit from "./Character/Merit";
 import Note from "./Character/Note";
+import { applyCustomKnockoutCode } from "./utils";
+
+applyCustomKnockoutCode();
 
 const constructors = {
     Equipment: Equipment,
