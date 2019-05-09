@@ -71,6 +71,7 @@ class RollState {
                 critMessage = document.createElement("div");
                 critMessage.classList.add("crit-message");
                 critMessage.innerText = "Crit!";
+                critMessage.id = "critMessage";
                 document.getElementsByClassName("diceContainer")[0].appendChild(critMessage);
             }
             this._currentRoundResults[this._currentDice] = nextRoll;
@@ -81,6 +82,10 @@ class RollState {
                 if (this._nextRoundRolls === 0) {
                     window.clearInterval(this._intervalHandle);
                     this._diceObj.rollingInProgress(false);
+                    const critMessage = document.getElementById("critMessage");
+                    if (critMessage) {
+                        critMessage.remove();
+                    }
                     return;
                 }
                 else {
