@@ -39,7 +39,9 @@ export default class Application {
     }
 
     public newCharacter(): void {
-        this.characters.push(Character.newCharacter());
+        const newChar = Character.newCharacter();
+        newChar.locked(false);
+        this.characters.push(newChar);
         this.characterId(this.characters().length - 1);
         this.mode("sheet");
     }
