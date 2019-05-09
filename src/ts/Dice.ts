@@ -64,15 +64,13 @@ class RollState {
             const nextRoll = randomInteger(1, 11);
             if (nextRoll === 10) {
                 this._nextRoundRolls++;
-                let critMessage = document.getElementById("critMessage");
-                if (critMessage) {
-                    critMessage.remove();
-                }
-                critMessage = document.createElement("div");
+                const diceContainer = document.getElementsByClassName("diceContainer")[0];
+                const critMessage = document.createElement("div");
                 critMessage.classList.add("crit-message");
                 critMessage.innerText = "Crit!";
                 critMessage.id = "critMessage";
-                document.getElementsByClassName("diceContainer")[0].appendChild(critMessage);
+                diceContainer.appendChild(critMessage);
+                window.setTimeout(() => diceContainer.removeChild(critMessage), 1010);
             }
             this._currentRoundResults[this._currentDice] = nextRoll;
             this._diceObj.rollRounds.replace(this._diceObj.rollRounds()[this._currentRound], this._currentRoundResults);
