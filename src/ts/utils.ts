@@ -59,7 +59,7 @@ export function applyCustomKnockoutCode() {
 
     ko.bindingHandlers.damageDisplay = {
         init: (element: HTMLElement) => {
-            for (let i = 0; i < 12; i++) {
+            for (let i = 0; i < 15; i++) {
                 const span = document.createElement("span");
                 span.classList.add("damage");
                 span.classList.add("none");
@@ -111,6 +111,7 @@ export function applyCustomKnockoutCode() {
             for (let i = 0; i < valueAccessor().max; i++) {
                 const dot = document.createElement("span");
                 dot.classList.add("attribute-dot");
+                dot.classList.add("pointer");
                 dot.dataset.toggle = "tooltip";
                 dot.title = "" + (i + 1);
                 $(dot).tooltip();
@@ -170,13 +171,17 @@ export function applyCustomKnockoutCode() {
                 element.appendChild(dot);
             }
         },
-        update: (element: HTMLElement, valueAccessor: () => { value: KnockoutObservable<number>, max: number }) => {
+        update: (element: HTMLElement, valueAccessor: () => { value: KnockoutObservable<number>, max: number, hideUnfilled?: boolean }) => {
             const value = valueAccessor().value();
             const dots = element.getElementsByTagName("span");
             for (let i = 0; i < dots.length; i++) {
                 dots[i].classList.remove("filled");
                 if (i < value) {
                     dots[i].classList.add("filled");
+                    dots[i].classList.remove("HIDDEN");
+                }
+                else if (valueAccessor().hideUnfilled) {
+                    dots[i].classList.add("HIDDEN");
                 }
             }
         }

@@ -134,7 +134,7 @@
                     <div class="col-lg">
                         <h2>Health <button class="btn btn-outline-light" data-bind="click: damage.clearAll.bind(damage)"><i class="fas fa-medkit"></i> Heal</button></h2>
                         <div class="col-12"><label>Total:</label></div>
-                        <div class="col-12"><div data-bind="readOnlyAttribute: { value: health, max: 12 }"></div></div>
+                        <div class="col-12"><div data-bind="readOnlyAttribute: { value: health, max: 15, hideUnfilled: true }"></div></div>
                         <br />
                         <div class="col-12"><label>Damage:</label></div>
                         <div class="col-12"><div data-bind="damageDisplay: damage"></div></div>
@@ -151,7 +151,7 @@
                     <div class="col-lg">
                         <h2>Magic <button class="btn btn-outline-light" data-bind="click: clearUsed(usedMagic)"><i class="fas fa-medkit"></i> Heal</button></h2>
                         <div class="col-12"><label>Total:</label></div>
-                        <div class="col-12"><div data-bind="readOnlyAttribute: { value: magic, max: 12 }"></div></div>
+                        <div class="col-12"><div data-bind="readOnlyAttribute: { value: magic, max: 10, hideUnfilled: true }"></div></div>
                         <br />
                         <div class="col-12"><label>Used:</label></div>
                         <div class="col-12"><div data-bind="used: { value: usedMagic, total: magic }"></div></div>
@@ -160,7 +160,7 @@
                     <div class="col-lg">
                         <h2>Willpower <button class="btn btn-outline-light" data-bind="click: clearUsed(usedWillpower)"><i class="fas fa-medkit"></i> Heal</button></h2>
                         <div class="col-12"><label>Total:</label></div>
-                        <div class="col-12"><div data-bind="readOnlyAttribute: { value: willpower, max: 12 }"></div></div>
+                        <div class="col-12"><div data-bind="readOnlyAttribute: { value: willpower, max: 10, hideUnfilled: true }"></div></div>
                         <br />
                         <div class="col-12"><label>Used:</label></div>
                         <div class="col-12"><div data-bind="used: { value: usedWillpower, total: willpower }"></div></div>
