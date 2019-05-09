@@ -1,4 +1,4 @@
-import Character, { CharacterJson } from "./Character/Character";
+import Character from "./Character/Character";
 import Dice from "./Dice";
 import swal from "sweetalert";
 
@@ -65,6 +65,7 @@ export default class Application {
         //         this.mode("list");
         //     }
         // });
+        if (this.character().locked()) return;
         if (confirm(`Are you sure you want to delete ${this.character().name()}? (As long as you don't save, your character won't be gone.)`)) {
             const id = this.characterId();
             this.characterId(0);
