@@ -54,6 +54,7 @@
             <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: downloadCharacter, visible: mode() === 'sheet'"><i class="fas fa-download"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: uploadCharacter, visible: mode() === 'list'"><i class="fas fa-upload"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-danger" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
+            <button class="btn btn-lg btn-outline" data-bind="click: toggleCharacterLock, class: lockButtonClass, visible: mode() !== 'list'"><i data-bind="class: lockButtonIcon"></i></button>
         </div>
         <div class="container-fluid body-content">
             <div class="listContainer" data-bind="visible: mode() === 'list'">

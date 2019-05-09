@@ -4,11 +4,17 @@ export default class Damage {
     public lethal: KnockoutObservable<number>;
     public aggravated: KnockoutObservable<number>;
 
-    public constructor(totalHealthObservable: KnockoutComputed<number>, bashing?: number, lethal?: number, aggravated?: number) {
+    public constructor(totalHealthObservable: KnockoutComputed<number>, bashing?: number, lethal?: number, aggravated?: number, locked?: KnockoutObservable<boolean>) {
         this.totalHealth = totalHealthObservable;
         this.bashing = ko.observable(bashing || 0);
         this.lethal = ko.observable(lethal || 0);
         this.aggravated = ko.observable(aggravated || 0);
+
+        if (locked) {
+            this.bashing = this.bashing.extend({ lockable: locked });
+            this.lethal = this.lethal.extend({ lockable: locked });
+            this.aggravated = this.aggravated.extend({ lockable: locked });
+        }
 
         totalHealthObservable.subscribe(val => {
             while (this.bashing() + this.lethal() + this.aggravated() > val) {

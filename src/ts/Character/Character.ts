@@ -7,6 +7,7 @@ import { randomInteger } from "../utils";
 
 export default class Character {
     public ghost: boolean = false;
+    public locked: KnockoutObservable<boolean> = ko.observable(true);
 
     public name: KnockoutObservable<string>;
     public player: KnockoutObservable<string>;
@@ -83,82 +84,82 @@ export default class Character {
     public usedWillpower: KnockoutObservable<number>;
 
     public constructor(json: CharacterJson) {
-        this.name = ko.observable(json.name);
-        this.player = ko.observable(json.player);
-        this.age = ko.observable(json.age).extend({ numeric: { precision: 0 } });
-        this.vice = ko.observable(json.vice);
-        this.virtue = ko.observable(json.virtue);
-        this.origins = ko.observable(json.origins);
-        this.gender = ko.observable(json.gender);
-        this.concept = ko.observable(json.concept);
-        this.chronicle = ko.observable(json.chronicle);
+        this.name = ko.observable(json.name).extend({ lockable: this.locked });
+        this.player = ko.observable(json.player).extend({ lockable: this.locked });
+        this.age = ko.observable(json.age).extend({ numeric: { precision: 0 }, lockable: this.locked });
+        this.vice = ko.observable(json.vice).extend({ lockable: this.locked });
+        this.virtue = ko.observable(json.virtue).extend({ lockable: this.locked });
+        this.origins = ko.observable(json.origins).extend({ lockable: this.locked });
+        this.gender = ko.observable(json.gender).extend({ lockable: this.locked });
+        this.concept = ko.observable(json.concept).extend({ lockable: this.locked });
+        this.chronicle = ko.observable(json.chronicle).extend({ lockable: this.locked });
 
-        this.intelligence = ko.observable(json.intelligence);
-        this.strength = ko.observable(json.strength);
-        this.presence = ko.observable(json.presence);
-        this.wits = ko.observable(json.wits);
-        this.dexterity = ko.observable(json.dexterity);
-        this.manipulation = ko.observable(json.manipulation);
-        this.resolve = ko.observable(json.resolve);
-        this.stamina = ko.observable(json.stamina);
-        this.composure = ko.observable(json.composure);
+        this.intelligence = ko.observable(json.intelligence).extend({ lockable: this.locked });
+        this.strength = ko.observable(json.strength).extend({ lockable: this.locked });
+        this.presence = ko.observable(json.presence).extend({ lockable: this.locked });
+        this.wits = ko.observable(json.wits).extend({ lockable: this.locked });
+        this.dexterity = ko.observable(json.dexterity).extend({ lockable: this.locked });
+        this.manipulation = ko.observable(json.manipulation).extend({ lockable: this.locked });
+        this.resolve = ko.observable(json.resolve).extend({ lockable: this.locked });
+        this.stamina = ko.observable(json.stamina).extend({ lockable: this.locked });
+        this.composure = ko.observable(json.composure).extend({ lockable: this.locked });
 
-        this.academics = ko.observable(json.academics);
-        this.robotics = ko.observable(json.robotics);
-        this.crafts = ko.observable(json.crafts);
-        this.investigation = ko.observable(json.investigation);
-        this.medicine = ko.observable(json.medicine);
-        this.occult = ko.observable(json.occult);
-        this.politics = ko.observable(json.politics);
-        this.science = ko.observable(json.science);
+        this.academics = ko.observable(json.academics).extend({ lockable: this.locked });
+        this.robotics = ko.observable(json.robotics).extend({ lockable: this.locked });
+        this.crafts = ko.observable(json.crafts).extend({ lockable: this.locked });
+        this.investigation = ko.observable(json.investigation).extend({ lockable: this.locked });
+        this.medicine = ko.observable(json.medicine).extend({ lockable: this.locked });
+        this.occult = ko.observable(json.occult).extend({ lockable: this.locked });
+        this.politics = ko.observable(json.politics).extend({ lockable: this.locked });
+        this.science = ko.observable(json.science).extend({ lockable: this.locked });
 
-        this.athletics = ko.observable(json.athletics);
-        this.brawl = ko.observable(json.brawl);
-        this.drive = ko.observable(json.drive);
-        this.ranged = ko.observable(json.ranged);
-        this.larceny = ko.observable(json.larceny);
-        this.stealth = ko.observable(json.stealth);
-        this.survival = ko.observable(json.survival);
-        this.weaponry = ko.observable(json.weaponry);
+        this.athletics = ko.observable(json.athletics).extend({ lockable: this.locked });
+        this.brawl = ko.observable(json.brawl).extend({ lockable: this.locked });
+        this.drive = ko.observable(json.drive).extend({ lockable: this.locked });
+        this.ranged = ko.observable(json.ranged).extend({ lockable: this.locked });
+        this.larceny = ko.observable(json.larceny).extend({ lockable: this.locked });
+        this.stealth = ko.observable(json.stealth).extend({ lockable: this.locked });
+        this.survival = ko.observable(json.survival).extend({ lockable: this.locked });
+        this.weaponry = ko.observable(json.weaponry).extend({ lockable: this.locked });
 
-        this.animalKen = ko.observable(json.animalKen);
-        this.empathy = ko.observable(json.empathy);
-        this.expression = ko.observable(json.expression);
-        this.intimidation = ko.observable(json.intimidation);
-        this.persuasion = ko.observable(json.persuasion);
-        this.socialize = ko.observable(json.socialize);
-        this.streetwise = ko.observable(json.streetwise);
-        this.subterfuge = ko.observable(json.subterfuge);
+        this.animalKen = ko.observable(json.animalKen).extend({ lockable: this.locked });
+        this.empathy = ko.observable(json.empathy).extend({ lockable: this.locked });
+        this.expression = ko.observable(json.expression).extend({ lockable: this.locked });
+        this.intimidation = ko.observable(json.intimidation).extend({ lockable: this.locked });
+        this.persuasion = ko.observable(json.persuasion).extend({ lockable: this.locked });
+        this.socialize = ko.observable(json.socialize).extend({ lockable: this.locked });
+        this.streetwise = ko.observable(json.streetwise).extend({ lockable: this.locked });
+        this.subterfuge = ko.observable(json.subterfuge).extend({ lockable: this.locked });
 
-        this.merits = ko.observableArray(json.merits.map(m => new Merit(m.name, m.value)));
-        this.spells = ko.observableArray(json.spells.map(s => new Merit(s.name, s.value)));
-        this.flaws = ko.observableArray(json.flaws.map(f => new Merit(f.name, f.value)));
+        this.merits = ko.observableArray(json.merits.map(m => new Merit(m.name, m.value, this.locked)));
+        this.spells = ko.observableArray(json.spells.map(s => new Merit(s.name, s.value, this.locked)));
+        this.flaws = ko.observableArray(json.flaws.map(f => new Merit(f.name, f.value, this.locked)));
 
-        this.size = ko.observable(json.size).extend({ numeric: { precision: 0, min: 1, max: 10 } });
+        this.size = ko.observable(json.size).extend({ numeric: { precision: 0, min: 1, max: 10 }, lockable: this.locked });
         this.speed = ko.computed(() => this.strength() + this.dexterity() + 5, this);
         this.defense = ko.computed(() => Math.min(this.dexterity(), this.wits()), this);
-        this.armor = ko.observable(json.armor).extend({ numeric: { precision: 0 } });
+        this.armor = ko.observable(json.armor).extend({ numeric: { precision: 0 } }).extend({ lockable: this.locked });
         this.initiative = ko.computed(() => this.dexterity() + this.composure(), this);
-        this.experience = ko.observable(json.experience).extend({ numeric: { precision: 0 } });
-        this.morality = ko.observable(json.morality).extend({ numeric: { precision: 0, min: 1, max: 10 } });
+        this.experience = ko.observable(json.experience).extend({ numeric: { precision: 0 }, lockable: this.locked });
+        this.morality = ko.observable(json.morality).extend({ numeric: { precision: 0, min: 1, max: 10 }, lockable: this.locked });
 
-        this.weapons = ko.observableArray(json.weapons.map(w => new Equipment(w.name, w.description)));
-        this.equipment = ko.observableArray(json.equipment.map(e => new Equipment(e.name, e.description)));
-        this.inventory = ko.observableArray(json.inventory.map(i => new InventoryItem(i.name, i.description, i.quantity)));
+        this.weapons = ko.observableArray(json.weapons.map(w => new Equipment(w.name, w.description, this.locked)));
+        this.equipment = ko.observableArray(json.equipment.map(e => new Equipment(e.name, e.description, this.locked)));
+        this.inventory = ko.observableArray(json.inventory.map(i => new InventoryItem(i.name, i.description, i.quantity, this.locked)));
 
-        this.notes = ko.observableArray(json.notes.map(n => new Note(n)));
+        this.notes = ko.observableArray(json.notes.map(n => new Note(n, this.locked)));
 
         this.health = ko.computed(() => this.stamina() + this.size(), this);
-        this.damage = new Damage(this.health, json.bashing, json.lethal, json.aggravated);
+        this.damage = new Damage(this.health, json.bashing, json.lethal, json.aggravated, this.locked);
 
         this.magic = ko.computed(() => this.resolve() + this.composure(), this);
-        this.usedMagic = ko.observable(json.usedMagic || 0);
+        this.usedMagic = ko.observable(json.usedMagic || 0).extend({ lockable: this.locked });
         this.magic.subscribe(val => {
             if (this.usedMagic() > val) this.usedMagic(val);
         }, this);
 
         this.willpower = ko.computed(() => this.resolve() + this.composure(), this);
-        this.usedWillpower = ko.observable(json.usedWillpower || 0);
+        this.usedWillpower = ko.observable(json.usedWillpower || 0).extend({ lockable: this.locked });
         this.willpower.subscribe(val => {
             if (this.usedWillpower() > val) this.usedWillpower(val);
         }, this);
@@ -239,20 +240,23 @@ export default class Character {
         element.getElementsByTagName("input")[0].focus();
     }
 
-    public newItem<T>(observableArray: KnockoutObservableArray<T>, constructor: new () => T): () => void {
+    public newItem<T>(observableArray: KnockoutObservableArray<T>, constructor: { createLockable(locked: KnockoutObservable<boolean>): T}): () => void {
         return () => {
-            observableArray.push(new constructor());
+            if (this.locked()) return;
+            observableArray.push(constructor.createLockable(this.locked));
         };
     }
 
     public removeItem<T>(observableArray: KnockoutObservableArray<T>): (item: T) => void {
         return (item: T) => {
+            if (this.locked()) return;
             observableArray.remove(item);
         };
     }
 
     public moveItem<T>(observableArray: KnockoutObservableArray<T>, direction: number): (item: T) => void {
         return (item: T) => {
+            if (this.locked()) return;
             const index = observableArray.indexOf(item);
             const newIndex = index + direction;
 
@@ -372,7 +376,6 @@ ko.bindingHandlers.attribute = {
         for (let i = 0; i < valueAccessor().max; i++) {
             const dot = document.createElement("span");
             dot.classList.add("attribute-dot");
-            //dot.dataset.index = "" + i;
             dot.dataset.toggle = "tooltip";
             dot.title = "" + (i + 1);
             $(dot).tooltip();
@@ -380,7 +383,6 @@ ko.bindingHandlers.attribute = {
             dots.push(dot);
 
             dot.addEventListener("pointerenter", () => {
-                //const dotIndex = parseInt(spanElement.dataset.index);
                 dots.forEach((dot: HTMLSpanElement, index: number) => {
                     if (index <= i) dot.classList.add("hoverFilled");
                 });
@@ -451,13 +453,11 @@ ko.bindingHandlers.used = {
         for (let i = 0; i < 12; i++) {
             const dot = document.createElement("span");
             dot.classList.add("attribute-dot");
-            // dot.dataset.index = "" + i;
             element.appendChild(dot);
 
             dots.push(dot);
 
             dot.addEventListener("pointerenter", () => {
-                //var dotIndex = parseInt(this.dataset.index);
                 dots.forEach((dot: HTMLSpanElement, index: number) => {
                     if (index <= i) dot.classList.add("hoverFilled");
                 });
@@ -497,16 +497,24 @@ ko.bindingHandlers.focusOnCreation = {
     }
 };
 
-// Hmm, this isn't working
-// interface KnockoutExtenders {
-//     numeric(target: any, args: any): KnockoutObservable<number>;
-// }
+(<any>ko.extenders).lockable = (target: any, locked: KnockoutObservable<boolean>) => {
+    const result = ko.pureComputed({
+        read: target,
+        write: (newValue: any) => {
+            if (locked()) {
+                target.notifySubscribers(target());
+            }
+            else {
+                target(newValue);
+                target.notifySubscribers(newValue);
+            }
+        }
+    }).extend({ notify: "always" });
 
-// TODO: figure this one out
+    return result;
+};
+
 (<any>ko.extenders).numeric = (target: any, args: { precision?: number, min?: number, max?: number }) => {
-    // if (!args.precision) args.precision = 0;
-    // if (!args.min) args.min = -Infinity;
-    // if (!args.max) args.max = Infinity;
     const precision = args.precision || 0;
     const min = args.min || -Infinity;
     const max = args.max || Infinity;

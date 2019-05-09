@@ -9,6 +9,8 @@ export default class Application {
     public realCharacters: KnockoutComputed<Array<Character>>;
     public character: KnockoutComputed<Character>;
     public dice: Dice;
+    public lockButtonClass: KnockoutComputed<string>;
+    public lockButtonIcon: KnockoutComputed<string>;
     private _previousSection: string;
 
     public constructor() {
@@ -22,6 +24,8 @@ export default class Application {
         this.realCharacters = ko.computed(() => this.characters().filter(c => !c.ghost), this);
         this.character = ko.computed(() => this.characters()[this.characterId()], this);
         this.dice = new Dice();
+        this.lockButtonClass = ko.computed(() => this.character().locked() ? "btn-danger" : "btn-outline-success", this);
+        this.lockButtonIcon = ko.computed(() => this.character().locked() ? "fas fa-lock" : "fas fa-lock-open", this);
         this._previousSection = null;
     }
 
@@ -119,6 +123,11 @@ export default class Application {
         ul.click();
 
         document.body.removeChild(ul);
+    }
+
+    public toggleCharacterLock(): void {
+        const character = this.character();
+        character.locked(!character.locked());
     }
 
     public switchMode(mode: string): () => void {

@@ -41,7 +41,7 @@ body {
     margin-top: 60px;
 }
 
-.btn-outline {
+.btn-outline:not(.btn-danger) {
     background-color: var(--primary-color);
 }
 
