@@ -6,6 +6,10 @@
     --bashing-img: url("../images/bashing-lt.png");
     --lethal-img: url("../images/lethal-lt.png");
     --aggravated-img: url("../images/aggravated-lt.png");
+
+    --bs-primary: #007bff;
+    --bs-success: #28a745;
+    --bs-danger: #dc3545;
 }
 
 ::-webkit-scrollbar {
@@ -43,6 +47,22 @@ body {
 
 .btn-outline:not(.btn-danger) {
     background-color: var(--primary-color);
+}
+
+.btn-outline-success:hover {
+    background-color: var(--bs-success);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--bs-primary);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--bs-danger);
+}
+
+.btn-outline-light:hover {
+    background-color: white;
 }
 
 .HIDDEN {
