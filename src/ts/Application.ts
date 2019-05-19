@@ -12,6 +12,9 @@ export default class Application {
     public lockButtonClass: KnockoutComputed<string>;
     public lockButtonIcon: KnockoutComputed<string>;
     private _previousSection: string;
+    public showClock: KnockoutObservable<boolean>;
+    public currentTime: KnockoutObservable<Date>;
+    public currentTimeDisplay: KnockoutComputed<string>;
 
     public constructor() {
         const savedCharacters: Array<Character> = (JSON.parse(window.localStorage.getItem("characters")) || []).map(Character.fromJson);
@@ -27,6 +30,29 @@ export default class Application {
         this.lockButtonClass = ko.computed(() => this.character().locked() ? "btn-danger" : "btn-outline-success", this);
         this.lockButtonIcon = ko.computed(() => this.character().locked() ? "fas fa-lock" : "fas fa-lock-open", this);
         this._previousSection = null;
+        this.showClock = ko.observable(false);
+        this.currentTime = ko.observable(new Date());
+
+        this.currentTimeDisplay = ko.computed(() => {
+            const time = this.currentTime();
+            let hours = time.getHours();
+            const minutes = time.getMinutes();
+            const seconds = time.getSeconds();
+            const suffix = hours < 12 ? "AM" : "PM";
+            const hourPrefix = hours < 10 ? "0" : "";
+            const minutePrefix = minutes < 10 ? "0" : "";
+            const secondPrefix = seconds < 10 ? "0" : "";
+            if (hours > 12) hours -= 12;
+            return `${hourPrefix}${hours}:${minutePrefix}${minutes}:${secondPrefix}${seconds} ${suffix}`;
+        }, this);
+
+        window.setInterval(() => {
+            this.currentTime(new Date());
+        }, 1000);
+    }
+
+    public toggleClock(): void {
+        this.showClock(!this.showClock());
     }
 
     public goBack(): void {

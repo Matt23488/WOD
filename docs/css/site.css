@@ -41,6 +41,18 @@ body {
     z-index: 999;
 }
 
+.clock {
+    position: fixed;
+    z-index: 999;
+    right: 10px;
+    top: 10px;
+    font-size: 1.4em;
+    border: 1px solid white;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+}
+
 .body-content {
     margin-top: 60px;
 }

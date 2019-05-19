@@ -48,6 +48,7 @@
         </div>
         <div class="toolbar">
             <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: goBack, visible: mode() !== 'list'"><i class="fas fa-arrow-left"></i></button>
+            <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: toggleClock"><i class="fas fa-clock"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('dice'), visible: mode() === 'sheet'"><i class="fas fa-dice"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('notes'), visible: mode() === 'sheet'"><i class="fas fa-clipboard"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: saveCharacters"><i class="fas fa-save"></i></button>
@@ -56,6 +57,7 @@
             <button class="btn btn-lg btn-outline btn-outline-danger" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
             <button class="btn btn-lg btn-outline" data-bind="click: toggleCharacterLock, class: lockButtonClass, visible: mode() !== 'list'"><i data-bind="class: lockButtonIcon"></i></button>
         </div>
+        <div class="clock" data-bind="visible: showClock, text: currentTimeDisplay"></div>
         <div class="container-fluid body-content">
             <div class="listContainer" data-bind="visible: mode() === 'list'">
                 <h1>Characters <button class="btn btn-lg btn-outline-success" data-bind="click: newCharacter"><i class="fas fa-plus"></i></button></h1>
