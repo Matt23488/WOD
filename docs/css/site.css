@@ -37,9 +37,17 @@ body {
 
 .toolbar {
     position: fixed;
-    margin: -48px 0 0 12px;
+    top: 12px;
+    left: 12px;
     z-index: 999;
 }
+
+/* .clockContainer {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 999;
+} */
 
 .clock {
     position: fixed;
@@ -54,7 +62,8 @@ body {
 }
 
 .body-content {
-    margin-top: 60px;
+    position: relative;
+    top: 80px;
 }
 
 .btn-outline:not(.btn-danger) {

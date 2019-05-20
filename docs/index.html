@@ -58,6 +58,8 @@
             <button class="btn btn-lg btn-outline" data-bind="click: toggleCharacterLock, class: lockButtonClass, visible: mode() !== 'list'"><i data-bind="class: lockButtonIcon"></i></button>
         </div>
         <div class="clock" data-bind="visible: showClock, text: currentTimeDisplay"></div>
+        <!-- <div class="clockContainer">
+        </div> -->
         <div class="container-fluid body-content">
             <div class="listContainer" data-bind="visible: mode() === 'list'">
                 <h1>Characters <button class="btn btn-lg btn-outline-success" data-bind="click: newCharacter"><i class="fas fa-plus"></i></button></h1>

@@ -55,6 +55,15 @@ export default class Application {
                 this.saveCharacters();
             }
         });
+
+        window.addEventListener("hashchange", e => {
+            const hash = window.location.hash.substring(1);
+            if (!hash) return;
+
+            var offset = 80; // TODO: Don't hardcode this maybe?
+            var $domElement = $(`#${hash}`);
+            $(window).scrollTop($domElement.offset().top - offset);
+        });
     }
 
     public toggleClock(): void {
