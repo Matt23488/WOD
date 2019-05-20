@@ -39,11 +39,10 @@ export default class Application {
             const minutes = time.getMinutes();
             const seconds = time.getSeconds();
             const suffix = hours < 12 ? "AM" : "PM";
-            const hourPrefix = hours < 10 ? "0" : "";
             const minutePrefix = minutes < 10 ? "0" : "";
             const secondPrefix = seconds < 10 ? "0" : "";
             if (hours > 12) hours -= 12;
-            return `${hourPrefix}${hours}:${minutePrefix}${minutes}:${secondPrefix}${seconds} ${suffix}`;
+            return `${hours}:${minutePrefix}${minutes}:${secondPrefix}${seconds} ${suffix}`;
         }, this);
 
         window.setInterval(() => {
