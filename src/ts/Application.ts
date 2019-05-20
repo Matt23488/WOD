@@ -49,6 +49,13 @@ export default class Application {
         window.setInterval(() => {
             this.currentTime(new Date());
         }, 1000);
+
+        window.addEventListener("keydown", e => {
+            if (e.key === "s" && e.ctrlKey === true) {
+                e.preventDefault();
+                this.saveCharacters();
+            }
+        });
     }
 
     public toggleClock(): void {
