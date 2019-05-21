@@ -57,7 +57,7 @@
             <button class="btn btn-lg btn-outline btn-outline-danger" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
             <button class="btn btn-lg btn-outline" data-bind="click: toggleCharacterLock, class: lockButtonClass, visible: mode() !== 'list'"><i data-bind="class: lockButtonIcon"></i></button>
         </div>
-        <div class="clock" data-bind="visible: showClock, text: currentTimeDisplay"></div>
+        <div class="clock" data-bind="style: { opacity: showClock() ? '1' : '0' }, text: currentTimeDisplay"></div>
         <!-- <div class="clockContainer">
         </div> -->
         <div class="container-fluid body-content">
