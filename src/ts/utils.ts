@@ -106,7 +106,7 @@ export function applyCustomKnockoutCode() {
     };
 
     ko.bindingHandlers.attribute = {
-        init: (element: HTMLElement, valueAccessor: () => { value: KnockoutObservable<number>, max: number }) => {
+        init: (element: HTMLElement, valueAccessor: () => { value: KnockoutObservable<number>, max: number, canClear?: boolean }) => {
             const dots: Array<HTMLSpanElement> = [];
             for (let i = 0; i < valueAccessor().max; i++) {
                 const dot = document.createElement("span");
@@ -130,16 +130,19 @@ export function applyCustomKnockoutCode() {
                 });
             }
     
-            const clearDot = document.createElement("div");
-            clearDot.classList.add("clear-dot");
-            clearDot.innerHTML = "&times;";
-            clearDot.dataset.toggle = "tooltip";
-            clearDot.title = "Clear";
-            clearDot.addEventListener("click", () => {
-                valueAccessor().value(0);
-            });
-            element.appendChild(clearDot);
-            $(clearDot).tooltip();
+            const canClear = valueAccessor().canClear;
+            if (canClear === true || typeof canClear === "undefined") {
+                const clearDot = document.createElement("div");
+                clearDot.classList.add("clear-dot");
+                clearDot.innerHTML = "&times;";
+                clearDot.dataset.toggle = "tooltip";
+                clearDot.title = "Clear";
+                clearDot.addEventListener("click", () => {
+                    valueAccessor().value(0);
+                });
+                element.appendChild(clearDot);
+                $(clearDot).tooltip();
+            }
     
             dots.forEach((dot: HTMLSpanElement, index: number) => {
                 element.appendChild(dot);
