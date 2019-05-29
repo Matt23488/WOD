@@ -1,6 +1,7 @@
 import Character from "./Character/Character";
 import Dice from "./Dice";
 import swal from "sweetalert";
+import CommandStack from "./Command/CommandStack";
 
 export default class Application {
     public mode: KnockoutObservable<string>;
@@ -50,9 +51,21 @@ export default class Application {
         }, 1000);
 
         window.addEventListener("keydown", e => {
-            if (e.key === "s" && e.ctrlKey === true) {
-                e.preventDefault();
-                this.saveCharacters();
+            if (e.ctrlKey !== true) return;
+
+            switch (e.key) {
+                case "s":
+                    e.preventDefault();
+                    this.saveCharacters();
+                    break;
+                case "z":
+                    e.preventDefault();
+                    CommandStack.instance.undo();
+                    break;
+                case "Z":
+                    e.preventDefault();
+                    CommandStack.instance.redo();
+                    break;
             }
         });
 

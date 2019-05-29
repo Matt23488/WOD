@@ -1,4 +1,6 @@
 import Damage from "./Character/Damage";
+import CommandStack from "./Command/CommandStack";
+import AttributeCommand from "./Command/AttributeCommand";
 
 export function randomInteger(minInclusive = 0, maxExclusive = 10): number {
     if (maxExclusive < minInclusive) {
@@ -138,7 +140,7 @@ export function applyCustomKnockoutCode() {
                 clearDot.dataset.toggle = "tooltip";
                 clearDot.title = "Clear";
                 clearDot.addEventListener("click", () => {
-                    valueAccessor().value(0);
+                    CommandStack.instance.execute(new AttributeCommand(valueAccessor().value, 0, valueAccessor().value()));
                 });
                 element.appendChild(clearDot);
                 $(clearDot).tooltip();
@@ -147,7 +149,7 @@ export function applyCustomKnockoutCode() {
             dots.forEach((dot: HTMLSpanElement, index: number) => {
                 element.appendChild(dot);
                 dot.addEventListener("click", () => {
-                    valueAccessor().value(index + 1);
+                    CommandStack.instance.execute(new AttributeCommand(valueAccessor().value, index + 1, valueAccessor().value()));
                 });
             });
         },
