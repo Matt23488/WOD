@@ -388,9 +388,9 @@
             <div class="diceContainer" data-bind="visible: mode() === 'dice', with: dice">
                 <h1>Roll Dice</h1>
                 <div class="btn-group">
-                    <button class="btn btn-lg btn-outline-light" data-bind="click: incrementDicePool(-1)"><i class="fas fa-minus"></i></button>
+                    <button class="btn btn-lg btn-outline-light" data-bind="click: incrementDicePool(-1), contextMenu: incrementDicePool(-10)"><i class="fas fa-minus"></i></button>
                     <button class="btn btn-lg btn-outline-light" style="padding-left: 20px; padding-right: 20px;" data-bind="click: rollDice, text: dicePool"></button>
-                    <button class="btn btn-lg btn-outline-light" data-bind="click: incrementDicePool(1)"><i class="fas fa-plus"></i></button>
+                    <button class="btn btn-lg btn-outline-light" data-bind="click: incrementDicePool(1), contextMenu: incrementDicePool(10)"><i class="fas fa-plus"></i></button>
                 </div>
                 <br />
                 <br />

@@ -241,6 +241,15 @@ export function applyCustomKnockoutCode() {
             }, 1);
         }
     };
+
+    ko.bindingHandlers.contextMenu = {
+        init: (element: HTMLElement, valueAccessor: (() => () => void)) => {
+            element.addEventListener("contextmenu", e => {
+                e.preventDefault();
+                valueAccessor()();
+            });
+        }
+    };
     
     (<any>ko.extenders).lockable = (target: any, locked: KnockoutObservable<boolean>) => {
         const result = ko.pureComputed({
