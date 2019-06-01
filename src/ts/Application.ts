@@ -16,6 +16,8 @@ export default class Application {
     public showClock: KnockoutObservable<boolean>;
     public currentTime: KnockoutObservable<Date>;
     public currentTimeDisplay: KnockoutComputed<string>;
+    public canUndo: KnockoutComputed<boolean>;
+    public canRedo: KnockoutComputed<boolean>;
 
     public constructor() {
         const savedCharacters: Array<Character> = (JSON.parse(window.localStorage.getItem("characters")) || []).map(Character.fromJson);
@@ -46,6 +48,9 @@ export default class Application {
             return `${hours}:${minutePrefix}${minutes}:${secondPrefix}${seconds} ${suffix}`;
         }, this);
 
+        this.canUndo = ko.computed(() => CommandStack.instance.canUndo() && !this.character().locked(), this);
+        this.canRedo = ko.computed(() => CommandStack.instance.canRedo() && !this.character().locked(), this);
+
         window.setInterval(() => {
             this.currentTime(new Date());
         }, 1000);
@@ -60,11 +65,11 @@ export default class Application {
                     break;
                 case "z":
                     e.preventDefault();
-                    CommandStack.instance.undo();
+                    this.undo();
                     break;
                 case "Z":
                     e.preventDefault();
-                    CommandStack.instance.redo();
+                    this.redo();
                     break;
             }
         });
@@ -96,12 +101,15 @@ export default class Application {
         const newChar = Character.newCharacter();
         newChar.locked(false);
         this.characters.push(newChar);
-        this.characterId(this.characters().length - 1);
-        this.mode("sheet");
+        this.selectCharacter(newChar);
     }
 
     public selectCharacter(character: Character): void {
-        this.characterId(this.characters.indexOf(character));
+        const charIndex = this.characters.indexOf(character);
+        if (this.characterId() !== charIndex) {
+            this.characterId(charIndex);
+            CommandStack.instance.reset();
+        }
         this.mode("sheet");
     }
 
@@ -197,5 +205,15 @@ export default class Application {
             window.location.hash = "";
             this.mode(mode);
         }
+    }
+
+    public undo(): void {
+        if (!this.canUndo()) return;
+        CommandStack.instance.undo();
+    }
+
+    public redo(): void {
+        if (!this.canRedo()) return;
+        CommandStack.instance.redo();
     }
 }
