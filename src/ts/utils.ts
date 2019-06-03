@@ -216,7 +216,7 @@ export function applyCustomKnockoutCode() {
             }
             dots.forEach((dot: HTMLSpanElement, index: number) => {
                 dot.addEventListener("click", () => {
-                    valueAccessor().value(index + 1);
+                    CommandStack.instance.execute(new AttributeCommand(valueAccessor().value, index + 1, valueAccessor().value()));
                 });
             });
         },
