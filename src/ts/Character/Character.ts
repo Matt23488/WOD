@@ -4,6 +4,9 @@ import InventoryItem from "./InventoryItem";
 import Merit from "./Merit";
 import Note from "./Note";
 import { randomInteger } from "../utils";
+import CommandStack from "../Command/CommandStack";
+import CollectionAddCommand from "../Command/CollectionAddCommand";
+import CollectionRemoveCommand from "../Command/CollectionRemoveCommand";
 
 export default class Character {
     public ghost: boolean = false;
@@ -243,14 +246,14 @@ export default class Character {
     public newItem<T>(observableArray: KnockoutObservableArray<T>, constructor: { createLockable(locked: KnockoutObservable<boolean>): T}): () => void {
         return () => {
             if (this.locked()) return;
-            observableArray.push(constructor.createLockable(this.locked));
+            CommandStack.instance.execute(new CollectionAddCommand(observableArray, constructor.createLockable(this.locked)));
         };
     }
 
     public removeItem<T>(observableArray: KnockoutObservableArray<T>): (item: T) => void {
         return (item: T) => {
             if (this.locked()) return;
-            observableArray.remove(item);
+            CommandStack.instance.execute(new CollectionRemoveCommand(observableArray, item));
         };
     }
 
