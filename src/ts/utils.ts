@@ -243,8 +243,10 @@ export function applyCustomKnockoutCode() {
     };
 
     ko.bindingHandlers.contextMenu = {
-        init: (element: HTMLElement, valueAccessor: (() => () => void)) => {
+        init: (element: HTMLElement, valueAccessor: () => () => void) => {
+            window.alert("contextMenu binding handler init()");
             element.addEventListener("contextmenu", e => {
+                window.alert("oncontextmenu fired via contextMenu binding handler");
                 e.preventDefault();
                 valueAccessor()();
             });
