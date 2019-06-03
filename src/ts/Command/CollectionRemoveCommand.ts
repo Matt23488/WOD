@@ -18,4 +18,8 @@ export default class CollectionRemoveCommand<T> implements ICommand {
     public undo(): void {
         this._observable.splice(this._itemIndex, 0, this._item);
     }
+
+    public doesNothing(): boolean {
+        return false;
+    }
 }

@@ -32,6 +32,8 @@ export default class CommandStack {
     }
 
     public execute(command: ICommand): void {
+        if (command.doesNothing()) return;
+
         command.execute();
         this._undoStack.push(command);
         this._redoStack.removeAll();

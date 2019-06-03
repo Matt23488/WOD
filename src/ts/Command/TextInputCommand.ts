@@ -1,11 +1,11 @@
 import ICommand from "./ICommand";
 
-export default class AttributeCommand implements ICommand {
-    private _observable: KnockoutObservable<number>;
-    private _newValue: number;
-    private _oldValue: number;
+export default class TextInputCommand implements ICommand {
+    private _observable: KnockoutObservable<string>;
+    private _newValue: string;
+    private _oldValue: string;
 
-    public constructor(observable: KnockoutObservable<number>, newValue: number, oldValue: number) {
+    public constructor(observable: KnockoutObservable<string>, newValue: string, oldValue: string) {
         this._observable = observable;
         this._newValue = newValue;
         this._oldValue = oldValue;
@@ -15,7 +15,7 @@ export default class AttributeCommand implements ICommand {
         this._observable(this._newValue);
     }
 
-    public undo(): void {
+    public undo(): void  {
         this._observable(this._oldValue);
     }
 

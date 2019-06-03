@@ -16,4 +16,8 @@ export default class CollectionAddCommand<T> implements ICommand {
     public undo(): void {
         this._observable.remove(this._newItem);
     }
+
+    public doesNothing(): boolean {
+        return false;
+    }
 }

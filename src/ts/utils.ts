@@ -1,6 +1,7 @@
 import Damage from "./Character/Damage";
 import CommandStack from "./Command/CommandStack";
 import AttributeCommand from "./Command/AttributeCommand";
+import TextInputCommand from "./Command/TextInputCommand";
 
 export function randomInteger(minInclusive = 0, maxExclusive = 10): number {
     if (maxExclusive < minInclusive) {
@@ -250,8 +251,28 @@ export function applyCustomKnockoutCode() {
             });
         }
     };
+
+    ko.bindingHandlers.undoableTextInput = {
+        init: (element: HTMLElement, valueAccessor: () => KnockoutObservable<string>) => {
+            const inputElement = <HTMLInputElement>element;
+            inputElement.addEventListener("change", () => {
+                const oldValue = valueAccessor()();
+                const newValue = inputElement.value;
+                if (oldValue === newValue) return;
+
+                valueAccessor()(newValue);
+                if (valueAccessor()() === oldValue) return;
+                valueAccessor()(oldValue);
+
+                CommandStack.instance.execute(new TextInputCommand(valueAccessor(), newValue, oldValue));
+            });
+        },
+        update: (element: HTMLElement, valueAccessor: () => KnockoutObservable<string>) => {
+            (<HTMLInputElement>element).value = valueAccessor()();
+        }
+    };
     
-    (<any>ko.extenders).lockable = (target: any, locked: KnockoutObservable<boolean>) => {
+    (<any>ko.extenders).lockable = (target: KnockoutObservable<any>, locked: KnockoutObservable<boolean>) => {
         const result = ko.pureComputed({
             read: target,
             write: (newValue: any) => {
@@ -267,6 +288,17 @@ export function applyCustomKnockoutCode() {
     
         return result;
     };
+
+    // TODO: Make undoing an extender to not make it so I have to write special code
+    // for the various commands
+    // (<any>ko.extenders).undoable = (target: KnockoutObservable<any>) => {
+    //     const result = ko.pureComputed({
+    //         read: target,
+    //         write: (newValue: any) => {
+
+    //         }
+    //     }).extend({ notify: "always" });
+    // };
     
     (<any>ko.extenders).numeric = (target: any, args: { precision?: number, min?: number, max?: number }) => {
         const precision = args.precision || 0;

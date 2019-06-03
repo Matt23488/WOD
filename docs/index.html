@@ -74,19 +74,19 @@
                 <h2>Character Sheet</h2>
                 <div class="row">
                     <div class="col-lg">
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Name:</label> <input class="form-control" type="text" data-bind="textInput: name" /></div>
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Player:</label> <input class="form-control" type="text" data-bind="textInput: player" /></div>
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Age:</label> <input class="form-control" type="number" data-bind="textInput: age" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Name:</label> <input class="form-control" type="text" data-bind="undoableTextInput: name" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Player:</label> <input class="form-control" type="text" data-bind="undoableTextInput: player" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Age:</label> <input class="form-control" type="number" data-bind="undoableTextInput: age" /></div>
                     </div>
                     <div class="col-lg">
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Vice:</label> <input class="form-control" type="text" data-bind="textInput: vice" /></div>
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Virtue:</label> <input class="form-control" type="text" data-bind="textInput: virtue" /></div>
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Origins:</label> <input class="form-control" type="text" data-bind="textInput: origins" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Vice:</label> <input class="form-control" type="text" data-bind="undoableTextInput: vice" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Virtue:</label> <input class="form-control" type="text" data-bind="undoableTextInput: virtue" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Origins:</label> <input class="form-control" type="text" data-bind="undoableTextInput: origins" /></div>
                     </div>
                     <div class="col-lg">
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Gender:</label> <input class="form-control" type="text" data-bind="textInput: gender" /></div>
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Concept:</label> <input class="form-control" type="text" data-bind="textInput: concept" /></div>
-                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Chronicle:</label> <input class="form-control" type="text" data-bind="textInput: chronicle" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Gender:</label> <input class="form-control" type="text" data-bind="undoableTextInput: gender" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Concept:</label> <input class="form-control" type="text" data-bind="undoableTextInput: concept" /></div>
+                        <div class="form-group clickable pointer" data-bind="click: onComponentClick"><label class="label">Chronicle:</label> <input class="form-control" type="text" data-bind="undoableTextInput: chronicle" /></div>
                     </div>
                 </div>
                 <br />
@@ -329,7 +329,7 @@
                         <h2>Other Stats</h2>
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick">
                             <label class="label">Size:</label>
-                            <input class="form-control" type="number" data-bind="value: size" />
+                            <input class="form-control" type="number" data-bind="undoableTextInput: size" />
                         </div>
                         <div class="form-group">
                             <label>Speed:</label>
@@ -341,7 +341,7 @@
                         </div>
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick">
                             <label class="label">Armor:</label>
-                            <input class="form-control" type="number" data-bind="textInput: armor" />
+                            <input class="form-control" type="number" data-bind="undoableTextInput: armor" />
                         </div>
                         <div class="form-group">
                             <label>Initiative:</label>
@@ -349,11 +349,11 @@
                         </div>
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick">
                             <label class="label">Experience:</label>
-                            <input class="form-control" type="number" data-bind="textInput: experience" />
+                            <input class="form-control" type="number" data-bind="undoableTextInput: experience" />
                         </div>
                         <div class="form-group clickable pointer" data-bind="click: onComponentClick">
                             <label class="label">Morality:</label>
-                            <input class="form-control" type="number" data-bind="value: morality" />
+                            <input class="form-control" type="number" data-bind="undoableTextInput: morality" />
                         </div>
                         <br />
                     </div>
@@ -426,7 +426,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.notes)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><textarea class="form-control" data-bind="textInput: value, focusOnCreation"></textarea></td>
+                            <td><textarea class="form-control" data-bind="undoableTextInput: value, focusOnCreation"></textarea></td>
                         </tr>
                     </tbody>
                 </table>
@@ -458,7 +458,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.merits)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="undoableTextInput: name, focusOnCreation" /></td>
                             <td><div class="attribute" data-bind="attribute: { value: value, max: 5 }"></div></td>
                         </tr>
                     </tbody>
@@ -491,7 +491,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.spells)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="undoableTextInput: name, focusOnCreation" /></td>
                             <td><div class="attribute" data-bind="attribute: { value: value, max: 5 }"></div></td>
                         </tr>
                     </tbody>
@@ -524,7 +524,7 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.flaws)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="undoableTextInput: name, focusOnCreation" /></td>
                             <td><div class="attribute" data-bind="attribute: { value: value, max: 5 }"></div></td>
                         </tr>
                     </tbody>
@@ -557,8 +557,8 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.weapons)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="undoableTextInput: name, focusOnCreation" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="undoableTextInput: description" /></td>
                         </tr>
                     </tbody>
                 </table>
@@ -590,8 +590,8 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.equipment)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="undoableTextInput: name, focusOnCreation" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="undoableTextInput: description" /></td>
                         </tr>
                     </tbody>
                 </table>
@@ -625,9 +625,9 @@
                                 </div>
                             </td>
                             <td><button class="btn btn-outline-danger" data-bind="click: $parent.removeItem($parent.inventory)"><i class="fas fa-trash-alt"></i></button></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: name, focusOnCreation" /></td>
-                            <td><input type="text" style="width: 100%;" data-bind="textInput: description" /></td>
-                            <td><input type="number" style="width: 100%;" data-bind="textInput: quantity" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="undoableTextInput: name, focusOnCreation" /></td>
+                            <td><input type="text" style="width: 100%;" data-bind="undoableTextInput: description" /></td>
+                            <td><input type="number" style="width: 100%;" data-bind="undoableTextInput: quantity" /></td>
                         </tr>
                     </tbody>
                 </table>
