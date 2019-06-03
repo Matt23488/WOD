@@ -45,6 +45,7 @@ export default class Application {
             const minutePrefix = minutes < 10 ? "0" : "";
             const secondPrefix = seconds < 10 ? "0" : "";
             if (hours > 12) hours -= 12;
+            else if (hours === 0) hours = 12;
             return `${hours}:${minutePrefix}${minutes}:${secondPrefix}${seconds} ${suffix}`;
         }, this);
 
