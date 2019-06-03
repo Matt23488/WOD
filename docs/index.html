@@ -56,8 +56,8 @@
             <button class="btn btn-lg btn-outline btn-outline-success" data-bind="click: uploadCharacter, visible: mode() === 'list'"><i class="fas fa-upload"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-danger" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
             <button class="btn btn-lg btn-outline" data-bind="click: toggleCharacterLock, class: lockButtonClass, visible: mode() !== 'list'"><i data-bind="class: lockButtonIcon"></i></button>
-            <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: undo, visible: mode() === 'sheet', enable: canUndo"><i class="fas fa-undo-alt"></i></button>
-            <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: redo, visible: mode() === 'sheet', enable: canRedo"><i class="fas fa-redo-alt"></i></button>
+            <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: undo, visible: mode() !== 'list' && mode() !== 'dice', enable: canUndo"><i class="fas fa-undo-alt"></i></button>
+            <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: redo, visible: mode() !== 'list' && mode() !== 'dice', enable: canRedo"><i class="fas fa-redo-alt"></i></button>
         </div>
         <div class="clock" data-bind="style: { opacity: showClock() ? '1' : '0' }, text: currentTimeDisplay"></div>
         <!-- <div class="clockContainer">
