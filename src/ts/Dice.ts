@@ -25,7 +25,9 @@ export default class Dice {
 
     public incrementDicePool(amount: number): () => void {
         return () => {
-            this.dicePool(this.dicePool() + amount);
+            let newAmount = this.dicePool() + amount;
+            if (newAmount < 1) newAmount = 1;
+            this.dicePool(newAmount);
         };
     }
 
@@ -96,6 +98,6 @@ class RollState {
                     this._diceObj.rollRounds.push(this._currentRoundResults);
                 }
             }
-        }, 250);
+        }, 100);
     }
 }
