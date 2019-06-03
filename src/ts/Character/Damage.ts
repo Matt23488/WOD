@@ -1,3 +1,7 @@
+import CommandStack from "../Command/CommandStack";
+import AttributeCommand from "../Command/AttributeCommand";
+import BatchCommand from "../Command/BatchCommand";
+
 export default class Damage {
     public totalHealth: KnockoutComputed<number>;
     public bashing: KnockoutObservable<number>;
@@ -17,17 +21,27 @@ export default class Damage {
         }
 
         totalHealthObservable.subscribe(val => {
-            while (this.bashing() + this.lethal() + this.aggravated() > val) {
-                if (this.bashing() > 0) {
-                    this.bashing(this.bashing() - 1);
+            // TODO: Need to make this work so that it can be undone properly.
+            // Same with magic/willpower
+            const commands: AttributeCommand[] = [];
+            let bashing = this.bashing();
+            let lethal = this.lethal();
+            let aggravated = this.aggravated();
+            while (bashing + lethal + aggravated > val) {
+                if (bashing > 0) {
+                    commands.push(new AttributeCommand(this.bashing, bashing - 1, bashing));
+                    bashing--;
                 }
-                else if (this.lethal() > 0) {
-                    this.lethal(this.lethal() - 1);
+                else if (lethal > 0) {
+                    commands.push(new AttributeCommand(this.lethal, lethal - 1, lethal));
+                    lethal--;
                 }
                 else {
-                    this.aggravated(this.aggravated() - 1);
+                    commands.push(new AttributeCommand(this.aggravated, aggravated - 1, aggravated));
+                    aggravated--;
                 }
             }
+            CommandStack.instance.execute(new BatchCommand(...commands));
         }, this);
     }
 
@@ -37,15 +51,19 @@ export default class Damage {
 
     public addBashing(): void {
         if (this.anyEmpty()) {
-            this.bashing(this.bashing() + 1);
+            CommandStack.instance.execute(new AttributeCommand(this.bashing, this.bashing() + 1, this.bashing()));
         }
         else if (this.bashing() > 0) {
-            this.bashing(this.bashing() - 1);
-            this.lethal(this.lethal() + 1);
+            CommandStack.instance.execute(new BatchCommand(
+                new AttributeCommand(this.bashing, this.bashing() - 1, this.bashing()),
+                new AttributeCommand(this.lethal, this.lethal() + 1, this.lethal())
+            ));
         }
         else if (this.lethal() > 0) {
-            this.lethal(this.lethal() - 1);
-            this.aggravated(this.aggravated() + 1);
+            CommandStack.instance.execute(new BatchCommand(
+                new AttributeCommand(this.lethal, this.lethal() - 1, this.lethal()),
+                new AttributeCommand(this.aggravated, this.aggravated() + 1, this.aggravated())
+            ));
         }
         else {
             alert("you ded");
@@ -54,15 +72,19 @@ export default class Damage {
 
     public addLethal(): void {
         if (this.anyEmpty()) {
-            this.lethal(this.lethal() + 1);
+            CommandStack.instance.execute(new AttributeCommand(this.lethal, this.lethal() + 1, this.lethal()));
         }
         else if (this.bashing() > 0) {
-            this.bashing(this.bashing() - 1);
-            this.lethal(this.lethal() + 1);
+            CommandStack.instance.execute(new BatchCommand(
+                new AttributeCommand(this.bashing, this.bashing() - 1, this.bashing()),
+                new AttributeCommand(this.lethal, this.lethal() + 1, this.lethal())
+            ));
         }
         else if (this.lethal() > 0) {
-            this.lethal(this.lethal() - 1);
-            this.aggravated(this.aggravated() + 1);
+            CommandStack.instance.execute(new BatchCommand(
+                new AttributeCommand(this.lethal, this.lethal() - 1, this.lethal()),
+                new AttributeCommand(this.aggravated, this.aggravated() + 1, this.aggravated())
+            ));
         }
         else {
             alert("you ded");
@@ -71,15 +93,19 @@ export default class Damage {
 
     public addAggravated(): void {
         if (this.anyEmpty()) {
-            this.aggravated(this.aggravated() + 1);
+            CommandStack.instance.execute(new AttributeCommand(this.aggravated, this.aggravated() + 1, this.aggravated()));
         }
         else if (this.bashing() > 0) {
-            this.bashing(this.bashing() - 1);
-            this.aggravated(this.aggravated() + 1);
+            CommandStack.instance.execute(new BatchCommand(
+                new AttributeCommand(this.bashing, this.bashing() - 1, this.bashing()),
+                new AttributeCommand(this.aggravated, this.aggravated() + 1, this.aggravated())
+            ));
         }
         else if (this.lethal() > 0) {
-            this.lethal(this.lethal() - 1);
-            this.aggravated(this.aggravated() + 1);
+            CommandStack.instance.execute(new BatchCommand(
+                new AttributeCommand(this.lethal, this.lethal() - 1, this.lethal()),
+                new AttributeCommand(this.aggravated, this.aggravated() + 1, this.aggravated())
+            ));
         }
         else {
             alert("you ded");
@@ -87,8 +113,10 @@ export default class Damage {
     }
 
     public clearAll(): void {
-        this.bashing(0);
-        this.lethal(0);
-        this.aggravated(0);
+        CommandStack.instance.execute(new BatchCommand(
+            new AttributeCommand(this.bashing, 0, this.bashing()),
+            new AttributeCommand(this.lethal, 0, this.lethal()),
+            new AttributeCommand(this.aggravated, 0, this.aggravated())
+        ));
     }
 }

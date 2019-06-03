@@ -9,6 +9,7 @@ import CollectionAddCommand from "../Command/CollectionAddCommand";
 import CollectionRemoveCommand from "../Command/CollectionRemoveCommand";
 import CollectionMoveCommand from "../Command/CollectionMoveCommand";
 import ClearUsedCommand from "../Command/ClearUsedCommand";
+import AttributeCommand from "../Command/AttributeCommand";
 
 export default class Character {
     public ghost: boolean = false;
@@ -160,13 +161,13 @@ export default class Character {
         this.magic = ko.computed(() => this.resolve() + this.composure(), this);
         this.usedMagic = ko.observable(json.usedMagic || 0).extend({ lockable: this.locked });
         this.magic.subscribe(val => {
-            if (this.usedMagic() > val) this.usedMagic(val);
+            if (this.usedMagic() > val) CommandStack.instance.execute(new AttributeCommand(this.usedMagic, val, this.usedMagic()));
         }, this);
 
         this.willpower = ko.computed(() => this.resolve() + this.composure(), this);
         this.usedWillpower = ko.observable(json.usedWillpower || 0).extend({ lockable: this.locked });
         this.willpower.subscribe(val => {
-            if (this.usedWillpower() > val) this.usedWillpower(val);
+            if (this.usedWillpower() > val) CommandStack.instance.execute(new AttributeCommand(this.usedWillpower, val, this.usedWillpower()));
         }, this);
     }
 

@@ -1,4 +1,5 @@
 import ICommand from "./ICommand";
+import BatchCommand from "./BatchCommand";
 
 export default class CommandStack {
     private static _instance: CommandStack;
@@ -39,10 +40,24 @@ export default class CommandStack {
         this._redoStack.removeAll();
     }
 
+    public executeWithPrevious(command: ICommand, before: boolean = false): void {
+        if (command.doesNothing()) return;
+
+        command.execute();
+
+        let previousCommand = this._undoStack.pop();
+        if (before) [previousCommand, command] = [command, previousCommand];
+        this._undoStack.push(new BatchCommand(previousCommand, command));
+        this._redoStack.removeAll();
+    }
+
     public undo(): void {
         if (this._undoStack().length === 0) return;
         
         const command = this._undoStack.pop();
+
+        // TODO: Conslidate BatchCommands maybe?
+
         command.undo();
         this._redoStack.push(command);
     }
