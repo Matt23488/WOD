@@ -72,6 +72,11 @@ export default class Application {
                     e.preventDefault();
                     this.redo();
                     break;
+                case "l":
+                    e.preventDefault();
+                    if (this.mode() === "list") break;
+                    this.toggleCharacterLock();
+                    break;
             }
         });
 
