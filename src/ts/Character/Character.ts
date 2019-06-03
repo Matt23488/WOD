@@ -8,6 +8,7 @@ import CommandStack from "../Command/CommandStack";
 import CollectionAddCommand from "../Command/CollectionAddCommand";
 import CollectionRemoveCommand from "../Command/CollectionRemoveCommand";
 import CollectionMoveCommand from "../Command/CollectionMoveCommand";
+import ClearUsedCommand from "../Command/ClearUsedCommand";
 
 export default class Character {
     public ghost: boolean = false;
@@ -272,7 +273,7 @@ export default class Character {
 
     public clearUsed(usedObservable: KnockoutObservable<number>): () => void {
         return () => {
-            usedObservable(0);
+            CommandStack.instance.execute(new ClearUsedCommand(usedObservable));
         };
     }
 
