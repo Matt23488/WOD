@@ -7,6 +7,7 @@ import { randomInteger } from "../utils";
 import CommandStack from "../Command/CommandStack";
 import CollectionAddCommand from "../Command/CollectionAddCommand";
 import CollectionRemoveCommand from "../Command/CollectionRemoveCommand";
+import CollectionMoveCommand from "../Command/CollectionMoveCommand";
 
 export default class Character {
     public ghost: boolean = false;
@@ -265,8 +266,7 @@ export default class Character {
 
             if (newIndex < 0 || newIndex >= observableArray().length) return;
 
-            observableArray.splice(index, 1);
-            observableArray.splice(newIndex, 0, item);
+            CommandStack.instance.execute(new CollectionMoveCommand(observableArray, item, newIndex, index));
         };
     }
 
