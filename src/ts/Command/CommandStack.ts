@@ -6,6 +6,7 @@ export default class CommandStack {
     
     private _undoStack: KnockoutObservableArray<ICommand>;
     private _redoStack: KnockoutObservableArray<ICommand>;
+    private _currentlyExecuting: boolean;
 
     public canUndo: KnockoutComputed<boolean>;
     public canRedo: KnockoutComputed<boolean>;
@@ -13,6 +14,7 @@ export default class CommandStack {
     private constructor() {
         this._undoStack = ko.observableArray([]);
         this._redoStack = ko.observableArray([]);
+        this._currentlyExecuting = false;
 
         this.canUndo = ko.computed(() => this._undoStack().length > 0, this);
         this.canRedo = ko.computed(() => this._redoStack().length > 0, this);
@@ -35,28 +37,38 @@ export default class CommandStack {
     public execute(command: ICommand): void {
         if (command.doesNothing()) return;
 
+        if (this._currentlyExecuting) {
+            window.setTimeout(() => this.execute(command), 1);
+            return;
+        }
+
+        this._currentlyExecuting = true;
         command.execute();
         this._undoStack.push(command);
         this._redoStack.removeAll();
+        this._currentlyExecuting = false;
     }
 
-    public executeWithPrevious(command: ICommand, before: boolean = false): void {
+    public executeWithPrevious(command: ICommand): void {
         if (command.doesNothing()) return;
 
-        command.execute();
+        if (this._currentlyExecuting) {
+            window.setTimeout(() => this.executeWithPrevious(command), 1);
+            return;
+        }
 
+        this._currentlyExecuting = true;
+        command.execute();
         let previousCommand = this._undoStack.pop();
-        if (before) [previousCommand, command] = [command, previousCommand];
         this._undoStack.push(new BatchCommand(previousCommand, command));
         this._redoStack.removeAll();
+        this._currentlyExecuting = false;
     }
 
     public undo(): void {
         if (this._undoStack().length === 0) return;
         
         const command = this._undoStack.pop();
-
-        // TODO: Conslidate BatchCommands maybe?
 
         command.undo();
         this._redoStack.push(command);

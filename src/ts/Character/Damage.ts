@@ -21,27 +21,25 @@ export default class Damage {
         }
 
         totalHealthObservable.subscribe(val => {
-            // TODO: Need to make this work so that it can be undone properly.
-            // Same with magic/willpower
-            const commands: AttributeCommand[] = [];
             let bashing = this.bashing();
             let lethal = this.lethal();
             let aggravated = this.aggravated();
             while (bashing + lethal + aggravated > val) {
                 if (bashing > 0) {
-                    commands.push(new AttributeCommand(this.bashing, bashing - 1, bashing));
                     bashing--;
                 }
                 else if (lethal > 0) {
-                    commands.push(new AttributeCommand(this.lethal, lethal - 1, lethal));
                     lethal--;
                 }
                 else {
-                    commands.push(new AttributeCommand(this.aggravated, aggravated - 1, aggravated));
                     aggravated--;
                 }
             }
-            CommandStack.instance.execute(new BatchCommand(...commands));
+            CommandStack.instance.executeWithPrevious(new BatchCommand(
+                new AttributeCommand(this.bashing, bashing, this.bashing()),
+                new AttributeCommand(this.lethal, lethal, this.lethal()),
+                new AttributeCommand(this.aggravated, aggravated, this.aggravated())
+            ));
         }, this);
     }
 

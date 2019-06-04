@@ -292,12 +292,12 @@ export function applyCustomKnockoutCode() {
 
     // TODO: Make undoing an extender to not make it so I have to write special code
     // for the various commands
-    (<any>ko.extenders).undoable = (target: KnockoutObservable<any>, undoable: boolean) => {
+    (<any>ko.extenders).undoable = <T>(target: KnockoutObservable<T>, undoable: boolean) => {
         if (!undoable) return target;
 
         const result = ko.pureComputed({
             read: target,
-            write: (newValue: any) => {
+            write: (newValue: T) => {
                 // const current = target();
                 // if (newValue !== current) {
                 //     CommandStack.instance.execute(new ObservableWriteCommand(target, newValue, current));
