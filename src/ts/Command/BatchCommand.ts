@@ -7,6 +7,14 @@ export default class BatchCommand implements ICommand {
         this._commands = commands.filter(command => !command.doesNothing());
     }
 
+    public get commandCount(): number { return this._commands.length; }
+
+    public getCommand(index: number): ICommand | null {
+        if (index < 0 || index >= this._commands.length) return null;
+
+        return this._commands[index];
+    }
+
     public execute(): void {
         for (let i = 0; i < this._commands.length; i++) this._commands[i].execute();
     }

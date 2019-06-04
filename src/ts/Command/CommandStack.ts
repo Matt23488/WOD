@@ -16,14 +16,29 @@ export default class CommandStack {
         this._redoStack = ko.observableArray([]);
         this._currentlyExecuting = false;
 
-        this.canUndo = ko.computed(() => this._undoStack().length > 0, this);
-        this.canRedo = ko.computed(() => this._redoStack().length > 0, this);
+        this.canUndo = ko.computed(() => this.undoLength > 0, this);
+        this.canRedo = ko.computed(() => this.redoLength > 0, this);
     }
 
     public static get instance(): CommandStack {
         if (!CommandStack._instance) CommandStack._instance = new CommandStack();
 
         return CommandStack._instance;
+    }
+
+    public get undoLength(): number { return this._undoStack().length; }
+    public get redoLength(): number { return this._redoStack().length; }
+
+    public getPreviousCommand(drillIntoBatch: boolean = false): ICommand {
+        let previousCommand = this._undoStack()[this.undoLength - 1];
+
+        if (!drillIntoBatch) return previousCommand;
+
+        while (previousCommand instanceof BatchCommand) {
+            previousCommand = previousCommand.getCommand(previousCommand.commandCount - 1);
+        }
+
+        return previousCommand;
     }
 
     // TODO: Maybe don't have this as singleton...

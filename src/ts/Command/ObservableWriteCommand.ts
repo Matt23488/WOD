@@ -11,6 +11,8 @@ export default class ObservableWriteCommand<T> implements ICommand {
         this._oldValue = oldValue;
     }
 
+    public get observable(): KnockoutObservable<T> { return this._observable; }
+
     public execute(): void {
         this._observable(this._newValue);
     }
