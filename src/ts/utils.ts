@@ -2,6 +2,7 @@ import Damage from "./Character/Damage";
 import CommandStack from "./Command/CommandStack";
 import AttributeCommand from "./Command/AttributeCommand";
 import TextInputCommand from "./Command/TextInputCommand";
+import ObservableWriteCommand from "./Command/ObservableWriteCommand";
 
 export function randomInteger(minInclusive = 0, maxExclusive = 10): number {
     if (maxExclusive < minInclusive) {
@@ -291,14 +292,22 @@ export function applyCustomKnockoutCode() {
 
     // TODO: Make undoing an extender to not make it so I have to write special code
     // for the various commands
-    // (<any>ko.extenders).undoable = (target: KnockoutObservable<any>) => {
-    //     const result = ko.pureComputed({
-    //         read: target,
-    //         write: (newValue: any) => {
+    (<any>ko.extenders).undoable = (target: KnockoutObservable<any>, undoable: boolean) => {
+        if (!undoable) return target;
 
-    //         }
-    //     }).extend({ notify: "always" });
-    // };
+        const result = ko.pureComputed({
+            read: target,
+            write: (newValue: any) => {
+                // const current = target();
+                // if (newValue !== current) {
+                //     CommandStack.instance.execute(new ObservableWriteCommand(target, newValue, current));
+                // }
+                CommandStack.instance.execute(new ObservableWriteCommand(target, newValue, target()));
+            }
+        }).extend({ notify: "always" });
+
+        return result;
+    };
     
     (<any>ko.extenders).numeric = (target: any, args: { precision?: number, min?: number, max?: number }) => {
         const precision = args.precision || 0;

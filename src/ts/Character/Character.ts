@@ -90,7 +90,7 @@ export default class Character {
     public usedWillpower: KnockoutObservable<number>;
 
     public constructor(json: CharacterJson) {
-        this.name = ko.observable(json.name).extend({ lockable: this.locked });
+        this.name = ko.observable(json.name).extend({ lockable: this.locked, undoable: false });
         this.player = ko.observable(json.player).extend({ lockable: this.locked });
         this.age = ko.observable(json.age).extend({ numeric: { precision: 0 }, lockable: this.locked });
         this.vice = ko.observable(json.vice).extend({ lockable: this.locked });
