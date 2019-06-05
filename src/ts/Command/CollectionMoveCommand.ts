@@ -13,7 +13,7 @@ export default class CollectionMoveCommand<T> implements ICommand {
         this._oldIndex = oldIndex;
     }
 
-    public get type(): string { return "CollectionMoveCommand"; }
+    public getType(): string { return "CollectionMoveCommand"; }
 
     public execute(): void {
         this._observable.splice(this._oldIndex, 1);

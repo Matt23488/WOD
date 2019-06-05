@@ -9,7 +9,7 @@ export default class CollectionAddCommand<T> implements ICommand {
         this._newItem = newItem;
     }
 
-    public get type(): string { return "CollectionAddCommand"; }
+    public getType(): string { return "CollectionAddCommand"; }
 
     public execute(): void {
         this._observable.push(this._newItem);

@@ -11,7 +11,7 @@ export default class TextInputCommand implements ICommand {
         this._oldValue = oldValue;
     }
 
-    public get type(): string { return "TextInputCommand"; }
+    public getType(): string { return "TextInputCommand"; }
 
     public execute(): void {
         this._observable(this._newValue);

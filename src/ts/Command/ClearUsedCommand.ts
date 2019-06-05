@@ -9,7 +9,7 @@ export default class ClearUsedCommand implements ICommand {
         this._oldValue = observable();
     }
 
-    public get type(): string { return "ClearUsedCommand"; }
+    public getType(): string { return "ClearUsedCommand"; }
 
     public execute(): void {
         this._observable(0);

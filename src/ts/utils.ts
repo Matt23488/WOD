@@ -19,7 +19,11 @@ export function randomFloat(minInclusive = 0, maxExclusive = 1): number {
     return Math.random() * (maxExclusive - minInclusive) + minInclusive;
 }
 
+const _observableNameMap = new Map<KnockoutObservable<any>, string>();
 export function applyCustomKnockoutCode() {
+    /////////////////////////////
+    // BINDINGS: ////////////////
+    /////////////////////////////
     ko.bindingHandlers.dice = {
         update: (element: HTMLElement, valueAccessor: () => KnockoutObservableArray<Array<number>>) => {
             const rollRounds = valueAccessor()();
@@ -272,10 +276,23 @@ export function applyCustomKnockoutCode() {
         }
     };
     
-    (<any>ko.extenders).lockable = (target: KnockoutObservable<any>, locked: KnockoutObservable<boolean>) => {
+    /////////////////////////////
+    // EXTENSIONS: //////////////
+    /////////////////////////////
+    ko.extenders.named = <T>(target: KnockoutObservable<T>, name: string) => {
+        // TODO: This requires that the `named` extension be the last one listed.
+        // It's messy and also inefficient because there will be multiple instances
+        // of the same observable property on a character equal to the number of
+        // characters the user has. I will need to come up with a different way,
+        // but for now this works as a proof of concept.
+        _observableNameMap.set(target, name);
+        return target;
+    };
+
+    ko.extenders.lockable = <T>(target: KnockoutObservable<T>, locked: KnockoutObservable<boolean>) => {
         const result = ko.pureComputed({
             read: target,
-            write: (newValue: any) => {
+            write: (newValue: T) => {
                 if (locked()) {
                     target.notifySubscribers(target());
                 }
@@ -289,7 +306,7 @@ export function applyCustomKnockoutCode() {
         return result;
     };
     
-    (<any>ko.extenders).numeric = (target: any, args: { precision?: number, min?: number, max?: number }) => {
+    ko.extenders.numeric = (target: KnockoutObservable<number>, args: { precision?: number, min?: number, max?: number }) => {
         const precision = args.precision || 0;
         const min = args.min || -Infinity;
         const max = args.max || Infinity;
@@ -297,7 +314,7 @@ export function applyCustomKnockoutCode() {
         // Create a writeable computed observable to intercept writes to our observable
         const result = ko.pureComputed({
             read: target, // Always return the original observable's value
-            write: (newValue: any) => {
+            write: (newValue: number) => {
                 const current = target();
                 const roundingMultiplier = Math.pow(10, precision);
                 const newValueAsNum = isNaN(newValue) ? 0 : +newValue;
@@ -324,5 +341,12 @@ export function applyCustomKnockoutCode() {
     
         // Return the new computed observable
         return result;
+    };
+    
+    /////////////////////////////
+    // CUSTOM FUNCTIONS: ////////
+    /////////////////////////////
+    ko.subscribable.fn.getName = function () {
+        return _observableNameMap.get(this);
     };
 }

@@ -11,7 +11,10 @@ export default class AttributeCommand implements ICommand {
         this._oldValue = oldValue;
     }
 
-    public get type(): string { return "AttributeCommand"; }
+    public getType(): string { return "AttributeCommand"; }
+    public toString(): string {
+        return `${this._observable.getName()}: ${this._oldValue} => ${this._newValue}`;
+    }
 
     public execute(): void {
         this._observable(this._newValue);
