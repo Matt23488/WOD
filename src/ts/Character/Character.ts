@@ -90,15 +90,15 @@ export default class Character {
     public usedWillpower: KnockoutObservable<number>;
 
     public constructor(json: CharacterJson) {
-        this.name = ko.observable(json.name).extend({ lockable: this.locked, undoable: { batchConsecutiveWrites: true } });
-        this.player = ko.observable(json.player).extend({ lockable: this.locked, undoable: { batchConsecutiveWrites: true } });
-        this.age = ko.observable(json.age).extend({ numeric: { precision: 0 }, lockable: this.locked, undoable: { batchConsecutiveWrites: true } });
-        this.vice = ko.observable(json.vice).extend({ lockable: this.locked, undoable: { batchConsecutiveWrites: true } });
-        this.virtue = ko.observable(json.virtue).extend({ lockable: this.locked, undoable: { batchConsecutiveWrites: true } });
-        this.origins = ko.observable(json.origins).extend({ lockable: this.locked, undoable: { batchConsecutiveWrites: true } });
-        this.gender = ko.observable(json.gender).extend({ lockable: this.locked, undoable: { batchConsecutiveWrites: true } });
-        this.concept = ko.observable(json.concept).extend({ lockable: this.locked, undoable: { batchConsecutiveWrites: true } });
-        this.chronicle = ko.observable(json.chronicle).extend({ lockable: this.locked, undoable: { batchConsecutiveWrites: true } });
+        this.name = ko.observable(json.name).extend({ lockable: this.locked });
+        this.player = ko.observable(json.player).extend({ lockable: this.locked });
+        this.age = ko.observable(json.age).extend({ numeric: { precision: 0 }, lockable: this.locked });
+        this.vice = ko.observable(json.vice).extend({ lockable: this.locked });
+        this.virtue = ko.observable(json.virtue).extend({ lockable: this.locked });
+        this.origins = ko.observable(json.origins).extend({ lockable: this.locked });
+        this.gender = ko.observable(json.gender).extend({ lockable: this.locked });
+        this.concept = ko.observable(json.concept).extend({ lockable: this.locked });
+        this.chronicle = ko.observable(json.chronicle).extend({ lockable: this.locked });
 
         this.intelligence = ko.observable(json.intelligence).extend({ lockable: this.locked });
         this.strength = ko.observable(json.strength).extend({ lockable: this.locked });

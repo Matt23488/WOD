@@ -9,6 +9,8 @@ export default class BatchCommand implements ICommand {
 
     public get commandCount(): number { return this._commands.length; }
 
+    public get type(): string { return "BatchCommand"; }
+
     public getCommand(index: number): ICommand | null {
         if (index < 0 || index >= this._commands.length) return null;
 

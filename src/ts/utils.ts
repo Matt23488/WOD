@@ -2,7 +2,6 @@ import Damage from "./Character/Damage";
 import CommandStack from "./Command/CommandStack";
 import AttributeCommand from "./Command/AttributeCommand";
 import TextInputCommand from "./Command/TextInputCommand";
-import ObservableWriteCommand from "./Command/ObservableWriteCommand";
 
 export function randomInteger(minInclusive = 0, maxExclusive = 10): number {
     if (maxExclusive < minInclusive) {
@@ -287,34 +286,6 @@ export function applyCustomKnockoutCode() {
             }
         }).extend({ notify: "always" });
     
-        return result;
-    };
-
-    // TODO: Make undoing an extender to not make it so I have to write special code
-    // for the various commands
-    (<any>ko.extenders).undoable = <T>(target: KnockoutObservable<T>, args: { batchConsecutiveWrites: boolean }) => {
-        const result = ko.pureComputed({
-            read: target,
-            write: (newValue: T) => {
-                const currentValue = target();
-                target(newValue);
-                if (target() === currentValue) return;
-                target(currentValue);
-
-                if (args.batchConsecutiveWrites) {
-                    const previousCommand = CommandStack.instance.getPreviousCommand(true);
-                    if (previousCommand instanceof ObservableWriteCommand) {
-                        if (previousCommand.observable === target) {
-                            CommandStack.instance.executeWithPrevious(new ObservableWriteCommand(target, newValue, target()));
-                            return;
-                        }
-                    }
-                }
-
-                CommandStack.instance.execute(new ObservableWriteCommand(target, newValue, target()));
-            }
-        }).extend({ notify: "always" });
-
         return result;
     };
     

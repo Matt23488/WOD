@@ -96,4 +96,11 @@ export default class CommandStack {
         command.execute();
         this._undoStack.push(command);
     }
+
+    public log(): void {
+        console.log("UNDO STACK:");
+        console.log(this._undoStack());
+        console.log("REDO STACK:");
+        console.log(this._redoStack());
+    }
 }

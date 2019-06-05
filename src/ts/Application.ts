@@ -72,6 +72,7 @@ export default class Application {
             this.toggleCharacterLock();
         });
         this.registerKeyboardCommand("o", () => this.toggleClock());
+        this.registerKeyboardCommand("q", () => CommandStack.instance.log());
         this.enableKeyboardCommands();
 
         window.addEventListener("hashchange", e => {

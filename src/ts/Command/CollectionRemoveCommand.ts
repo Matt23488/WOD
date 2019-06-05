@@ -11,6 +11,8 @@ export default class CollectionRemoveCommand<T> implements ICommand {
         this._itemIndex = this._observable.indexOf(this._item);
     }
 
+    public get type(): string { return "CollectionRemoveCommand"; }
+
     public execute(): void {
         this._observable.remove(this._item);
     }
