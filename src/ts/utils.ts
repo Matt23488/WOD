@@ -21,9 +21,12 @@ export function randomFloat(minInclusive = 0, maxExclusive = 1): number {
 
 const _observableNameMap = new Map<KnockoutObservable<any>, string>();
 export function applyCustomKnockoutCode() {
-    /////////////////////////////
-    // BINDINGS: ////////////////
-    /////////////////////////////
+    applyKnockoutBindings();
+    applyKnockoutExtenders();
+    applyKnockoutCustomFunctions();
+}
+
+function applyKnockoutBindings() {
     ko.bindingHandlers.dice = {
         update: (element: HTMLElement, valueAccessor: () => KnockoutObservableArray<Array<number>>) => {
             const rollRounds = valueAccessor()();
@@ -275,10 +278,8 @@ export function applyCustomKnockoutCode() {
             (<HTMLInputElement>element).value = valueAccessor()();
         }
     };
-    
-    /////////////////////////////
-    // EXTENSIONS: //////////////
-    /////////////////////////////
+}
+function applyKnockoutExtenders() {
     ko.extenders.named = <T>(target: KnockoutObservable<T>, name: string) => {
         // TODO: This requires that the `named` extension be the last one listed.
         // It's messy and also inefficient because there will be multiple instances
@@ -342,10 +343,8 @@ export function applyCustomKnockoutCode() {
         // Return the new computed observable
         return result;
     };
-    
-    /////////////////////////////
-    // CUSTOM FUNCTIONS: ////////
-    /////////////////////////////
+}
+function applyKnockoutCustomFunctions() {
     ko.subscribable.fn.getName = function () {
         return _observableNameMap.get(this);
     };
