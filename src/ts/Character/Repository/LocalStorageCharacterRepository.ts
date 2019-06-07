@@ -11,4 +11,16 @@ export default class LocalStorageCharacterRepository implements ICharacterReposi
         window.localStorage.setItem("characters", JSON.stringify(characters.map(c => c.toJson())));
         return true;
     }
+
+    public static get IsSupported(): boolean {
+        const test = "test";
+        try {
+            window.localStorage.setItem(test, test);
+            window.localStorage.removeItem(test);
+            return true;
+        }
+        catch (e) {
+            return false;
+        }
+    }
 }

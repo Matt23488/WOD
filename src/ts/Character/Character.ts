@@ -375,7 +375,7 @@ function randomName() {
     return `${firstName} ${lastName}`;
 }
 
-type CharacterJson = {
+export type CharacterJson = {
     name: string,
     player: string,
     age: number,
