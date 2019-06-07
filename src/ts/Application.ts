@@ -3,6 +3,7 @@ import Dice from "./Dice";
 // import swal from "sweetalert";
 import CommandStack from "./Command/CommandStack";
 import ICharacterRepository, { getCharacterRepository } from "./Character/Repository/ICharacterRepository";
+import { registerKeyboardCommand } from "./Keyboard";
 
 export default class Application {
     private _characterRepo: ICharacterRepository;
@@ -20,7 +21,6 @@ export default class Application {
     public currentTimeDisplay: KnockoutComputed<string>;
     public canUndo: KnockoutComputed<boolean>;
     public canRedo: KnockoutComputed<boolean>;
-    private _keyboardCommands: Map<string, () => void>;
 
     public constructor() {
         this._characterRepo = getCharacterRepository("LocalStorage");
@@ -61,23 +61,21 @@ export default class Application {
             this.currentTime(new Date());
         }, 1000);
 
-        this._keyboardCommands = new Map<string, () => void>();
-        this.registerKeyboardCommand("s", () => this.saveCharacters());
-        this.registerKeyboardCommand("z", () => { 
+        registerKeyboardCommand("s", () => this.saveCharacters());
+        registerKeyboardCommand("z", () => { 
             if (this.mode() === "list") return;
             this.undo();
         });
-        this.registerKeyboardCommand("Z", () => {
+        registerKeyboardCommand("Z", () => {
             if (this.mode() === "list") return;
             this.redo();
         });
-        this.registerKeyboardCommand("l", () => {
+        registerKeyboardCommand("l", () => {
             if (this.mode() === "list") return;
             this.toggleCharacterLock();
         });
-        this.registerKeyboardCommand("o", () => this.toggleClock());
-        this.registerKeyboardCommand("q", () => CommandStack.instance.log());
-        this.enableKeyboardCommands();
+        registerKeyboardCommand("o", () => this.toggleClock());
+        registerKeyboardCommand("q", () => CommandStack.instance.log());
 
         window.addEventListener("hashchange", e => {
             const hash = window.location.hash.substring(1);
@@ -213,23 +211,5 @@ export default class Application {
     public redo(): void {
         if (!this.canRedo()) return;
         CommandStack.instance.redo();
-    }
-
-    private registerKeyboardCommand(key: string, callback: () => void): void {
-        this._keyboardCommands.set(key, callback);
-    }
-
-    private enableKeyboardCommands(): void {
-        window.addEventListener("keydown", e => {
-            if (e.ctrlKey !== true) return;
-
-            for (let [key, callback] of this._keyboardCommands.entries()) {
-                if (e.key === key) {
-                    e.preventDefault();
-                    callback();
-                    return;
-                }
-            }
-        });
     }
 }
