@@ -1,9 +1,11 @@
 import Character from "./Character/Character";
 import Dice from "./Dice";
-import swal from "sweetalert";
+// import swal from "sweetalert";
 import CommandStack from "./Command/CommandStack";
+import ICharacterRepository, { getCharacterRepository } from "./Character/Repository/ICharacterRepository";
 
 export default class Application {
+    private _characterRepo: ICharacterRepository;
     public mode: KnockoutObservable<string>;
     public characterId: KnockoutObservable<number>;
     public characters: KnockoutObservableArray<Character>;
@@ -21,7 +23,9 @@ export default class Application {
     private _keyboardCommands: Map<string, () => void>;
 
     public constructor() {
-        const savedCharacters: Array<Character> = (JSON.parse(window.localStorage.getItem("characters")) || []).map(Character.fromJson);
+        this._characterRepo = getCharacterRepository("LocalStorage");
+
+        const savedCharacters = this._characterRepo.loadCharacters();
         savedCharacters.unshift(Character.newCharacter());
         savedCharacters[0].ghost = true;
 
@@ -115,38 +119,31 @@ export default class Application {
     }
 
     public deleteCharacter(character: Character): void {
-        // swal({
-        //     title: `Delete ${this.character().name()}`,
-        //     text: "Are you sure? (As long as you don't save, your character won't be gone.)",
-        //     icon: "warning",
-        //     buttons: ["Cancel", "Delete"],
-        //     dangerMode: true
-        // })
-        // .then((willDelete: boolean) => {
-        //     if (willDelete) {
-        //         const id = this.characterId();
-        //         this.characterId(0);
-        //         this.characters.remove(this.characters()[id]);
-        //         this.mode("list");
-        //     }
-        // });
         if (this.character().locked()) return;
-        if (confirm(`Are you sure you want to delete ${this.character().name()}? (As long as you don't save, your character won't be gone.)`)) {
-            const id = this.characterId();
-            this.characterId(0);
-            this.characters.remove(this.characters()[id]);
-            this.mode("list");
-        }
+        swal({
+            title: `Delete ${this.character().name()}`,
+            text: "Are you sure? (As long as you don't save, your character won't be gone.)",
+            icon: "warning",
+            buttons: ["Cancel", "Delete"],
+            dangerMode: true
+        })
+        .then((willDelete: boolean) => {
+            if (willDelete) {
+                const id = this.characterId();
+                this.characterId(0);
+                this.characters.remove(this.characters()[id]);
+                this.mode("list");
+            }
+        });
     }
 
     public saveCharacters(): void {
-        window.localStorage.setItem("characters", JSON.stringify(this.realCharacters().map(c => c.toJson())));
-        // swal("Characters saved successfully!", {
-        //     buttons: [],
-        //     timer: 1000,
-        //     icon: "success"
-        // });
-        alert("Characters saved successfully!");
+        this._characterRepo.saveCharacters(this.realCharacters());
+        swal("Characters saved successfully!", {
+            buttons: {},
+            timer: 1000,
+            icon: "success"
+        });
     }
 
     public downloadCharacter(): void {
