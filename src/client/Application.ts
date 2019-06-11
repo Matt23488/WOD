@@ -76,24 +76,63 @@ export default class Application {
         });
         registerKeyboardCommand("o", () => this.toggleClock());
         registerKeyboardCommand("q", () => CommandStack.instance.log());
+
+        let room: string;
+        let token: number;
+        let lastTimestamp: number;
+        let inRoom = false;
         registerKeyboardCommand("y", async () => {
-            const name = prompt("Name?");
+            if (inRoom) return;
+            const roomName = prompt("Room Name?");
             const password = prompt("Password?");
+            const screenName = prompt("Your name?");
             let response = await fetch("http://localhost:3000/api/JoinRoom", {
                 method: "POST",
                 cache: "no-cache",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ name, password })
+                body: JSON.stringify({ roomName, password, screenName })
             });
             let resJson = await response.json();
             if (!resJson.success) {
                 alert(resJson.message);
                 return;
             }
-            console.log(resJson);
-            alert(`Joined room "${name}" and your token is "${resJson.data.token}"`);
+            room = roomName;
+            token = resJson.data.token;
+            lastTimestamp = 0;
+            inRoom = true;
+            alert(`Joined room "${roomName}" and your token is "${resJson.data.token}"`);
+            window.setInterval(async () => {
+                const response = await fetch("http://localhost:3000/api/GetMessages", {
+                    method: "POST",
+                    cache: "no-cache",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ roomName: room, token, lastTimestamp })
+                });
+                const resJson = await response.json();
+                if (resJson.success) {
+                    // for (let message of resJson.data) console.log(message);
+                    lastTimestamp = resJson.data.timestamp;
+                    for (let message of resJson.data.messages) console.log(`${message.client.screenName}: ${message.messageText}`);
+                }
+            }, 500);
+        });
+        registerKeyboardCommand("m", () => {
+            if (!inRoom) return;
+            const messageText = prompt("Message?");
+
+            fetch("http://localhost:3000/api/PostMessage", {
+                method: "POST",
+                cache: "no-cache",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ roomName: room, token, messageText })
+            });
         });
         registerKeyboardCommand("d", async () => {
             const response = await fetch("http://localhost:3000/debug/GetRoomData");
