@@ -5,9 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Node",
+            "program": "${workspaceFolder}/src/js/server/index.js"
+        },
+        {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "Launch Chrome against localhost:8080",
             "url": "http://localhost:8080/docs",
             "webRoot": "${workspaceFolder}/docs"
         }

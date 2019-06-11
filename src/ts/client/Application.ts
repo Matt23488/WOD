@@ -76,20 +76,36 @@ export default class Application {
         });
         registerKeyboardCommand("o", () => this.toggleClock());
         registerKeyboardCommand("q", () => CommandStack.instance.log());
-        registerKeyboardCommand("y", () => {
-            // $.ajax({
-            //     type: "POST", 
-            //     url: "http://localhost:3000/CreateRoom",
-            //     data: JSON.stringify({ tits: "ass", shit: 33 })
-            // });
-            fetch("http://localhost:3000/CreateRoom", {
+        registerKeyboardCommand("y", async () => {
+            const name = prompt("Name?");
+            const password = prompt("Password?");
+            let response = await fetch("http://localhost:3000/CreateRoom", {
                 method: "POST",
                 cache: "no-cache",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ name: "ass", password: "shitsnacks" })
+                body: JSON.stringify({ name, password })
             });
+            let resJson = await response.json();
+            if (!resJson.success) {
+                console.log(`Room "${name}" already exists, attempting to join...`);
+                response = await fetch("http://localhost:3000/JoinRoom", {
+                    method: "POST",
+                    cache: "no-cache",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name, password })
+                });
+                resJson = await response.json();
+                if (!resJson.success) {
+                    alert(resJson.message);
+                    return;
+                }
+            }
+            console.log(resJson);
+            alert(`Joined room "${name}" and your token is "${resJson.token}"`);
         });
 
         window.addEventListener("hashchange", e => {

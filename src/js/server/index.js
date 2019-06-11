@@ -10,25 +10,49 @@ app.use(cors());
 
 const rooms = [];
 
-// app.get('/', (req, res) => res.send("Hello World!"));
 app.post('/CreateRoom', (req, res) => {
-    console.log(req.body);
-    const newRoom = new Room(req.body.name, req.body.password);
-    rooms.push(newRoom);
-    const client = newRoom.accept(req.ip, req.body.password);
-    console.log("ROOMS:");
-    for (let room of rooms) {
-        console.log(room.name, room.password);
-        for (let client of room.getClients()) {
-            console.log(client);
-        }
+    const { name, password } = req.body;
+    if (rooms.some(room => room.name === name)) {
+        res.json({
+            success: false,
+            message: "Room with that name already exists!"
+        });
+        return;
     }
-    res.json({ token: client.token });
-    // res.end();
+
+    const newRoom = new Room(name, password);
+    rooms.push(newRoom);
+    const client = newRoom.accept(req.ip, password);
+    res.json({
+        success: true,
+        token: client.token
+    });
 });
 
 app.post('/JoinRoom', (req, res) => {
-    res.end();
+    const { name, password } = req.body;
+    const room = rooms.filter(room => room.name === name)[0];
+    if (!room) {
+        res.json({
+            success: false,
+            message: `No room with name"${name}" found!`
+        });
+        return;
+    }
+
+    const client = room.accept(req.ip, password);
+    if (!client) {
+        res.json({
+            success: false,
+            message: `Incorrect password provided for room "${name}"!`
+        });
+        return;
+    }
+
+    res.json({
+        success: true,
+        token: client.token
+    });
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
@@ -59,9 +83,9 @@ class Room {
     accept(ipAddress, password) {
         if (password !== this._password) return;
         
-        const client = new Client(ipAddress, this._token);
+        const client = new Client(ipAddress, this._currentToken);
         this._clients.push(client);
-        this._token++;
+        this._currentToken++;
         return client;
     }
 };
