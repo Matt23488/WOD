@@ -79,7 +79,7 @@ export default class Application {
         registerKeyboardCommand("y", async () => {
             const name = prompt("Name?");
             const password = prompt("Password?");
-            let response = await fetch("http://localhost:3000/CreateRoom", {
+            let response = await fetch("http://localhost:3000/api/CreateRoom", {
                 method: "POST",
                 cache: "no-cache",
                 headers: {
@@ -90,7 +90,7 @@ export default class Application {
             let resJson = await response.json();
             if (!resJson.success) {
                 console.log(`Room "${name}" already exists, attempting to join...`);
-                response = await fetch("http://localhost:3000/JoinRoom", {
+                response = await fetch("http://localhost:3000/api/JoinRoom", {
                     method: "POST",
                     cache: "no-cache",
                     headers: {
@@ -105,7 +105,7 @@ export default class Application {
                 }
             }
             console.log(resJson);
-            alert(`Joined room "${name}" and your token is "${resJson.token}"`);
+            alert(`Joined room "${name}" and your token is "${resJson.data.token}"`);
         });
 
         window.addEventListener("hashchange", e => {

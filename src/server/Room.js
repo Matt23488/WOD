@@ -1,4 +1,4 @@
-export default class Room {
+class Room {
     constructor(name, password) {
         this._name = name;
         this._password = password;
@@ -24,9 +24,9 @@ export default class Room {
     accept(ipAddress, password) {
         if (password !== this._password) return;
         
-        const client = new Client(ipAddress, this._token);
+        const client = new Client(ipAddress, this._currentToken);
         this._clients.push(client);
-        this._token++;
+        this._currentToken++;
         return client;
     }
 };
@@ -40,3 +40,5 @@ class Client {
     get ipAddress() { return this._ipAddress; }
     get token() { return this._token; }
 }
+
+exports.Room = Room;

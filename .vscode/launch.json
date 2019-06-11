@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Node",
-            "program": "${workspaceFolder}/src/js/server/index.js"
+            "program": "${workspaceFolder}/src/server/index.js"
         },
         {
             "type": "chrome",

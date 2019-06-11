@@ -11,7 +11,7 @@ var fancy_log = require("fancy-log");
 var watchedBrowserify = watchify(browserify({
     basedir: ".",
     debug: true,
-    entries: ["src/ts/client/main.ts"],
+    entries: ["src/client/main.ts"],
     cache: {},
     packageCache: {}
 })).plugin(tsify);

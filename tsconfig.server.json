@@ -1,0 +1,10 @@
+{
+    "files": [
+        "src/ts/server/index.ts",
+        "src/ts/server/Room.ts"
+    ],
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "target": "es5"
+    }
+}
