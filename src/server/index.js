@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const api = require("./api");
+const { wodController } = require("./APIs/api");
+const { debugController } = require("./APIs/debug");
 const routeConfig = require('./routeConfig');
 
 const app = express();
@@ -8,7 +9,8 @@ const port = 3000;
 
 app.use(express.json());
 app.use(cors());
-app.use(api.standardResponse());
+app.use(routeConfig.standardResponse());
 
-routeConfig.registerRoutes(app, api.getController());
+routeConfig.registerRoutes(app, wodController);
+routeConfig.registerRoutes(app, debugController);
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

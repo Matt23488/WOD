@@ -29,6 +29,28 @@ const httpMethods = {
     POST: 1
 };
 
+function standardResponse() {
+    return function (req, res, next) {
+        res.jsonSuccess = data => {
+            res.json({
+                success: true,
+                message: "",
+                data
+            });
+        };
+
+        res.jsonFail = message => {
+            res.json({
+                success: false,
+                message,
+                data: null
+            });
+        };
+
+        next();
+    }
+}
+
 function registerRoutes(app, api) {
     for (let route of api.getRoutes()) {
         if (route.method === httpMethods.GET) {
@@ -43,3 +65,4 @@ function registerRoutes(app, api) {
 exports.Api = Api;
 exports.httpMethods = httpMethods;
 exports.registerRoutes = registerRoutes;
+exports.standardResponse = standardResponse;
