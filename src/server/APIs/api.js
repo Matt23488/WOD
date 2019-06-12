@@ -1,61 +1,32 @@
 const { Api, httpMethods } = require("../routeConfig");
-const { roomManager } = require("../Services/Room");
+const { room } = require("../Services/Room");
 
 class WodApi extends Api {
     constructor() {
         super();
 
-        this.createRoute(httpMethods.POST, "/api/CreateRoom", (req, res) => {
-            const { roomName, password, screenName } = req.body;
-            if (!roomName) {
-                res.jsonFail("Room must have a name!");
-                return;
-            }
-
-            if (!password) {
-                res.jsonFail("Room must have a password!");
-                return;
-            }
-
-            if (this._rooms.some(room => room.name === roomName)) {
-                res.jsonFail("Room with that name already exists!");
-                return;
-            }
-
-            const client = roomManager.createRoom(roomName, password, req.ip, screenName);
-            res.jsonSuccess({ token: client.token });
-        });
-
-        this.createRoute(httpMethods.POST, "/api/JoinRoom", (req, res) => {
-            const { roomName, password, screenName } = req.body;
-            if (!roomName) {
-                res.jsonFail("Room must have a name!");
-                return;
-            }
-
-            if (!password) {
-                res.jsonFail("Room must have a password!");
-                return;
-            }
-            
-            const client = roomManager.joinRoom(roomName, password, req.ip, screenName);
+        this.createRoute(httpMethods.POST, "/api/Join", (req, res) => {
+            const { screenName } = req.body;
+            const client = room.accept(req.ip, screenName);
             if (!client) {
-                res.jsonFail(`Incorrect password provided for room "${roomName}"!`);
+                res.jsonFail("Could not join room for some reason. Probably you're already joined.");
             }
             else {
-                res.jsonSuccess({ token: client.token });
+                res.jsonSuccess({
+                    token: client.token
+                });
             }
         });
 
         this.createRoute(httpMethods.POST, "/api/PostMessage", (req, res) => {
-            const { roomName, token, messageText } = req.body;
+            const { token, messageText } = req.body;
 
-            if (!roomManager.validateToken(roomName, token, req.ip)) {
-                res.jsonFail("Could not validate token!");
+            if (!room.validateToken(req.ip, token)) {
+                res.jsonFail("Invalid token for request IP!");
                 return;
             }
 
-            const message = roomManager.postMessage(roomName, req.ip, messageText);
+            const message = room.postMessage(messageText, req.ip);
             if (!message) {
                 res.jsonFail("Could not post message!");
             }
@@ -65,20 +36,28 @@ class WodApi extends Api {
         });
 
         this.createRoute(httpMethods.POST, "/api/GetMessages", (req, res) => {
-            const { roomName, token, lastTimestamp } = req.body;
+            const { token, lastTimestamp } = req.body;
 
-            if (!roomManager.validateToken(roomName, token, req.ip)) {
-                res.jsonFail("Could not get messages!");
+            if (!room.validateToken(req.ip, token)) {
+                res.jsonFail("Invalid token for request IP!");
                 return;
             }
 
-            const messages = roomManager.getMessages(roomName, lastTimestamp);
+            const messages = room.getMessages(lastTimestamp);
             if (!messages) {
                 res.jsonFail("Could not get messages!");
             }
             else {
+                let jsonMessages = []
+                for (let message of messages) {
+                    jsonMessages.push({
+                        messageText: message.messageText,
+                        screenName: message.client.screenName,
+                        timestamp: message.timestamp
+                    });
+                }
                 res.jsonSuccess({
-                    messages,
+                    messages: jsonMessages,
                     timestamp: Date.now()
                 });
             }

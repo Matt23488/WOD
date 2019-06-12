@@ -52,16 +52,11 @@ class RoomManager {
 }
 
 class Room {
-    constructor(name, password) {
-        this._name = name;
-        this._password = password;
+    constructor() {
         this._clients = [];
         this._currentToken = 0; // TODO: Replace this with something more robust in the end lol
         this._messages = [];
     }
-
-    get name() { return this._name; }
-    get password() { return this._password; }
     
     *getClients() {
         for (let client of this._clients) yield client;
@@ -81,10 +76,16 @@ class Room {
         }
     }
 
-    accept(ipAddress, password, screenName) {
-        if (password !== this._password) return;
+    validateToken(ipAddress, token) {
+        const client = this.getClient(ipAddress);
+        return token === client.token;
+    }
+
+    accept(ipAddress, screenName) {
+        let client = this.getClient(ipAddress);
+        if (client) return;
         
-        const client = new Client(ipAddress, this._currentToken, screenName);
+        client = new Client(ipAddress, this._currentToken, screenName);
         this._clients.push(client);
         this._currentToken++;
         return client;
@@ -128,4 +129,5 @@ class Message {
 // const roomManager = new RoomManager();
 
 // exports.Room = Room;
-exports.roomManager = new RoomManager();
+// exports.roomManager = new RoomManager();
+exports.room = new Room();

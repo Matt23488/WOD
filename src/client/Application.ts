@@ -77,33 +77,29 @@ export default class Application {
         registerKeyboardCommand("o", () => this.toggleClock());
         registerKeyboardCommand("q", () => CommandStack.instance.log());
 
-        let room: string;
         let token: number;
         let lastTimestamp: number;
         let inRoom = false;
-        registerKeyboardCommand("y", async () => {
+        registerKeyboardCommand("j", async () => {
             if (inRoom) return;
-            const roomName = prompt("Room Name?");
-            const password = prompt("Password?");
             const screenName = prompt("Your name?");
-            let response = await fetch("http://localhost:3000/api/JoinRoom", {
+            let response = await fetch("http://localhost:3000/api/Join", {
                 method: "POST",
                 cache: "no-cache",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ roomName, password, screenName })
+                body: JSON.stringify({ screenName })
             });
             let resJson = await response.json();
             if (!resJson.success) {
                 alert(resJson.message);
                 return;
             }
-            room = roomName;
             token = resJson.data.token;
             lastTimestamp = 0;
             inRoom = true;
-            alert(`Joined room "${roomName}" and your token is "${resJson.data.token}"`);
+            alert(`Joined room and your token is "${resJson.data.token}"`);
             window.setInterval(async () => {
                 const response = await fetch("http://localhost:3000/api/GetMessages", {
                     method: "POST",
@@ -111,14 +107,14 @@ export default class Application {
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ roomName: room, token, lastTimestamp })
+                    body: JSON.stringify({ token, lastTimestamp })
                 });
                 const resJson = await response.json();
                 if (resJson.success) {
-                    // for (let message of resJson.data) console.log(message);
                     lastTimestamp = resJson.data.timestamp;
-                    for (let message of resJson.data.messages) console.log(`${message.client.screenName}: ${message.messageText}`);
+                    for (let message of resJson.data.messages) console.log(`${message.screenName}: ${message.messageText}`);
                 }
+                else console.error(resJson.message);
             }, 500);
         });
         registerKeyboardCommand("m", () => {
@@ -131,7 +127,7 @@ export default class Application {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ roomName: room, token, messageText })
+                body: JSON.stringify({ token, messageText })
             });
         });
         registerKeyboardCommand("d", async () => {
