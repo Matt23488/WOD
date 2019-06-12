@@ -77,67 +77,58 @@ export default class Application {
         registerKeyboardCommand("o", () => this.toggleClock());
         registerKeyboardCommand("q", () => CommandStack.instance.log());
 
-        let token: number;
-        let lastTimestamp: number;
-        let inRoom = false;
-        registerKeyboardCommand("j", async () => {
-            if (inRoom) return;
-            const screenName = prompt("Your name?");
-            let response = await fetch("http://localhost:3000/api/Join", {
-                method: "POST",
-                cache: "no-cache",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ screenName })
-            });
-            let resJson = await response.json();
-            if (!resJson.success) {
-                alert(resJson.message);
-                return;
-            }
-            token = resJson.data.token;
-            lastTimestamp = 0;
-            inRoom = true;
-            alert(`Joined room and your token is "${resJson.data.token}"`);
-            window.setInterval(async () => {
-                const response = await fetch("http://localhost:3000/api/GetMessages", {
-                    method: "POST",
-                    cache: "no-cache",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ token, lastTimestamp })
-                });
-                const resJson = await response.json();
-                if (resJson.success) {
-                    lastTimestamp = resJson.data.timestamp;
-                    for (let message of resJson.data.messages) console.log(`${message.screenName}: ${message.messageText}`);
-                }
-                else console.error(resJson.message);
-            }, 500);
-        });
-        registerKeyboardCommand("m", () => {
-            if (!inRoom) return;
-            const messageText = prompt("Message?");
+        // TODO: abstract this code
+        window.WebSocket = window.WebSocket || window.MozWebSocket;
 
-            fetch("http://localhost:3000/api/PostMessage", {
-                method: "POST",
-                cache: "no-cache",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ token, messageText })
+        let connection: WebSocket;
+        let joined = false;
+        registerKeyboardCommand("j", () => {
+            if (joined) return;
+
+            connection = new WebSocket("ws://localhost:3001");
+
+            connection.addEventListener("open", () => {
+                joined = true;
+                const userName = prompt("Your Name?");
+                connection.send(JSON.stringify({ type: "name", value: userName }));
+            });
+
+            connection.addEventListener("error", error => {
+                console.error("Could not connect to chat server.");
+            });
+
+            connection.addEventListener("message", message => {
+                try {
+                    const json = JSON.parse(message.data);
+                    if (json.type === "connect" || json.type === "disconnect") {
+                        console.info(json.message);
+                    }
+                    else if (json.type === "message") {
+                        console.log(`${json.screenName}: ${json.message}`);
+                    }
+                    else if (json.type === "error") {
+                        console.error(json.message);
+                    }
+                }
+                catch (e) {
+                    console.error (`This doesn't look like valid JSON: ${message.data}`);
+                    return;
+                }
             });
         });
-        registerKeyboardCommand("d", async () => {
-            const response = await fetch("http://localhost:3000/debug/GetRoomData");
-            const resJson = await response.json();
-            if (!resJson.success) {
-                alert(resJson.message);
-                return;
-            }
-            console.log(resJson.data);
+
+        registerKeyboardCommand("m", () => {
+            if (!joined) return;
+
+            const message = prompt("Message?");
+            connection.send(JSON.stringify({ type: "message", value: message }));
+        });
+
+        registerKeyboardCommand("J", () => {
+            if (!joined) return;
+
+            connection.close();
+            joined = false;
         });
 
         window.addEventListener("hashchange", e => {

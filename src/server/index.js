@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const { wodController } = require("./APIs/api");
 const { debugController } = require("./APIs/debug");
+const { homeController } = require("./APIs/home");
+const { startChatServer } = require("./Chat/chatServer");
 const routeConfig = require('./routeConfig');
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(cors());
 app.use(routeConfig.standardResponse());
 
-routeConfig.registerRoutes(app, wodController);
 routeConfig.registerRoutes(app, debugController);
+routeConfig.registerRoutes(app, homeController);
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+startChatServer();

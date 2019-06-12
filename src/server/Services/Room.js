@@ -1,60 +1,6 @@
-class RoomManager {
-    constructor() {
-        this._rooms = [];
-    }
-
-    *getRooms() {
-        for (let room of this._rooms) yield room;
-    }
-
-    getRoom(roomName) {
-        return this._rooms.filter(room => room.name === roomName)[0];
-    }
-
-    createRoom(roomName, password, clientIp, screenName) {
-        const newRoom = new Room(roomName, password);
-        this._rooms.push(newRoom);
-        return newRoom.accept(clientIp, password, screenName);
-    }
-
-    joinRoom(roomName, password, clientIp, screenName) {
-        const room = this.getRoom(roomName);
-        if (!room) {
-            return this.createRoom(roomName, password, clientIp, screenName);
-        }
-
-        return room.accept(clientIp, password, screenName);
-    }
-
-    validateToken(roomName, token, clientIp) {
-        const room = this.getRoom(roomName);
-        if (!room) return false;
-
-        const client = room.getClient(clientIp);
-        if (!client || client.token !== token) return false;
-
-        return true;
-    }
-
-    postMessage(roomName, clientIp, messageText) {
-        const room = this.getRoom(roomName);
-        if (!room) return;
-
-        return room.postMessage(messageText, clientIp);
-    }
-
-    getMessages(roomName, lastTimestamp) {
-        const room = this.getRoom(roomName);
-        if (!room) return;
-
-        return [...room.getMessages(lastTimestamp)];
-    }
-}
-
 class Room {
     constructor() {
         this._clients = [];
-        this._currentToken = 0; // TODO: Replace this with something more robust in the end lol
         this._messages = [];
     }
     
@@ -76,42 +22,66 @@ class Room {
         }
     }
 
-    validateToken(ipAddress, token) {
-        const client = this.getClient(ipAddress);
-        return token === client.token;
+    addClient(wsConnection) {
+        let client = this.getClient(wsConnection.remoteAddress);
+        if (client) return false;
+
+        client = new Client(wsConnection);
+        this._clients.push(client);
+        return true;
     }
 
-    accept(ipAddress, screenName) {
-        let client = this.getClient(ipAddress);
-        if (client) return;
-        
-        client = new Client(ipAddress, this._currentToken, screenName);
-        this._clients.push(client);
-        this._currentToken++;
-        return client;
+    updateClientName(clientIp, screenName) {
+        let client = this.getClient(clientIp);
+        if (!client) return false;
+
+        client.screenName = screenName;
+        this._clients.forEach(c => c._wsConnection.send(JSON.stringify({
+            type: "connect",
+            timestamp: Date.now(),
+            message: `${screenName} has connected.`
+        })));
+        return true;
     }
 
     postMessage(text, clientIp) {
         const client = this.getClient(clientIp);
-        if (!client) return;
+        if (!client || !client.screenName) return false;
 
         const message = new Message(text, client);
         this._messages.push(message);
-        return message;
+        this._clients.forEach(c => c._wsConnection.send(JSON.stringify({
+            type: "message",
+            timestamp: message.timestamp,
+            message: message.messageText,
+            screenName: client.screenName
+        })));
+        return true;
+    }
+
+    removeclient(clientIp) {
+        const client = this.getClient(clientIp);
+        if (!client) return false;
+
+        this._clients = this._clients.filter(c => c.ipAddress !== clientIp);
+        this._clients.forEach(c => c._wsConnection.send(JSON.stringify({
+            type: "disconnect",
+            timestamp: Date.now(),
+            message: `${client.screenName} has disconnected.`,
+        })));
+        return true;
     }
 }
 
 class Client {
     // TODO: Currently allowing multiple clients to have the same screen name.
-    constructor(ipAddress, token, screenName) {
-        this._ipAddress = ipAddress;
-        this._token = token;
-        this._screenName = screenName;
+    constructor(wsConnection) {
+        this._wsConnection = wsConnection;
     }
 
-    get ipAddress() { return this._ipAddress; }
-    get token() { return this._token; }
+    get ipAddress() { return this._wsConnection.remoteAddress; }
     get screenName() { return this._screenName; }
+    set screenName(value) { this._screenName = value; }
 }
 
 class Message {
@@ -126,8 +96,4 @@ class Message {
     get client() { return this._client; }
 }
 
-// const roomManager = new RoomManager();
-
-// exports.Room = Room;
-// exports.roomManager = new RoomManager();
 exports.room = new Room();
