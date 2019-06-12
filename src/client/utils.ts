@@ -2,6 +2,7 @@ import Damage from "./Character/Damage";
 import CommandStack from "./Command/CommandStack";
 import AttributeCommand from "./Command/AttributeCommand";
 import TextInputCommand from "./Command/TextInputCommand";
+import MenuBar from "./MenuBar";
 
 export function randomInteger(minInclusive = 0, maxExclusive = 10): number {
     if (maxExclusive < minInclusive) {
@@ -27,6 +28,52 @@ export function applyCustomKnockoutCode() {
 }
 
 function applyKnockoutBindings() {
+    ko.bindingHandlers.menuBar = {
+        init: (element: HTMLElement, valueAccessor: () => MenuBar) => {
+            const menuBar = valueAccessor();
+            for (let menu of menuBar.getMenus()) {
+                const dropdownLi = document.createElement("li");
+                dropdownLi.classList.add("nav-item");
+                dropdownLi.classList.add("dropdown");
+
+                const headerLink = document.createElement("a");
+                headerLink.classList.add("nav-link");
+                headerLink.classList.add("dropdown-toggle");
+                headerLink.href = "#";
+                headerLink.dataset.toggle = "dropdown";
+                headerLink.innerText = menu.text;
+
+                const menuContainer = document.createElement("div");
+                menuContainer.classList.add("dropdown-menu");
+
+                for (let menuOption of menu.getMenuOptions()) {
+                    const optionLink = document.createElement("a");
+                    optionLink.classList.add("dropdown-item");
+                    if (!menuOption.visible()) optionLink.classList.add("disabled");
+                    optionLink.href = "#";
+                    optionLink.innerText = menuOption.text;
+                    optionLink.addEventListener("click", () => {
+                        if (menuOption.visible()) menuOption.callback();
+                    });
+
+                    menuContainer.appendChild(optionLink);
+
+                    menuOption.visible.subscribe(newVal => {
+                        optionLink.classList.toggle("disabled", !newVal);
+                    });
+                }
+
+                dropdownLi.appendChild(headerLink);
+                dropdownLi.appendChild(menuContainer);
+                element.appendChild(dropdownLi);
+            }
+        }//,
+        // update: (element: HTMLElement, valueAccessor: () => KnockoutObservable<MenuBar>) => {
+        //     // element.innerHTML = "";
+            
+        // }
+    }
+
     ko.bindingHandlers.dice = {
         update: (element: HTMLElement, valueAccessor: () => KnockoutObservableArray<Array<number>>) => {
             const rollRounds = valueAccessor()();

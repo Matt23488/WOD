@@ -48,7 +48,7 @@
             <img src="images/aggravated.png" />
             <img src="images/aggravated-lt.png" />
         </div>
-        <div class="toolbar">
+        <!-- <div class="toolbar">
             <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: goBack, visible: mode() !== 'list'"><i class="fas fa-arrow-left"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: toggleClock"><i class="fas fa-clock"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-primary" data-bind="click: switchMode('dice'), visible: mode() === 'sheet'"><i class="fas fa-dice"></i></button>
@@ -60,7 +60,16 @@
             <button class="btn btn-lg btn-outline" data-bind="click: toggleCharacterLock, class: lockButtonClass, visible: mode() !== 'list'"><i data-bind="class: lockButtonIcon"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: undo, visible: mode() !== 'list' && mode() !== 'dice', enable: canUndo"><i class="fas fa-undo-alt"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: redo, visible: mode() !== 'list' && mode() !== 'dice', enable: canRedo"><i class="fas fa-redo-alt"></i></button>
-        </div>
+        </div> -->
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menuBar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menuBar">
+                <ul class="navbar-nav" data-bind="menuBar: menuBar">
+                </ul>
+            </div>
+        </nav>
         <div class="clock" data-bind="style: { opacity: showClock() ? '1' : '0' }, text: currentTimeDisplay"></div>
         <!-- <div class="clockContainer">
         </div> -->
