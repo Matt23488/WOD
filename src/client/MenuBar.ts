@@ -1,65 +1,73 @@
 import { registerKeyboardCommand } from "./Keyboard";
 
 export default class MenuBar {
-    private _menus: Menu[];
+    // private _menus: Menu[];
+    public menus: KnockoutObservableArray<Menu>;
 
     public constructor() {
-        this._menus = [];
+        // this._menus = [];
+        this.menus = ko.observableArray([]);
     }
 
-    public *getMenus(): IterableIterator<Menu> {
-        for (let menu of this._menus) yield menu;
-    }
+    // public *getMenus(): IterableIterator<Menu> {
+    //     for (let menu of this._menus) yield menu;
+    // }
 
     public addMenu(text: string): Menu {
         const menu = new Menu(text);
-        this._menus.push(menu);
+        this.menus.push(menu);
         return menu;
     }
 }
 
 class Menu {
-    private _text: string;
-    private _options: MenuOption[];
+    // private _options: MenuOption[];
+    
+    public text: KnockoutObservable<string>;
+    public options: KnockoutObservableArray<MenuOption>;
 
     public constructor(text: string) {
-        this._text = text;
-        this._options = [];
+        this.text = ko.observable(text);
+        // this._options = [];
+        this.options = ko.observableArray([]);
     }
 
-    public get text(): string { return this._text; }
-
-    public *getMenuOptions(): IterableIterator<MenuOption> {
-        for (let option of this._options) yield option;
-    }
+    // public *getMenuOptions(): IterableIterator<MenuOption> {
+    //     for (let option of this._options) yield option;
+    // }
 
     public addMenuOption(text: string, visible: KnockoutObservable<boolean>, callback: () => void, commandKey?: string) {
-        this._options.push(new MenuOption(text, visible, callback, commandKey));
+        this.options.push(new MenuOption(text, visible, callback, commandKey));
     }
 }
 
 class MenuOption {
-    private _text: string;
-    private _visible: KnockoutObservable<boolean>;
     private _commandKey: string;
     private _callback: () => void;
+    
+    private text: KnockoutObservable<string>;
+    public enabled: KnockoutObservable<boolean>;
 
-    public constructor(text: string, visible: KnockoutObservable<boolean>, callback: () => void, commandKey?: string) {
-        this._text = text;
-        this._visible = visible;
+    public constructor(text: string, enabled: KnockoutObservable<boolean>, callback: () => void, commandKey?: string) {
         this._commandKey = commandKey;
         this._callback = callback;
+        
+        this.text = ko.observable(text);
+        this.enabled = enabled;
 
-        // TODO: Should this be in the binding?
         if (commandKey) {
             registerKeyboardCommand(commandKey, () => {
-                if (visible()) callback();
+                this.doCommand();
             });
         }
     }
 
-    public get text(): string { return this._text; }
-    public get visible(): KnockoutObservable<boolean> { return this._visible; }
+    public doCommand(): void {
+        if (this.enabled()) this._callback();
+    }
+
+    // public get text(): string { return this._text; }
+    // public get visible(): KnockoutObservable<boolean> { return this._visible; }
     public get commandKey(): string { return this._commandKey; }
-    public get callback(): () => void { return this._callback; }
+    // public get callback(): () => void { return this._callback; }
 }

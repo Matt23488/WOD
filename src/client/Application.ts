@@ -66,14 +66,14 @@ export default class Application {
         }, 1000);
 
         registerKeyboardCommand("s", () => this.saveCharacters());
-        // registerKeyboardCommand("z", () => { 
-        //     if (this.mode() === "list") return;
-        //     this.undo();
-        // });
-        // registerKeyboardCommand("Z", () => {
-        //     if (this.mode() === "list") return;
-        //     this.redo();
-        // });
+        registerKeyboardCommand("z", () => { 
+            if (this.mode() === "list") return;
+            this.undo();
+        });
+        registerKeyboardCommand("Z", () => {
+            if (this.mode() === "list") return;
+            this.redo();
+        });
         registerKeyboardCommand("l", () => {
             if (this.mode() === "list") return;
             this.toggleCharacterLock();
@@ -135,26 +135,26 @@ export default class Application {
             joined = false;
         });
 
-        // window.addEventListener("hashchange", e => {
-        //     const hash = window.location.hash.substring(1);
-        //     if (!hash) return;
+        window.addEventListener("hashchange", e => {
+            const hash = window.location.hash.substring(1);
+            if (!hash) return;
 
-        //     var offset = 80; // TODO: Don't hardcode this maybe?
-        //     var $domElement = $(`#${hash}`);
-        //     $(window).scrollTop($domElement.offset().top - offset);
-        // });
-        const menuBar = new MenuBar();
-        // File menu
-        const fileMenu = menuBar.addMenu("File");
-        fileMenu.addMenuOption("Back", ko.computed(() => this.mode() !== "list", this), () => this.goBack());
-        fileMenu.addMenuOption("Test", ko.computed(() => true), () => alert("test"));
+            const offset = parseInt($(".body-content").css("top"));
+            const $domElement = $(`#${hash}`);
+            $(window).scrollTop($domElement.offset().top - offset);
+        });
 
-        const editMenu = menuBar.addMenu("Edit");
-        editMenu.addMenuOption("Undo", ko.computed(() => this.mode() !== "list" && this.canUndo(), this), () => this.undo(), "z");
-        editMenu.addMenuOption("Redo", ko.computed(() => this.mode() !== "list" && this.canRedo(), this), () => this.redo(), "Z");
+        // const menuBar = new MenuBar();
+        // // File menu
+        // const fileMenu = menuBar.addMenu("File");
+        // fileMenu.addMenuOption("Back", ko.computed(() => this.mode() !== "list", this), () => this.goBack());
+        // fileMenu.addMenuOption("Test", ko.computed(() => true), () => alert("test"));
 
-        // this.menuBar = ko.observable(menuBar);
-        this.menuBar = menuBar;
+        // const editMenu = menuBar.addMenu("Edit");
+        // editMenu.addMenuOption("Undo", ko.computed(() => this.mode() !== "list" && this.canUndo(), this), () => this.undo(), "z");
+        // editMenu.addMenuOption("Redo", ko.computed(() => this.mode() !== "list" && this.canRedo(), this), () => this.redo(), "Z");
+
+        // this.menuBar = menuBar;
     }
 
     public toggleClock(): void {

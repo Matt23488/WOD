@@ -61,16 +61,35 @@
             <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: undo, visible: mode() !== 'list' && mode() !== 'dice', enable: canUndo"><i class="fas fa-undo-alt"></i></button>
             <button class="btn btn-lg btn-outline btn-outline-light" data-bind="click: redo, visible: mode() !== 'list' && mode() !== 'dice', enable: canRedo"><i class="fas fa-redo-alt"></i></button>
         </div> -->
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <div class="toolbar">
+            <button class="btn-icon" data-bind="click: goBack, visible: mode() !== 'list'"><i class="fas fa-arrow-left"></i></button>
+            <button class="btn-icon" data-bind="click: toggleClock"><i class="fas fa-clock"></i></button>
+            <button class="btn-icon" data-bind="click: switchMode('dice'), visible: mode() === 'sheet'"><i class="fas fa-dice"></i></button>
+            <button class="btn-icon" data-bind="click: switchMode('notes'), visible: mode() === 'sheet'"><i class="fas fa-clipboard"></i></button>
+            <button class="btn-icon" data-bind="click: saveCharacters"><i class="fas fa-save"></i></button>
+            <button class="btn-icon" data-bind="click: downloadCharacter, visible: mode() === 'sheet'"><i class="fas fa-download"></i></button>
+            <button class="btn-icon" data-bind="click: uploadCharacter, visible: mode() === 'list'"><i class="fas fa-upload"></i></button>
+            <button class="btn-icon" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
+            <button class="btn-icon" data-bind="click: toggleCharacterLock, visible: mode() !== 'list'"><i data-bind="class: lockButtonIcon"></i></button>
+            <button class="btn-icon" data-bind="click: undo, visible: mode() !== 'list' && mode() !== 'dice', enable: canUndo"><i class="fas fa-undo-alt"></i></button>
+            <button class="btn-icon" data-bind="click: redo, visible: mode() !== 'list' && mode() !== 'dice', enable: canRedo"><i class="fas fa-redo-alt"></i></button>
+        </div>
+        <!-- <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menuBar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="menuBar">
-                <ul class="navbar-nav" data-bind="menuBar: menuBar">
-                    <!-- TODO: Maybe remove the custom binding and do this with foreach loops here since it's HTML and Bootstrap that doesn't belong in JS code. -->
+            <div class="collapse navbar-collapse" id="menuBar" data-bind="with: menuBar">
+                <-- TODO: Maybe remove the custom binding and do this with foreach loops here since it's HTML and Bootstrap that doesn't belong in JS code. ->
+                <ul class="navbar-nav" data-bind="foreach: menus">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" data-bind="text: text"></a>
+                        <div class="dropdown-menu" data-bind="foreach: options">
+                            <a class="dropdown-item" href="#" data-bind="enabled: enabled, text: text, click: doCommand"></a>
+                        </div>
+                    </li>
                 </ul>
             </div>
-        </nav>
+        </nav> -->
         <div class="clock" data-bind="style: { opacity: showClock() ? '1' : '0' }, text: currentTimeDisplay"></div>
         <!-- <div class="clockContainer">
         </div> -->
