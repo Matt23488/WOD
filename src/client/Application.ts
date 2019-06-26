@@ -5,6 +5,7 @@ import CommandStack from "./Command/CommandStack";
 import ICharacterRepository, { getCharacterRepository } from "./Character/Repository/ICharacterRepository";
 import { registerKeyboardCommand } from "./Keyboard";
 import MenuBar from "./MenuBar";
+import Connection from "./Connection";
 
 export default class Application {
     private _characterRepo: ICharacterRepository;
@@ -15,6 +16,8 @@ export default class Application {
     public characters: KnockoutObservableArray<Character>;
     public realCharacters: KnockoutComputed<Array<Character>>;
     public character: KnockoutComputed<Character>;
+    public connections: KnockoutObservableArray<Connection>;
+    public connection: KnockoutComputed<Connection>;
     public dice: Dice;
     public lockButtonClass: KnockoutComputed<string>;
     public lockButtonIcon: KnockoutComputed<string>;
@@ -38,6 +41,8 @@ export default class Application {
         this.characters = ko.observableArray(savedCharacters);
         this.realCharacters = ko.computed(() => this.characters().filter(c => !c.ghost), this);
         this.character = ko.computed(() => this.characters()[this.characterId()], this);
+        this.connections = ko.observableArray(savedCharacters.map(c => new Connection(c)));
+        this.connection = ko.computed(() => this.connections()[this.characterId()], this); // TODO: Make this part of the character class instead
         this.dice = new Dice();
         this.lockButtonClass = ko.computed(() => this.character().locked() ? "btn-danger" : "btn-outline-success", this);
         this.lockButtonIcon = ko.computed(() => this.character().locked() ? "fas fa-lock" : "fas fa-lock-open", this);
@@ -81,58 +86,17 @@ export default class Application {
         registerKeyboardCommand("o", () => this.toggleClock());
         registerKeyboardCommand("q", () => CommandStack.instance.log());
 
-        // TODO: abstract this code
-        window.WebSocket = window.WebSocket || window.MozWebSocket;
-
-        let connection: WebSocket;
-        let joined = false;
         registerKeyboardCommand("j", () => {
-            if (joined) return;
-
-            connection = new WebSocket("ws://localhost:3001");
-
-            connection.addEventListener("open", () => {
-                joined = true;
-                const userName = prompt("Your Name?");
-                connection.send(JSON.stringify({ type: "name", value: userName }));
-            });
-
-            connection.addEventListener("error", error => {
-                console.error("Could not connect to chat server.");
-            });
-
-            connection.addEventListener("message", message => {
-                try {
-                    const json = JSON.parse(message.data);
-                    if (json.type === "connect" || json.type === "disconnect") {
-                        console.info(json.message);
-                    }
-                    else if (json.type === "message") {
-                        console.log(`${json.screenName}: ${json.message}`);
-                    }
-                    else if (json.type === "error") {
-                        console.error(json.message);
-                    }
-                }
-                catch (e) {
-                    console.error (`This doesn't look like valid JSON: ${message.data}`);
-                    return;
-                }
-            });
+            this.connection().connect();
         });
 
         registerKeyboardCommand("m", () => {
-            if (!joined) return;
-
             const message = prompt("Message?");
-            connection.send(JSON.stringify({ type: "message", value: message }));
+            this.connection().sendMessage(message);
         });
 
         registerKeyboardCommand("J", () => {
-            if (!joined) return;
-
-            connection.close();
-            joined = false;
+            this.connection().disconnect();
         });
 
         window.addEventListener("hashchange", e => {

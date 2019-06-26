@@ -70,6 +70,7 @@
             <button class="btn-icon" data-bind="click: downloadCharacter, visible: mode() === 'sheet'"><i class="fas fa-download"></i></button>
             <button class="btn-icon" data-bind="click: uploadCharacter, visible: mode() === 'list'"><i class="fas fa-upload"></i></button>
             <button class="btn-icon" data-bind="click: deleteCharacter, visible: mode() === 'sheet'"><i class="fas fa-trash-alt"></i></button>
+            <button class="btn-icon" data-bind="click: switchMode('connection'), visible: mode() === 'sheet'"><i class="fas fa-wifi"></i></button>
             <button class="btn-icon" data-bind="click: toggleCharacterLock, visible: mode() !== 'list'"><i data-bind="class: lockButtonIcon"></i></button>
             <button class="btn-icon" data-bind="click: undo, visible: mode() !== 'list' && mode() !== 'dice', enable: canUndo"><i class="fas fa-undo-alt"></i></button>
             <button class="btn-icon" data-bind="click: redo, visible: mode() !== 'list' && mode() !== 'dice', enable: canRedo"><i class="fas fa-redo-alt"></i></button>
@@ -99,6 +100,14 @@
                 <ul class="characterList" data-bind="foreach: realCharacters">
                     <li class="clickable pointer label" data-bind="text: name, click: $root.selectCharacter.bind($root)"></li>
                 </ul>
+            </div>
+
+            <div class="connectionContainer" data-bind="visible: mode() === 'connection', using: connection">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group"><label class="label">Server Address:</label> <input class="form-control" type="text" data-bind="textInput: serverAddress" /></div>
+                    </div>
+                </div>
             </div>
 
             <div class="characterContainer" data-bind="visible: mode() === 'sheet', using: character">
