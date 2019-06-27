@@ -4,12 +4,14 @@ export default class Connection {
     private _character: Character;
     private _connection: WebSocket;
     private _connected: boolean;
+    private _otherUsers: { ipAddress: string, screenName: string }[];
 
     public serverAddress: KnockoutObservable<string>;
 
     public constructor(character: Character) {
         this._character = character;
         this._connected = false;
+        this._otherUsers = [];
 
         this.serverAddress = ko.observable("");
         WebsocketSetup.Setup();
@@ -34,6 +36,12 @@ export default class Connection {
                 const json = JSON.parse(message.data);
                 if (json.type === "connect" || json.type === "disconnect") {
                     console.info(json.message);
+                }
+                else if (json.type === "init") {
+                    this._otherUsers = json.message.otherUsers;
+                }
+                else if (json.type === "newUser") {
+                    this._otherUsers.push(json.message);
                 }
                 else if (json.type === "message") {
                     console.log(`${json.screenName}: ${json.message}`);

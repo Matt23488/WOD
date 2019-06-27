@@ -138,6 +138,10 @@ export default class Application {
         const newChar = Character.newCharacter();
         newChar.locked(false);
         this.characters.push(newChar);
+
+        // TODO: This is why connection needs to belong to the character.
+        this.connections.push(new Connection(newChar));
+
         this.selectCharacter(newChar);
     }
 
