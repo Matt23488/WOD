@@ -125,6 +125,9 @@ class SimpleMessage extends Message {
     }
 }
 
+// TODO: Date.UTC() could be used to account for timezones. Pass a result to a specific
+// point in time to the server, and the server can figure out the difference for sending
+// back timestamp values.
 class UserMessage extends Message {
     public messageText: KnockoutObservable<string>;
 
