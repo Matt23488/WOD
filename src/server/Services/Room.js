@@ -73,6 +73,13 @@ class Room {
             message: message.messageText,
             screenName: client.screenName
         })));
+
+        const now = new Date();
+        const hours = now.getHours().toPrecision(2);
+        const minutes = now.getMinutes().toPrecision(2);
+        const seconds = now.getSeconds().toPrecision(2);
+        console.log(`[${hours}:${minutes}:${seconds}] ${client.screenName}: ${text}`);
+
         return true;
     }
 

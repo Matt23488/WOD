@@ -5,7 +5,6 @@ import CommandStack from "./Command/CommandStack";
 import ICharacterRepository, { getCharacterRepository } from "./Character/Repository/ICharacterRepository";
 import { registerKeyboardCommand } from "./Keyboard";
 import MenuBar from "./MenuBar";
-import Connection from "./Connection";
 
 export default class Application {
     private _characterRepo: ICharacterRepository;
@@ -16,8 +15,6 @@ export default class Application {
     public characters: KnockoutObservableArray<Character>;
     public realCharacters: KnockoutComputed<Array<Character>>;
     public character: KnockoutComputed<Character>;
-    public connections: KnockoutObservableArray<Connection>;
-    public connection: KnockoutComputed<Connection>;
     public dice: Dice;
     public lockButtonClass: KnockoutComputed<string>;
     public lockButtonIcon: KnockoutComputed<string>;
@@ -41,8 +38,6 @@ export default class Application {
         this.characters = ko.observableArray(savedCharacters);
         this.realCharacters = ko.computed(() => this.characters().filter(c => !c.ghost), this);
         this.character = ko.computed(() => this.characters()[this.characterId()], this);
-        this.connections = ko.observableArray(savedCharacters.map(c => new Connection(c)));
-        this.connection = ko.computed(() => this.connections()[this.characterId()], this); // TODO: Make this part of the character class instead
         this.dice = new Dice();
         this.lockButtonClass = ko.computed(() => this.character().locked() ? "btn-danger" : "btn-outline-success", this);
         this.lockButtonIcon = ko.computed(() => this.character().locked() ? "fas fa-lock" : "fas fa-lock-open", this);
@@ -87,16 +82,16 @@ export default class Application {
         registerKeyboardCommand("q", () => CommandStack.instance.log());
 
         registerKeyboardCommand("j", () => {
-            this.connection().connect();
+            this.character().connection.connect();
         });
 
         registerKeyboardCommand("m", () => {
             const message = prompt("Message?");
-            this.connection().sendMessage(message);
+            this.character().connection.sendMessage(message);
         });
 
         registerKeyboardCommand("J", () => {
-            this.connection().disconnect();
+            this.character().connection.disconnect();
         });
 
         window.addEventListener("hashchange", e => {
@@ -138,9 +133,6 @@ export default class Application {
         const newChar = Character.newCharacter();
         newChar.locked(false);
         this.characters.push(newChar);
-
-        // TODO: This is why connection needs to belong to the character.
-        this.connections.push(new Connection(newChar));
 
         this.selectCharacter(newChar);
     }

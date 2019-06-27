@@ -22,7 +22,7 @@ function startServer() {
         let suffix = 1;
         let clientIp = request.remoteAddress;
         while (ips.some(ip => ip === clientIp)) {
-            clientIp = `${request.remoteAddress}${suffix}`;
+            clientIp = `${request.remoteAddress}.${suffix}`;
             suffix++;
         }
         ips.push(clientIp);

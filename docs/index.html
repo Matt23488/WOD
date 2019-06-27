@@ -102,10 +102,42 @@
                 </ul>
             </div>
 
-            <div class="connectionContainer" data-bind="visible: mode() === 'connection', using: connection">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group"><label class="label">Server Address:</label> <input class="form-control" type="text" data-bind="textInput: serverAddress" /></div>
+            <div class="connectionContainer" data-bind="visible: mode() === 'connection', using: character().connection">
+                <div class="form-group"><label class="label">Server Address:</label> <input class="form-control" type="text" data-bind="textInput: serverAddress" /></div>
+                <button class="btn btn-lg btn-outline btn-outline-light" data-bind="text: connectButtonText, click: connectButtonClick"></button>
+
+                <div data-bind="visible: connected">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#chatUsers">Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#chatGroup">Group Chat</a>
+                        </li>
+                        <!-- ko foreach: chatWindows -->
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" data-bind="attr: { href: domID }, class: domClass, text: domText"></a>
+                        </li>
+                        <!-- /ko -->
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane container active" id="chatUsers">
+                            <ul class="list-group" data-bind="foreach: otherUsers">
+                                <li class="list-group-item list-group-item-dark" data-bind="text: screenName"></li>
+                            </ul>
+                        </div>
+                        <div class="tab-pane container fade" id="chatGroup" data-bind="using: groupChat">
+                            <ul class="list-group" data-bind="foreach: messages">
+                                <li class="list-group-item list-group-item-dark" data-bind="text: messageText"></li>
+                            </ul>
+                        </div>
+                        <!-- ko foreach: chatWindows -->
+                        <div class="tab-pane container fade" data-bind="attr: { id: domID }">
+                            <ul class="list-group" data-bind="foreach: messages">
+                                <li class="list-group-item list-group-item-dark" data-bind="text: messageText"></li>
+                            </ul>
+                        </div>
+                        <!-- /ko -->
                     </div>
                 </div>
             </div>

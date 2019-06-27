@@ -10,6 +10,7 @@ import CollectionRemoveCommand from "../Command/CollectionRemoveCommand";
 import CollectionMoveCommand from "../Command/CollectionMoveCommand";
 import ClearUsedCommand from "../Command/ClearUsedCommand";
 import AttributeCommand from "../Command/AttributeCommand";
+import Connection from "../Connection";
 
 export default class Character {
     public ghost: boolean = false;
@@ -88,6 +89,8 @@ export default class Character {
 
     public willpower: KnockoutComputed<number>;
     public usedWillpower: KnockoutObservable<number>;
+
+    public connection: Connection;
 
     public constructor(json: CharacterJson) {
         this.name = ko.observable(json.name).extend({ lockable: this.locked, named: "Name" });
@@ -169,6 +172,8 @@ export default class Character {
         this.willpower.subscribe(val => {
             if (this.usedWillpower() > val) CommandStack.instance.executeWithPrevious(new AttributeCommand(this.usedWillpower, val, this.usedWillpower()));
         }, this);
+
+        this.connection = new Connection(this, json.serverAddress);
     }
 
     public static newCharacter(): Character {
@@ -233,7 +238,9 @@ export default class Character {
             equipment: [],
             inventory: [],
 
-            notes: []
+            notes: [],
+
+            serverAddress: ""
         });
     }
 
@@ -346,7 +353,9 @@ export default class Character {
             equipment: this.equipment().map(e => { return { name: e.name(), description: e.description() }; }),
             inventory: this.inventory().map(i => { return { name: i.name(), description: i.description(), quantity: i.quantity() }; }),
 
-            notes: this.notes().map(n => n.value())
+            notes: this.notes().map(n => n.value()),
+
+            serverAddress: this.connection.serverAddress()
         };
     }
 }
@@ -443,5 +452,7 @@ export type CharacterJson = {
     aggravated?: number,
 
     usedMagic?: number,
-    usedWillpower?: number
+    usedWillpower?: number,
+
+    serverAddress: string
 };
