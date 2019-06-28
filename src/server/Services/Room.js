@@ -3,6 +3,11 @@ class Room {
         this._clients = [];
         this._messages = [];
         this._utc42069 = Date.UTC(69, 4, 20);
+        this._nextClientId = 0;
+    }
+
+    newClientId() {
+        return this._nextClientId++;
     }
     
     *getClients() {
@@ -15,105 +20,133 @@ class Room {
         }
     }
 
-    getClient(ipAddress) {
+    getClient(clientId) {
         for (let client of this._clients) {
-            if (client.ipAddress === ipAddress) {
+            if (client.id === clientId) {
                 return client;
             }
         }
     }
 
-    // TODO: Going to abstract the the ipAddress into this class, so
-    // remove the `clientIp` parameter when I do so. Also look into
-    // sending ids to clients rather the the IPs of other users.
-    addClient(wsConnection, clientIp) {
-        let client = this.getClient(clientIp || wsConnection.remoteAddress);
-        if (client) return false;
+    registerNewClient(request) {
+        const connection = request.accept(null, request.origin); // TODO: replace request.origin with * if this doesn't work
+        console.log(`New connection from ${connection.remoteAddress}.`);
 
-        client = new Client(wsConnection, clientIp);
-        this._clients.push(client);
-        return true;
+        const newClient = new Client(connection, this.newClientId());
+        this._clients.push(newClient);
+
+        connection.on("message", message => {
+            if (message.type === "utf8") {
+                try {
+                    const json = JSON.parse(message.utf8Data);
+                    if (json.type === "init") {
+                        this.initClient(newClient.id, json.value.name, json.value.utc42069);
+                        this.propagateNewClient(newClient.id);
+                    }
+                    else if (json.type === "message") {
+                        this.postMessage(json.value, newClient.id);
+                    }
+                }
+                catch (e) {
+                    console.error(`Message data is not in a format we use: ${message.utf8Data}`);
+                }
+            }
+        });
+
+        connection.on("close", () => {
+            this.removeClient(newClient.id);
+            console.log(`Connection from ${connection.remoteAddress} closed.`);
+        });
     }
 
-    initClient(clientIp, screenName, utc42069) {
-        let client = this.getClient(clientIp);
+    initClient(clientId, screenName, utc42069) {
+        let client = this.getClient(clientId);
         if (!client) return false;
 
         client.screenName = screenName;
         client.timestampOffset = utc42069 - this._utc42069;
-        this._clients.forEach(c => c.wsConnection.send(JSON.stringify({
-            type: "connect",
-            timestamp: Date.now() + c.timestampOffset,
-            message: `${screenName} has connected.`
+        this._clients.forEach(c => c.sendMessage(new WSMessage(
+            "info",
+            c.timestampOffset,
+            `${screenName} has connected.`
+        )));
+        return true;
+    }
+
+    propagateNewClient(clientId) {
+        let client = this.getClient(clientId);
+        if (!client) return false;
+
+        const otherClients = this._clients.filter(c => c.id !== clientId);
+        client.sendMessage(new WSMessage(
+            "init",
+            client.timestampOffset,
+            {
+                id: clientId,
+                users: this._clients.map(({ id, screenName }) => { return { id, screenName }; })
+            }
+        ));
+        otherClients.forEach(c => c.sendMessage(new WSMessage("newUser", c.timestampOffset, {
+            id: client.id,
+            screenName: client.screenName
         })));
         return true;
     }
 
-    // room.propagateNewClient(connection.remoteAddress);
-    propagateNewClient(clientIp) {
-        let client = this.getClient(clientIp);
-        if (!client) return false;
-
-        const otherClients = this._clients.filter(c => c.ipAddress !== clientIp);
-        client.wsConnection.send(JSON.stringify(new WSMessage("init", {
-                otherUsers: otherClients.map(({ ipAddress, screenName }) => { return { ipAddress, screenName }; })
-        }, client.timestampOffset)));
-        otherClients.forEach(c => c.wsConnection.send(JSON.stringify(new WSMessage("newUser", {
-            ipAddress: client.ipAddress,
-            screenName: client.screenName
-        }, c.timestampOffset))));
-        return true;
-    }
-
-    postMessage(text, clientIp) {
-        const client = this.getClient(clientIp);
+    postMessage(text, clientId) {
+        const client = this.getClient(clientId);
         if (!client || !client.screenName) return false;
 
         const message = new Message(text, client);
         this._messages.push(message);
-        this._clients.forEach(c => c.wsConnection.send(JSON.stringify({
-            type: "message",
-            timestamp: message.timestamp + c.timestampOffset,
-            message: message.messageText,
-            screenName: client.screenName
-        })));
-
-        // const now = new Date();
-        // const hours = now.getHours().toPrecision(2);
-        // const minutes = now.getMinutes().toPrecision(2);
-        // const seconds = now.getSeconds().toPrecision(2);
-        // console.log(`[${hours}:${minutes}:${seconds}] ${client.screenName}: ${text}`);
+        this._clients.forEach(c => c.sendMessage(new WSMessage(
+            "message",
+            c.timestampOffset,
+            {
+                messageText: message.messageText,
+                id: client.id
+            }
+        )));
 
         return true;
     }
 
-    removeclient(clientIp) {
-        const client = this.getClient(clientIp);
+    removeClient(clientId) {
+        const client = this.getClient(clientId);
         if (!client) return false;
 
-        this._clients = this._clients.filter(c => c.ipAddress !== clientIp);
-        this._clients.forEach(c => c.wsConnection.send(JSON.stringify({
-            type: "disconnect",
-            timestamp: Date.now() + c.timestampOffset,
-            message: `${client.screenName} has disconnected.`,
-        })));
+        this._clients = this._clients.filter(c => c.id !== clientId);
+        this._clients.forEach(c => {
+            c.sendMessage(new WSMessage(
+                "info",
+                c.timestampOffset,
+                `${client.screenName} has disconnected.`
+            ));
+            c.sendMessage(new WSMessage(
+                "disconnect",
+                c.timestampOffset,
+                clientId
+            ));
+        });
         return true;
     }
 }
 
 class Client {
-    // TODO: Currently allowing multiple clients to have the same screen name.
-    constructor(wsConnection, clientIp) {
-        this._wsConnection = wsConnection;
-        this._clientIp = clientIp;
+    constructor(connection, id) {
+        this._connection = connection;
+        this._id = id;
     }
 
-    get wsConnection() { return this._wsConnection; }
-    get ipAddress() { return this._clientIp || this._wsConnection.remoteAddress; }
+    get id() { return this._id; }
     get screenName() { return this._screenName; }
     set screenName(value) { this._screenName = value; }
     get timestampOffset() { return this._timestampOffset; }
     set timestampOffset(value) { this._timestampOffset = value; }
+
+    sendMessage(message) {
+        this._connection.send(JSON.stringify(message));
+    }
 }
 
 class Message {
@@ -129,7 +162,7 @@ class Message {
 }
 
 class WSMessage {
-    constructor(type, messageData, timestampOffset) {
+    constructor(type, timestampOffset, messageData) {
         this.type = type;
         this.timestamp = Date.now() + timestampOffset;
         this.message = messageData

@@ -3,10 +3,11 @@ import Character from "./Character/Character";
 export default class Connection {
     private _character: Character;
     private _connection: WebSocket;
+    private _clientId: number;
     
     public serverAddress: KnockoutObservable<string>;
     public connected: KnockoutObservable<boolean>;
-    public otherUsers: KnockoutObservableArray<{ ipAddress: string, screenName: string }>;
+    public users: KnockoutObservableArray<{ id: number, screenName: string }>;
     public groupChat: ChatWindow;
     public chatWindows: KnockoutObservableArray<ChatWindow>;
     public connectButtonText: KnockoutComputed<string>;
@@ -16,7 +17,7 @@ export default class Connection {
         
         this.serverAddress = ko.observable(serverAddress);
         this.connected = ko.observable(false);
-        this.otherUsers = ko.observableArray([]);
+        this.users = ko.observableArray([]);
         this.groupChat = new ChatWindow();
         this.chatWindows = ko.observableArray([]);
         this.connectButtonText = ko.computed(() => this.connected() ? "Disconnect" : "Connect", this);
@@ -47,17 +48,22 @@ export default class Connection {
         this._connection.addEventListener("message", message => {
             try {
                 const json = JSON.parse(message.data);
-                if (json.type === "connect" || json.type === "disconnect") {
+                if (json.type === "info") {
                     this.groupChat.messages.push(new SimpleMessage(json.message));
                 }
                 else if (json.type === "init") {
-                    this.otherUsers.push(...json.message.otherUsers);
+                    this._clientId = json.message.id;
+                    this.users.push(...json.message.users);
                 }
                 else if (json.type === "newUser") {
-                    this.otherUsers.push(json.message);
+                    this.users.push(json.message);
                 }
                 else if (json.type === "message") {
-                    this.groupChat.messages.push(new UserMessage(json.screenName, json.message, json.timestamp));
+                    this.groupChat.messages.push(new UserMessage(this.getUserScreenName(json.message.id), json.message.messageText, json.timestamp));
+                }
+                else if (json.type === "disconnect") {
+                    const oldUser = this.users().filter(u => u.id === json.message)[0];
+                    this.users.remove(oldUser);
                 }
                 else if (json.type === "error") {
                     console.log(json.message);
@@ -75,7 +81,7 @@ export default class Connection {
         this._connection.close();
         this.connected(false);
         this._connection = null;
-        this.otherUsers.removeAll();
+        this.users.removeAll();
         this.groupChat.messages.removeAll();
         this.chatWindows.removeAll();
         console.info("Disconnected from chat server.");
@@ -90,6 +96,12 @@ export default class Connection {
     public connectButtonClick(): void {
         if (this.connected()) this.disconnect();
         else this.connect();
+    }
+
+    private getUserScreenName(id: number): string {
+        const user = this.users().filter(u => u.id === id)[0];
+        console.log("getUserScreenName", user, user.screenName);
+        return user.screenName;
     }
 }
 
@@ -117,6 +129,7 @@ class ChatWindow {
 // editing them after the fact. Probably will so I'll probably leave this in.
 // TODO: Thinking about maybe just having the server pass back messages already formatted.
 // But then again the timestamps would be off. Think about this.
+// TODO: Need a property here to determine how to draw the message essentially.
 abstract class Message {
     public abstract messageText: KnockoutObservable<string>;
 }

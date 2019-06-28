@@ -15,43 +15,8 @@ function startServer() {
         httpServer: server
     });
 
-    const ips = [];
     wsServer.on("request", request => {
-        // This allows users on the same IP to connect. Will work just fine, but maybe the `ips` array
-        // should be abstracted into the room manager.
-        let suffix = 1;
-        let clientIp = request.remoteAddress;
-        while (ips.some(ip => ip === clientIp)) {
-            clientIp = `${request.remoteAddress}.${suffix}`;
-            suffix++;
-        }
-        ips.push(clientIp);
-        console.log(`Connection from ${clientIp}.`);
-
-        const connection = request.accept(null, request.origin); // replace request.origin with * if this doesn't work
-        room.addClient(connection, clientIp);
-
-        connection.on("message", message => {
-            if (message.type === "utf8") {
-                try {
-                    const json = JSON.parse(message.utf8Data);
-                    if (json.type === "init") {
-                        room.initClient(clientIp, json.value.name, json.value.utc42069);
-                        room.propagateNewClient(clientIp);
-                    }
-                    else if (json.type === "message") {
-                        room.postMessage(json.value, clientIp);
-                    }
-                }
-                catch (e) {
-                    console.error(`Message data is not in a format we use: ${message.utf8Data}`);
-                }
-            }
-        });
-
-        connection.on("close", () => {
-            room.removeclient(clientIp);
-        });
+        room.registerNewClient(request);
     });
     started = true;
 }
