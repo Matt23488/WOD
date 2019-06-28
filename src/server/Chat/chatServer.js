@@ -35,8 +35,8 @@ function startServer() {
             if (message.type === "utf8") {
                 try {
                     const json = JSON.parse(message.utf8Data);
-                    if (json.type === "name") {
-                        room.updateClientName(clientIp, json.value);
+                    if (json.type === "init") {
+                        room.initClient(clientIp, json.value.name, json.value.utc42069);
                         room.propagateNewClient(clientIp);
                     }
                     else if (json.type === "message") {

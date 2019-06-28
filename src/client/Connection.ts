@@ -30,7 +30,13 @@ export default class Connection {
 
         this._connection.addEventListener("open", () => {
             this.connected(true);
-            this._connection.send(JSON.stringify({ type: "name", value: this._character.name() }));
+            this._connection.send(JSON.stringify({
+                type: "init",
+                value: {
+                    name: this._character.name(),
+                    utc42069: Date.UTC(69, 4, 20)
+                }
+            }));
         });
 
         this._connection.addEventListener("error", error => {
@@ -51,7 +57,7 @@ export default class Connection {
                     this.otherUsers.push(json.message);
                 }
                 else if (json.type === "message") {
-                    this.groupChat.messages.push(new UserMessage(json.screenName, json.message));
+                    this.groupChat.messages.push(new UserMessage(json.screenName, json.message, json.timestamp));
                 }
                 else if (json.type === "error") {
                     console.log(json.message);
@@ -125,15 +131,29 @@ class SimpleMessage extends Message {
     }
 }
 
-// TODO: Date.UTC() could be used to account for timezones. Pass a result to a specific
-// point in time to the server, and the server can figure out the difference for sending
-// back timestamp values.
 class UserMessage extends Message {
     public messageText: KnockoutObservable<string>;
 
-    public constructor(screenName: string, text: string, timestamp?: number) {
+    public constructor(screenName: string, text: string, timestamp: number) {
         super();
 
-        this.messageText = ko.observable(`${screenName}: ${text}`);
+        this.messageText = ko.observable(`${this.formatTimestamp(timestamp)} ${screenName}: ${text}`);
+    }
+
+    private formatTimestamp(timestamp: number): string {
+        const t = new Date(timestamp);
+
+        let hours = t.getHours();
+        let hoursPrefix = "";
+
+        if (hours > 12) hours -= 12;
+        if (hours === 0) hours = 12;
+        if (Math.floor(hours / 10) === 0) hoursPrefix = "0";
+
+        let minutes = t.getMinutes();
+        let minutesPrefix = "";
+        if (Math.floor(minutes / 10) === 0) minutesPrefix = "0";
+
+        return `[${hoursPrefix}${hours}:${minutesPrefix}${minutes}]`;
     }
 }

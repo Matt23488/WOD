@@ -2,6 +2,7 @@ class Room {
     constructor() {
         this._clients = [];
         this._messages = [];
+        this._utc42069 = Date.UTC(69, 4, 20);
     }
     
     *getClients() {
@@ -34,14 +35,15 @@ class Room {
         return true;
     }
 
-    updateClientName(clientIp, screenName) {
+    initClient(clientIp, screenName, utc42069) {
         let client = this.getClient(clientIp);
         if (!client) return false;
 
         client.screenName = screenName;
+        client.timestampOffset = utc42069 - this._utc42069;
         this._clients.forEach(c => c.wsConnection.send(JSON.stringify({
             type: "connect",
-            timestamp: Date.now(),
+            timestamp: Date.now() + c.timestampOffset,
             message: `${screenName} has connected.`
         })));
         return true;
@@ -55,9 +57,11 @@ class Room {
         const otherClients = this._clients.filter(c => c.ipAddress !== clientIp);
         client.wsConnection.send(JSON.stringify(new WSMessage("init", {
                 otherUsers: otherClients.map(({ ipAddress, screenName }) => { return { ipAddress, screenName }; })
-        })));
-        const newUserMessage = JSON.stringify(new WSMessage("newUser", { ipAddress: client.ipAddress, screenName: client.screenName }));
-        otherClients.forEach(c => c.wsConnection.send(newUserMessage));
+        }, client.timestampOffset)));
+        otherClients.forEach(c => c.wsConnection.send(JSON.stringify(new WSMessage("newUser", {
+            ipAddress: client.ipAddress,
+            screenName: client.screenName
+        }, c.timestampOffset))));
         return true;
     }
 
@@ -69,16 +73,16 @@ class Room {
         this._messages.push(message);
         this._clients.forEach(c => c.wsConnection.send(JSON.stringify({
             type: "message",
-            timestamp: message.timestamp,
+            timestamp: message.timestamp + c.timestampOffset,
             message: message.messageText,
             screenName: client.screenName
         })));
 
-        const now = new Date();
-        const hours = now.getHours().toPrecision(2);
-        const minutes = now.getMinutes().toPrecision(2);
-        const seconds = now.getSeconds().toPrecision(2);
-        console.log(`[${hours}:${minutes}:${seconds}] ${client.screenName}: ${text}`);
+        // const now = new Date();
+        // const hours = now.getHours().toPrecision(2);
+        // const minutes = now.getMinutes().toPrecision(2);
+        // const seconds = now.getSeconds().toPrecision(2);
+        // console.log(`[${hours}:${minutes}:${seconds}] ${client.screenName}: ${text}`);
 
         return true;
     }
@@ -90,7 +94,7 @@ class Room {
         this._clients = this._clients.filter(c => c.ipAddress !== clientIp);
         this._clients.forEach(c => c.wsConnection.send(JSON.stringify({
             type: "disconnect",
-            timestamp: Date.now(),
+            timestamp: Date.now() + c.timestampOffset,
             message: `${client.screenName} has disconnected.`,
         })));
         return true;
@@ -108,6 +112,8 @@ class Client {
     get ipAddress() { return this._clientIp || this._wsConnection.remoteAddress; }
     get screenName() { return this._screenName; }
     set screenName(value) { this._screenName = value; }
+    get timestampOffset() { return this._timestampOffset; }
+    set timestampOffset(value) { this._timestampOffset = value; }
 }
 
 class Message {
@@ -123,9 +129,9 @@ class Message {
 }
 
 class WSMessage {
-    constructor(type, messageData) {
+    constructor(type, messageData, timestampOffset) {
         this.type = type;
-        this.timestamp = Date.now();
+        this.timestamp = Date.now() + timestampOffset;
         this.message = messageData
     }
 }
