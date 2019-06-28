@@ -49,7 +49,7 @@ export default class Connection {
                 if (json.type === "info") {
                     for (let window of this.chatWindows()) {
                         if (!json.message.rooms.some((r: number) => r === window.id)) continue;
-                        window.messages.push(new SimpleMessage(json.message.messageText));
+                        window.addMessage(new SimpleMessage(json.message.messageText));
                     }
                 }
                 else if (json.type === "init") {
@@ -63,7 +63,8 @@ export default class Connection {
                 else if (json.type === "message") {
                     for (let window of this.chatWindows()) {
                         if (window.id !== json.message.roomId) continue;
-                        window.messages.push(new UserMessage(this.getUserScreenName(json.message.id), json.message.messageText, json.timestamp));
+                        const messageType = json.message.id === this._clientId ? "chatMeMessage" : "chatThemMessage";
+                        window.addMessage(new UserMessage(this.getUserScreenName(json.message.id), json.message.messageText, json.timestamp, messageType));
                     }
                 }
                 else if (json.type === "disconnect") {
@@ -123,8 +124,9 @@ class WebsocketSetup {
 
 class ChatWindow {
     private _id: number;
+    private _currentGroup: MessageGroup;
 
-    public messages: KnockoutObservableArray<Message>;
+    public messageGroups: KnockoutObservableArray<MessageGroup>;
     public domID: KnockoutObservable<string>;
     public domHref: KnockoutComputed<string>;
     public domClass: KnockoutObservable<string>;
@@ -132,7 +134,7 @@ class ChatWindow {
 
     public constructor(id: number) {
         this._id = id;
-        this.messages = ko.observableArray([]);
+        this.messageGroups = ko.observableArray([]);
         this.domID = ko.observable(`chat${id}`);
         this.domHref = ko.computed(() => `#${this.domID()}`, this);
         this.domClass = ko.observable("");
@@ -140,33 +142,56 @@ class ChatWindow {
     }
 
     public get id(): number { return this._id; }
+
+    public addMessage(message: Message) {
+        if (!this._currentGroup || message.messageType() !== this._currentGroup.type) {
+            this._currentGroup = new MessageGroup(message.messageType());
+            this.messageGroups.push(this._currentGroup);
+        }
+
+        this._currentGroup.messages.push(message);
+    }
+}
+
+class MessageGroup {
+    private _type: string;
+    public messages: KnockoutObservableArray<Message>;
+
+    public constructor (type: string, ...messages: Message[]) {
+        this._type = type;
+        this.messages = ko.observableArray(messages);
+    }
+
+    public get type(): string { return this._type; }
 }
 
 // TODO: messageText may not need to be observable, unless I plan to allow
 // editing them after the fact. Probably will so I'll probably leave this in.
-// TODO: Thinking about maybe just having the server pass back messages already formatted.
-// But then again the timestamps would be off. Think about this.
-// TODO: Need a property here to determine how to draw the message essentially.
 abstract class Message {
+    public abstract messageType: KnockoutObservable<string>;
     public abstract messageText: KnockoutObservable<string>;
 }
 
 class SimpleMessage extends Message {
+    public messageType: KnockoutObservable<string>;
     public messageText: KnockoutObservable<string>;
 
     public constructor(text: string) {
         super();
 
+        this.messageType = ko.observable("chatInfoMessage");
         this.messageText = ko.observable(text);
     }
 }
 
 class UserMessage extends Message {
     public messageText: KnockoutObservable<string>;
+    public messageType: KnockoutObservable<string>;
 
-    public constructor(screenName: string, text: string, timestamp: number) {
+    public constructor(screenName: string, text: string, timestamp: number, messageType: string) {
         super();
 
+        this.messageType = ko.observable(messageType);
         this.messageText = ko.observable(`${this.formatTimestamp(timestamp)} ${screenName}: ${text}`);
     }
 

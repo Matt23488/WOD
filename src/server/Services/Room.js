@@ -169,7 +169,7 @@ class Room {
         for (let i = 0; i < this._rooms.length; i++) {
             const room = this._rooms[i];
             if(!room.removeClient(clientId)) continue;
-            if (room.clientIds.length === 1) {
+            if (i > 0 && room.clientIds.length === 1) {
                 // TODO: Need to notify other clients to destroy their rooms client-side.
                 this._rooms.splice(i, 1);
                 i--;

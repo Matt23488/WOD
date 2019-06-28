@@ -125,9 +125,11 @@
                         </div>
                         <!-- ko foreach: chatWindows -->
                         <div class="tab-pane container fade" data-bind="attr: { id: domID }">
-                            <ul class="list-group" data-bind="foreach: messages">
-                                <li class="list-group-item list-group-item-dark" data-bind="text: messageText"></li>
-                            </ul>
+                            <div class="chatContainer" data-bind="foreach: messageGroups">
+                                <div class="chatGroup" data-bind="foreach: messages">
+                                    <div class="chatMessage" data-bind="text: messageText, class: messageType"></div>
+                                </div>
+                            </div>
                         </div>
                         <!-- /ko -->
                     </div>

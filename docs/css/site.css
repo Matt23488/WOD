@@ -333,3 +333,45 @@ div.clear-dot {
     animation-fill-mode: forwards;
     opacity: 0;
 }
+
+.chatContainer {
+    position: relative;
+}
+
+.chatGroup {
+    clear: both;
+}
+
+.chatMessage {
+    border-radius: 3px;
+    padding: 5px;
+    max-width: 500px;
+    margin: 2px;
+    clear: both;
+}
+
+/* TODO: This is not exactly right. */
+.chatMessage:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.chatMessage:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.chatInfoMessage {
+    text-align: center;
+}
+
+/* TODO: Try to accomplish this without floats. */
+.chatMeMessage {
+    background: red;
+    float: right;
+}
+
+.chatThemMessage {
+    background: blue;
+    float: left;
+}
