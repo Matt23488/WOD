@@ -111,12 +111,9 @@
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#chatUsers">Users</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#chatGroup">Group Chat</a>
-                        </li>
                         <!-- ko foreach: chatWindows -->
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" data-bind="attr: { href: domID }, class: domClass, text: domText"></a>
+                            <a class="nav-link" data-toggle="tab" data-bind="attr: { href: domHref }, class: domClass, text: domText"></a>
                         </li>
                         <!-- /ko -->
                     </ul>
@@ -124,11 +121,6 @@
                         <div class="tab-pane container active" id="chatUsers">
                             <ul class="list-group" data-bind="foreach: users">
                                 <li class="list-group-item list-group-item-dark" data-bind="text: screenName"></li>
-                            </ul>
-                        </div>
-                        <div class="tab-pane container fade" id="chatGroup" data-bind="using: groupChat">
-                            <ul class="list-group" data-bind="foreach: messages">
-                                <li class="list-group-item list-group-item-dark" data-bind="text: messageText"></li>
                             </ul>
                         </div>
                         <!-- ko foreach: chatWindows -->

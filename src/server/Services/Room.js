@@ -1,17 +1,22 @@
 class Room {
     constructor() {
         this._clients = [];
+        this._rooms = [];
         this._messages = [];
         this._utc42069 = Date.UTC(69, 4, 20);
         this._nextClientId = 0;
+        this._nextRoomId = 0;
+
+        this._publicRoom = new ChatRoom(this.newRoomId());
+        this._rooms.push(this._publicRoom);
     }
 
     newClientId() {
         return this._nextClientId++;
     }
-    
-    *getClients() {
-        for (let client of this._clients) yield client;
+
+    newRoomId() {
+        return this._nextRoomId++;
     }
 
     *getMessages(timestamp = 0) {
@@ -26,6 +31,20 @@ class Room {
                 return client;
             }
         }
+    }
+
+    getClients(...clientIds) {
+        return this._clients.filter(c => clientIds.some(id => id === c.id));
+    }
+
+    getRoom(roomId) {
+        for (let room of this._rooms) {
+            if (room.id === roomId) return room;
+        }
+    }
+
+    getRoomsForClient(clientId) {
+        return this._rooms.filter(r => r.clientIds.some(id => id === clientId));
     }
 
     registerNewClient(request) {
@@ -44,7 +63,7 @@ class Room {
                         this.propagateNewClient(newClient.id);
                     }
                     else if (json.type === "message") {
-                        this.postMessage(json.value, newClient.id);
+                        this.postMessage(json.value, newClient.id, json.roomId);
                     }
                 }
                 catch (e) {
@@ -68,7 +87,10 @@ class Room {
         this._clients.forEach(c => c.sendMessage(new WSMessage(
             "info",
             c.timestampOffset,
-            `${screenName} has connected.`
+            {
+                rooms: [ this._publicRoom.id ],
+                messageText: `${screenName} has connected.`
+            }
         )));
         return true;
     }
@@ -77,34 +99,46 @@ class Room {
         let client = this.getClient(clientId);
         if (!client) return false;
 
+        this._publicRoom.addClient(clientId);
+
         const otherClients = this._clients.filter(c => c.id !== clientId);
         client.sendMessage(new WSMessage(
             "init",
             client.timestampOffset,
             {
                 id: clientId,
+                rooms: [ this._publicRoom.id ],
                 users: this._clients.map(({ id, screenName }) => { return { id, screenName }; })
             }
         ));
         otherClients.forEach(c => c.sendMessage(new WSMessage("newUser", c.timestampOffset, {
             id: client.id,
-            screenName: client.screenName
+            screenName: client.screenName,
+            rooms: [ this._publicRoom.id ]
         })));
         return true;
     }
 
-    postMessage(text, clientId) {
+    postMessage(text, clientId, roomId) {
         const client = this.getClient(clientId);
         if (!client || !client.screenName) return false;
 
+        const room = this.getRoom(roomId);
+        if (!room) return false;
+
+        if (!room.clientIds.some(id => id === clientId)) return false;
+
+        // TODO: If I end up needing this I'll need to put it in the ChatRoom class.
         const message = new Message(text, client);
         this._messages.push(message);
-        this._clients.forEach(c => c.sendMessage(new WSMessage(
+
+        this.getClients(...room.clientIds).forEach(c => c.sendMessage(new WSMessage(
             "message",
             c.timestampOffset,
             {
                 messageText: message.messageText,
-                id: client.id
+                id: client.id,
+                roomId: roomId
             }
         )));
 
@@ -120,7 +154,10 @@ class Room {
             c.sendMessage(new WSMessage(
                 "info",
                 c.timestampOffset,
-                `${client.screenName} has disconnected.`
+                {
+                    rooms: [ this._publicRoom.id ],
+                    messageText: `${client.screenName} has disconnected.`
+                }
             ));
             c.sendMessage(new WSMessage(
                 "disconnect",
@@ -128,6 +165,17 @@ class Room {
                 clientId
             ));
         });
+
+        for (let i = 0; i < this._rooms.length; i++) {
+            const room = this._rooms[i];
+            if(!room.removeClient(clientId)) continue;
+            if (room.clientIds.length === 1) {
+                // TODO: Need to notify other clients to destroy their rooms client-side.
+                this._rooms.splice(i, 1);
+                i--;
+            }
+        }
+
         return true;
     }
 }
@@ -166,6 +214,29 @@ class WSMessage {
         this.type = type;
         this.timestamp = Date.now() + timestampOffset;
         this.message = messageData
+    }
+}
+
+class ChatRoom {
+    constructor(id, ...clientIds) {
+        this._id = id;
+        this._clientIds = clientIds;
+    }
+
+    get id() { return this._id; }
+    get clientIds() {
+        return this._clientIds.map(obj => obj);
+    }
+
+    addClient(clientId) {
+        this._clientIds.push(clientId);
+    }
+
+    removeClient(clientId) {
+        const index = this._clientIds.indexOf(clientId);
+        if (index === -1) return false;
+        this._clientIds.splice(index, 1);
+        return true;
     }
 }
 

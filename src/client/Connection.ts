@@ -8,7 +8,6 @@ export default class Connection {
     public serverAddress: KnockoutObservable<string>;
     public connected: KnockoutObservable<boolean>;
     public users: KnockoutObservableArray<{ id: number, screenName: string }>;
-    public groupChat: ChatWindow;
     public chatWindows: KnockoutObservableArray<ChatWindow>;
     public connectButtonText: KnockoutComputed<string>;
 
@@ -18,7 +17,6 @@ export default class Connection {
         this.serverAddress = ko.observable(serverAddress);
         this.connected = ko.observable(false);
         this.users = ko.observableArray([]);
-        this.groupChat = new ChatWindow();
         this.chatWindows = ko.observableArray([]);
         this.connectButtonText = ko.computed(() => this.connected() ? "Disconnect" : "Connect", this);
 
@@ -49,17 +47,24 @@ export default class Connection {
             try {
                 const json = JSON.parse(message.data);
                 if (json.type === "info") {
-                    this.groupChat.messages.push(new SimpleMessage(json.message));
+                    for (let window of this.chatWindows()) {
+                        if (!json.message.rooms.some((r: number) => r === window.id)) continue;
+                        window.messages.push(new SimpleMessage(json.message.messageText));
+                    }
                 }
                 else if (json.type === "init") {
                     this._clientId = json.message.id;
                     this.users.push(...json.message.users);
+                    this.chatWindows.push(new ChatWindow(json.message.rooms[0]));
                 }
                 else if (json.type === "newUser") {
                     this.users.push(json.message);
                 }
                 else if (json.type === "message") {
-                    this.groupChat.messages.push(new UserMessage(this.getUserScreenName(json.message.id), json.message.messageText, json.timestamp));
+                    for (let window of this.chatWindows()) {
+                        if (window.id !== json.message.roomId) continue;
+                        window.messages.push(new UserMessage(this.getUserScreenName(json.message.id), json.message.messageText, json.timestamp));
+                    }
                 }
                 else if (json.type === "disconnect") {
                     const oldUser = this.users().filter(u => u.id === json.message)[0];
@@ -82,7 +87,6 @@ export default class Connection {
         this.connected(false);
         this._connection = null;
         this.users.removeAll();
-        this.groupChat.messages.removeAll();
         this.chatWindows.removeAll();
         console.info("Disconnected from chat server.");
     }
@@ -90,7 +94,8 @@ export default class Connection {
     public sendMessage(message: string): void {
         if (!this.connected()) return;
 
-        this._connection.send(JSON.stringify({ type: "message", value: message }));
+        // TODO: hardcoded roomId
+        this._connection.send(JSON.stringify({ type: "message", value: message, roomId: 0 }));
     }
 
     public connectButtonClick(): void {
@@ -100,7 +105,6 @@ export default class Connection {
 
     private getUserScreenName(id: number): string {
         const user = this.users().filter(u => u.id === id)[0];
-        console.log("getUserScreenName", user, user.screenName);
         return user.screenName;
     }
 }
@@ -118,11 +122,24 @@ class WebsocketSetup {
 }
 
 class ChatWindow {
-    public messages: KnockoutObservableArray<Message>;
+    private _id: number;
 
-    public constructor() {
+    public messages: KnockoutObservableArray<Message>;
+    public domID: KnockoutObservable<string>;
+    public domHref: KnockoutComputed<string>;
+    public domClass: KnockoutObservable<string>;
+    public domText: KnockoutObservable<string>;
+
+    public constructor(id: number) {
+        this._id = id;
         this.messages = ko.observableArray([]);
+        this.domID = ko.observable(`chat${id}`);
+        this.domHref = ko.computed(() => `#${this.domID()}`, this);
+        this.domClass = ko.observable("");
+        this.domText = ko.observable("TODO"); // TODO:
     }
+
+    public get id(): number { return this._id; }
 }
 
 // TODO: messageText may not need to be observable, unless I plan to allow
