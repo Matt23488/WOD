@@ -1,0 +1,128 @@
+@import "_variables";
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: $body-color;/* rgb(34, 0, 81);*/
+    border-radius: 5px;
+
+    &:hover {
+        background-color: gold;
+    }
+}
+
+body {
+    /* background-image: linear-gradient(to bottom right, rgb(63, 0, 146), rgb(200, 0, 255)); */
+    background-color: $primary-color;
+    color: $body-color;
+}
+
+.toolbar {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 999;
+}
+
+/* .clockContainer {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 999;
+} */
+
+.clock {
+    position: fixed;
+    z-index: 999;
+    right: 10px;
+    top: 10px;
+    font-size: 1.4em;
+    border: 1px solid white;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: $primary-color;
+    -webkit-transition: opacity 0.25s;
+    transition: opacity 0.25s;
+}
+
+.body-content {
+    position: relative;
+    top: 60px;
+}
+
+.HIDDEN {
+    display: none !important;
+}
+
+input, textarea, span.form-control {
+    border: 0 !important;
+    border-bottom: 2px solid $body-color !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    color: $body-color !important;
+}
+
+table {
+    color: $body-color !important;
+}
+
+textarea {
+    width: 100%;
+}
+
+input:focus {
+    border: 0 !important;
+}
+
+label {
+    font-weight: bold;
+}
+
+.characterContainer {
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.widthMax {
+    width: 100%;
+}
+
+.pointer, .pointer * {
+    cursor: pointer;
+}
+
+.clickable {
+    border-radius: 5px;
+
+    &.label,
+    & .label {
+        -webkit-transition: color 0.25s;
+        transition: color 0.25s;
+    }
+
+    &.label:hover,
+    &:hover .label {
+        color: gold;
+    }
+}
+
+.font20 {
+    font-size: 20pt;
+}
+
+.characterList {
+    list-style-type: none;
+    font-size: 3em;
+
+    & > li {
+        color: $body-color;
+        padding: 10px;
+        border-radius: 5px;
+    }
+}

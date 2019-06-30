@@ -1,0 +1,48 @@
+@keyframes rollingDice {
+    0% { background-image: url("images/dice-3.png"); }
+    10% { background-image: url("images/dice-5.png"); }
+    20% { background-image: url("images/dice-6.png"); }
+    30% { background-image: url("images/dice-6.png"); }
+    40% { background-image: url("images/dice-3.png"); }
+    50% { background-image: url("images/dice-6.png"); }
+    60% { background-image: url("images/dice-1.png"); }
+    70% { background-image: url("images/dice-4.png"); }
+    80% { background-image: url("images/dice-7.png"); }
+    90% { background-image: url("images/dice-9.png"); }
+    100% { background-image: url("images/dice-6.png"); }
+}
+
+.dice-round {
+    margin-bottom: 25px;
+}
+
+.dice {
+    width: 72px;
+    height: 72px;
+    display: inline-block;
+    background-size: 72px 72px;
+}
+
+@keyframes crit-fade {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.crit-message {
+    position: fixed;
+    font-size: 10em;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: gold;
+    animation: crit-fade 1s 1;
+    animation-fill-mode: forwards;
+    opacity: 0;
+}

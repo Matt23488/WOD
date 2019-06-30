@@ -9,7 +9,7 @@ function startServer() {
     const server = http.createServer((req, res) => {
         // Don't need anything here for websockets only apparently
     });
-    server.listen(3001, () => {});
+    server.listen(42069, () => {});
 
     const wsServer = new WebSocketServer({
         httpServer: server

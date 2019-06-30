@@ -1,0 +1,76 @@
+@import "_variables";
+
+.attribute-dot {
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
+    border: 1px solid $body-color;
+    margin: 0 5px 0 0;
+    display: inline-block;
+    -webkit-transition: background-color 0.25s, border-color 0.25s;
+    transition: background-color 0.25s, border-color 0.25s;
+
+    &:first-of-type {
+        margin-left: 3px;
+    }
+}
+
+div.clear-dot {
+    display: inline;
+}
+
+.attribute .clear-dot {
+    visibility: hidden;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
+    font-size: 1.7em;
+    cursor: pointer;
+    position: relative;
+}
+
+.attribute:hover .clear-dot {
+    visibility: initial;
+}
+
+@media only screen and (max-width: 991px) {
+    .attribute-dot {
+        width: 2em;
+        height: 2em;
+        border-radius: 1em;
+        margin: 5px 10px 5px 0;
+    }
+
+    .damage {
+        width: calc(2em - 2px);
+        height: calc(2em - 2px);
+        margin: 0 5px;
+        border: 1px solid $body-color;
+        display: inline-block;
+        box-sizing: content-box;
+        background-size: calc(2em - 2px) calc(2em - 2px);
+    }
+
+    .attribute .clear-dot {
+        visibility: initial;
+        width: 2em;
+        height: 2em;
+        border-radius: 1em;
+        font-size: 3em;
+        bottom: 6px;
+    }
+}
+
+.filled {
+    background-color: $body-color;
+}
+
+.filled-red {
+    background-color: red;
+    border-color: red;
+}
+
+.hoverFilled {
+    background-color: gold !important;
+    border-color: gold !important;
+}

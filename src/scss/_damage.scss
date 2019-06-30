@@ -1,0 +1,27 @@
+@import "_variables";
+
+.damage {
+    width: calc(1em - 1px);
+    height: calc(1em - 1px);
+    margin: 0 2px;
+    border: 1px solid $body-color;
+    display: inline-block;
+    box-sizing: content-box;
+    background-size: calc(1em - 1px) calc(1em - 1px);
+}
+
+.none {
+    background-image: url("images/none.png");
+}
+
+.bashing {
+    background-image: $bashing-img;
+}
+
+.lethal {
+    background-image: $lethal-img;
+}
+
+.aggravated {
+    background-image: $aggravated-img;
+}

@@ -1,0 +1,33 @@
+@import "_variables";
+
+.btn-icon {
+    font-size: 1.5rem;
+    border: none;
+    background: transparent;
+    color: $body-color;
+    transition: color 0.5s;
+
+    &:hover {
+        color: gold;
+    }
+}
+
+.btn-outline:not(.btn-danger) {
+    background-color: $primary-color;
+}
+
+.btn-outline-success:hover {
+    background-color: $bs-success;
+}
+
+.btn-outline-primary:hover {
+    background-color: $bs-primary;
+}
+
+.btn-outline-danger:hover {
+    background-color: $bs-danger;
+}
+
+.btn-outline-light:hover {
+    background-color: white;
+}

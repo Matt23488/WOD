@@ -7,6 +7,8 @@ var uglify = require("gulp-uglify");
 var sourcemaps = require("gulp-sourcemaps");
 var buffer = require("vinyl-buffer");
 var fancy_log = require("fancy-log");
+var browserSync = require("browser-sync").create();
+var sass = require("gulp-sass");
 
 var watchedBrowserify = watchify(browserify({
     basedir: ".",
@@ -27,6 +29,25 @@ function bundle() {
         .pipe(gulp.dest("docs"));
 }
 
-gulp.task("default", bundle);
+gulp.task("typescript", bundle);
 watchedBrowserify.on("update", bundle);
 watchedBrowserify.on("log", fancy_log);
+
+gulp.task("serve", function () {
+    // browserSync.init({
+    //     server: "./docs",
+    //     port: 8080
+    // });
+
+    gulp.watch("src/scss/**/*.scss", gulp.parallel(["sass"]));
+    // gulp.watch("docs/*.html").on("change", browserSync.reload);
+});
+
+gulp.task("sass", function () {
+    return gulp.src("src/scss/site.scss")
+        .pipe(sass().on("error", sass.logError))
+        .pipe(gulp.dest("docs"))
+        .pipe(browserSync.stream());
+});
+
+gulp.task("default", gulp.parallel(["sass", "serve", "typescript"]));

@@ -25,7 +25,7 @@ export default class Connection {
 
     public connect(): void {
         if (this.connected()) return;
-        this._connection = new WebSocket(`ws://${this.serverAddress()}:3001`);
+        this._connection = new WebSocket(`ws://${this.serverAddress()}:42069`);
 
         this._connection.addEventListener("open", () => {
             this.connected(true);

@@ -1,0 +1,14 @@
+@import "_variables";
+
+/* Sweet Alert custom styling */
+.swal-modal,
+.swal-icon--success:after,
+.swal-icon--success:before,
+.swal-icon--success__hide-corners {
+    background-color: $primary-color !important;
+}
+
+.swal-text,
+.swal-title {
+    color: $body-color !important;
+}
