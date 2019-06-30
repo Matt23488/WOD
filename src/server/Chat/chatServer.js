@@ -9,7 +9,8 @@ function startServer() {
     const server = http.createServer((req, res) => {
         // Don't need anything here for websockets only apparently
     });
-    server.listen(42069, () => {});
+    const port = 42069;
+    server.listen(port, () => {});
 
     const wsServer = new WebSocketServer({
         httpServer: server
@@ -19,6 +20,7 @@ function startServer() {
         room.registerNewClient(request);
     });
     started = true;
+    console.info(`Websocket server listening on port ${port}!`)
 }
 
 exports.startChatServer = startServer;

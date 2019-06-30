@@ -48,14 +48,22 @@ export default class Connection {
                 const json = JSON.parse(message.data);
                 if (json.type === "info") {
                     for (let window of this.chatWindows()) {
-                        if (!json.message.rooms.some((r: number) => r === window.id)) continue;
+                        if (!json.message.rooms.some((r: any) => r.id === window.id)) continue;
                         window.addMessage(new SimpleMessage(json.message.messageText));
                     }
                 }
                 else if (json.type === "init") {
                     this._clientId = json.message.id;
                     this.users.push(...json.message.users);
-                    this.chatWindows.push(new ChatWindow(json.message.rooms[0]));
+                    for (let room of json.message.rooms) {
+                        let name = "Everyone";
+                        if (room.id > 0) {
+                            const otherUser = this.users().filter(u => u.id !== this._clientId && room.users.some((r: any) => r === u.id))[0];
+                            if (!otherUser) name = "Unknown";
+                            else name = otherUser.screenName;
+                        }
+                        this.chatWindows.push(new ChatWindow(room.id, name));
+                    }
                 }
                 else if (json.type === "newUser") {
                     this.users.push(json.message);
@@ -124,6 +132,7 @@ class WebsocketSetup {
 
 class ChatWindow {
     private _id: number;
+    private _name: string;
     private _currentGroup: MessageGroup;
 
     public messageGroups: KnockoutObservableArray<MessageGroup>;
@@ -132,16 +141,18 @@ class ChatWindow {
     public domClass: KnockoutObservable<string>;
     public domText: KnockoutObservable<string>;
 
-    public constructor(id: number) {
+    public constructor(id: number, name: string) {
         this._id = id;
+        this._name = name;
         this.messageGroups = ko.observableArray([]);
         this.domID = ko.observable(`chat${id}`);
         this.domHref = ko.computed(() => `#${this.domID()}`, this);
         this.domClass = ko.observable("");
-        this.domText = ko.observable("TODO"); // TODO:
+        this.domText = ko.observable(name);
     }
 
     public get id(): number { return this._id; }
+    public get name(): string { return this._name; }
 
     public addMessage(message: Message) {
         if (!this._currentGroup || message.messageType() !== this._currentGroup.type) {

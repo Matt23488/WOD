@@ -88,7 +88,7 @@ class Room {
             "info",
             c.timestampOffset,
             {
-                rooms: [ this._publicRoom.id ],
+                rooms: [ { id: this._publicRoom.id, users: this._publicRoom.clientIds } ],
                 messageText: `${screenName} has connected.`
             }
         )));
@@ -107,14 +107,14 @@ class Room {
             client.timestampOffset,
             {
                 id: clientId,
-                rooms: [ this._publicRoom.id ],
+                rooms: [ { id: this._publicRoom.id, users: this._publicRoom.clientIds } ],
                 users: this._clients.map(({ id, screenName }) => { return { id, screenName }; })
             }
         ));
         otherClients.forEach(c => c.sendMessage(new WSMessage("newUser", c.timestampOffset, {
             id: client.id,
             screenName: client.screenName,
-            rooms: [ this._publicRoom.id ]
+            rooms: [ { id: this._publicRoom.id, users: this._publicRoom.clientIds } ]
         })));
         return true;
     }
@@ -155,7 +155,8 @@ class Room {
                 "info",
                 c.timestampOffset,
                 {
-                    rooms: [ this._publicRoom.id ],
+                    // TODO: Need to abstract this ugly mess. It's currently in four places.
+                    rooms: [ { id: this._publicRoom.id, users: this._publicRoom.clientIds } ],
                     messageText: `${client.screenName} has disconnected.`
                 }
             ));
