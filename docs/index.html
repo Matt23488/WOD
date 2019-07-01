@@ -103,8 +103,8 @@
             </div>
 
             <div class="connectionContainer" data-bind="visible: mode() === 'connection', using: character().connection">
-                <div class="form-group"><label class="label">Server Address:</label> <input class="form-control" type="text" data-bind="textInput: serverAddress" /></div>
-                <button class="btn btn-lg btn-outline btn-outline-light" data-bind="text: connectButtonText, click: connectButtonClick"></button>
+                <div class="form-group"><label class="label">Server Address:</label> <input class="form-control" type="text" data-bind="textInput: serverAddress, enterClick: 'chatConnectButton'" /></div>
+                <button id="chatConnectButton" class="btn btn-lg btn-outline btn-outline-light" data-bind="text: connectButtonText, click: connectButtonClick"></button>
 
                 <div data-bind="visible: connected">
                     <ul class="nav nav-tabs">

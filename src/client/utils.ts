@@ -323,6 +323,16 @@ function applyKnockoutBindings() {
             (<HTMLInputElement>element).value = valueAccessor()();
         }
     };
+
+    ko.bindingHandlers.enterClick = {
+        init: (element: HTMLElement, valueAccessor: () => string) => {
+            element.addEventListener("keypress", e => {
+                if (e.keyCode !== 13) return;
+
+                document.getElementById(valueAccessor()).click();
+            });
+        }
+    }
 }
 function applyKnockoutExtenders() {
     ko.extenders.named = <T>(target: KnockoutObservable<T>, name: string) => {
