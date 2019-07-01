@@ -9,7 +9,7 @@ function startServer() {
     const server = http.createServer((req, res) => {
         // Don't need anything here for websockets only apparently
     });
-    const port = 42069;
+    const port = parseInt(process.env.WEB_SOCKET_PORT);
     server.listen(port, () => {});
 
     const wsServer = new WebSocketServer({

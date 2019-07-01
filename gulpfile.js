@@ -39,7 +39,7 @@ gulp.task("serve", function () {
     //     port: 8080
     // });
 
-    gulp.watch("src/scss/**/*.scss", gulp.parallel(["sass"]));
+    gulp.watch("src/scss/**/*.scss", gulp.parallel("sass"));
     // gulp.watch("docs/*.html").on("change", browserSync.reload);
 });
 
@@ -50,4 +50,4 @@ gulp.task("sass", function () {
         .pipe(browserSync.stream());
 });
 
-gulp.task("default", gulp.parallel(["sass", "serve", "typescript"]));
+gulp.task("default", gulp.parallel("sass", "serve", "typescript"));
