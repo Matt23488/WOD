@@ -104,7 +104,7 @@ label {
   background: transparent;
   color: #c8c8c8;
   transition: color 0.5s; }
-  .btn-icon:hover {
+  .btn-icon:hover:not([disabled]) {
     color: gold; }
 
 .btn-outline:not(.btn-danger) {
@@ -154,6 +154,8 @@ label {
   transition: background-color 0.25s, border-color 0.25s; }
   .attribute-dot:first-of-type {
     margin-left: 3px; }
+  .attribute-dot.active {
+    background-color: #c8c8c8; }
 
 div.clear-dot {
   display: inline; }

@@ -13,6 +13,10 @@
     &:first-of-type {
         margin-left: 3px;
     }
+
+    &.active {
+        background-color: $body-color;
+    }
 }
 
 div.clear-dot {

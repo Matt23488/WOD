@@ -213,11 +213,9 @@ function applyKnockoutBindings() {
             const dots = element.getElementsByClassName("attribute-dot");
             for (let i = 0; i < dots.length; i++) {
                 const dot = <HTMLSpanElement>dots[i];
-                dot.style.backgroundColor = null;
-                dot.style.borderColor = null;
+                dot.classList.remove("active");
                 if (i < value) {
-                    dot.style.backgroundColor = "var(--body-color)";
-                    dot.style.borderColor = "var(--body-color)";
+                    dot.classList.add("active");
                 }
             }
         }

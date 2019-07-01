@@ -7,7 +7,7 @@
     color: $body-color;
     transition: color 0.5s;
 
-    &:hover {
+    &:hover:not([disabled]) {
         color: gold;
     }
 }
